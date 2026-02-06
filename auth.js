@@ -228,6 +228,7 @@
 // })();
 
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
+
 // ============================================================
 // 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FIXED)
 // ============================================================
@@ -685,7 +686,7 @@ document.addEventListener("DOMContentLoaded", function () {
   else if (currentPage.includes('login')) {
     initLoginForm();
   }
-  else if (currentPage.includes('landing') || currentPage === '/' || currentPage.endsWith('.html') === false) {
+  else if (currentPage.includes('w-page') || currentPage === '/' || currentPage.endsWith('.html') === false) {
     initLandingPage();
   }
   // ⚠️ FAQAT INDEX.HTML DA AUTH CHECK
