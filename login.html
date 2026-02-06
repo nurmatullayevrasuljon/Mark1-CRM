@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | Mark1 CRM</title>
+    <link rel="shortcut icon" href="img/b-logo2.png" type="image/x-icon">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="vendor/css/bootstrap.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh !important;">
+            <div class="col-xl-4 login-box">
+                <h2 class="brand-title">
+                    <img src="img/brand-l.png" alt="Logo">
+                    <span>platformasi</span>
+                </h2>
+                <p class="mark-text">Savdo, mahsulotlar va mijozlaringizni samarali <br> boshqaring</p>
+                <div class="d-flex align-items-center">
+                    <div class="blue-box my-2"><span></span></div>
+                    <div class="d-flex flex-column">
+                        <b class="bl-text ml-2">Real vaqt rejimida savdo tahlili </b>
+                        <span class="bl-text2 ml-2">Kundalik daromad va tranzaksiyalarni kuzatib boring</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="blue-box my-2"><span></span></div>
+                    <div class="d-flex flex-column">
+                        <b class="bl-text ml-2">Inventarizatsiyani boshqarish </b>
+                        <span class="bl-text2 ml-2">Ombor va ombor operatsiyalarini kuzatib boring</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="blue-box my-2"><span></span></div>
+                    <div class="d-flex flex-column">
+                        <b class="bl-text ml-2">Real vaqt rejimida savdo tahlili </b>
+                        <span class="bl-text2 ml-2">To'lovlar va muddatlarni kuzatib boring</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 login-card2">
+                <h4 class="font-weight-bold l-text">Qaytib kelganingizdan xursandmiz</h4>
+                <p class="text-muted mb-4 l-text2">CRM platformasidagi hisobingizga kiring</p>
+
+                <div class="btn-group w-100 mb-4 switch-btns">
+                    <button id="emailTab" class="btn btn-light active">Elektron pochta</button>
+                    <button id="phoneTab" class="btn btn-light">Telefon</button>
+                </div>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label id="loginLabel">E-pochta manzili</label>
+                        <input id="loginInput" type="email" class="form-control rounded-pill"
+                            placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Parol</label>
+                        <input id="password" type="password" class="form-control rounded-pill"
+                            placeholder="Parolingizni kiriting" required minlength="6">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <input type="checkbox" id="remember">
+                            <label for="remember" class="small mb-0">Meni eslaysizmi</label>
+                        </div>
+                        <a href="#" class="small">Parolni unutdingizmi?</a>
+                    </div>
+
+                    <button id="loginBtn" class="btn btn-login w-100" disabled>
+                        Tizimga kirish
+                    </button>
+
+                    <div class="text-center mt-4 small">
+                        Hisobingiz yo'qmi?
+                        <a href="signup.html" class="font-weight-bold">Bu yerda ro'yxatdan o'ting</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="auth.js" defer></script> 
+    <script src="script.js" defer></script>
+    <script src="index.js" defer></script>
+</body>
+
+</html>

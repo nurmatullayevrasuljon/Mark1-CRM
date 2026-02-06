@@ -1,0 +1,4007 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* font-family: Inter, sans-serif; */
+  background: #f4f6f8;
+  /* font-family: system-ui, sans-serif; */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  max-width: 100%;
+  overflow-x: clip;
+
+}
+
+.svg-icon {
+  width: 30px;
+  height: 30px;
+  color: #00d4ff;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.sidebar {
+  width: 230px;
+  background: #0f172a;
+  color: #fff;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.logo img {
+  width: 200px;
+}
+
+.nav-item {
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: .3s;
+  text-decoration: none;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: #1e293b;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sale-alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.sale-alert.error {
+  background: #ffe5e5;
+  color: #b00020;
+  border: 1px solid #ffb3b3;
+}
+
+.sale-alert.warning {
+  background: #fff4e5;
+  color: #8a5a00;
+  border: 1px solid #ffd699;
+}
+
+.sale-alert.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== LAYOUT SAFE FIX ===== */
+.d-flex {
+  align-items: stretch;
+}
+
+.content {
+  min-width: 0;
+  overflow-x: visible;
+}
+
+
+.topbar {
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.card-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+  margin-bottom: 20px;
+}
+
+.section {
+  display: none;
+  animation: fade .4s ease;
+}
+
+.section.active {
+  display: block;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px)
+  }
+
+  to {
+    opacity: 1;
+    transform: none
+  }
+}
+
+.profile {
+  position: relative;
+}
+
+.profile img {
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile:hover .dropdown {
+  display: block;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.dropdown a {
+  display: block;
+  padding: 5px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* PRODUCTS CARD BODY DESIGN */
+.card-body {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
+}
+
+#productSearch {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 15px;
+}
+
+/* counter */
+.counter-change {
+  display: block;
+  font-size: 15px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.counter-up {
+  color: #16a34a;
+}
+
+.counter-down {
+  color: #dc2626;
+}
+
+.counter-smal {
+  font-size: 15px !important;
+  font-weight: 600;
+}
+
+/* counter */
+
+/* product-img */
+.product-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .product-img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* product-img */
+
+/* savdo counter */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+/* Counter text */
+.counter {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+.daily-c {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+/* Counter change text */
+.counter-change {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Color variants */
+.text-success {
+  color: #16a34a !important;
+}
+
+.text-danger {
+  color: #dc2626 !important;
+}
+
+.text-muted {
+  color: #94a3b8 !important;
+}
+
+/* Small UZS text */
+.counter small {
+  font-size: 0.6em;
+  color: #94a3b8;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* savdo counter */
+
+.daily-counter {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+.tranzik-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+/* Expert Btn */
+.d-flex.gap-2>* {
+  margin-right: 0.5rem;
+}
+
+.d-flex.gap-2>*:last-child {
+  margin-right: 0;
+}
+
+#transactionFilter {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+}
+
+#exportTransactions {
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  padding: 0.375rem 1rem;
+  color: white;
+  font-weight: 500;
+}
+
+#exportTransactions:hover {
+  background: #2563eb;
+}
+
+/* Expert Btn */
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+/* Table hover effect */
+#salesTable tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Button hover effects */
+#addSaleCash:hover {
+  background-color: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
+}
+
+#addSaleCard:hover {
+  background-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(6, 182, 212, 0.3);
+}
+
+/* Delete button */
+.btn-danger {
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Alert styling */
+.alert-success {
+  border-left: 4px solid #22c55e;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+/* Professional Counter Styling */
+.counter small,
+h3 small {
+  font-size: 0.55em;
+  color: #94a3b8;
+  font-weight: 400;
+  margin-left: 4px;
+  opacity: 0.9;
+}
+
+/* Animation for counters */
+@keyframes countUp {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.counter.animating {
+  animation: countUp 0.4s ease-out;
+}
+
+.tr-input {
+  width: 100% !important;
+  padding: 22px 14px;
+  border-radius: 5px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+/* Qarzdorlar */
+.overdue-box {
+  background: #fef2f2;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+  border: 1px solid #ffc9c9;
+}
+
+.overdue-smal {
+  color: #c90407;
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+.overdue-smal2 {
+  color: #c57a00;
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+.overdue-smal3 {
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+#debtorsCounter {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #82181a;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+#debtorsCounter2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #c57a00;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+#debtorsCounter3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0f172b;
+  line-height: 1.2;
+  margin: 0.5rem 0;
+}
+
+#debtorsCounter small {
+  color: #82181a;
+}
+
+#debtorsCounter2 small {
+  color: #c57a00;
+}
+
+#debtorsCounter3 small {
+  color: #0f172b;
+}
+
+.debtors-change {
+  display: block;
+  font-size: 15px;
+  margin-top: 4px;
+  font-weight: 500;
+  color: #ea005d;
+}
+
+.debtors-change2 {
+  display: block;
+  font-size: 15px;
+  margin-top: 4px;
+  font-weight: 500;
+  color: #fee27f;
+}
+
+.upcoming-box {
+  background: #fefce8;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+  border: 1px solid #fff085;
+}
+
+.total-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+  border: 1px solid #e5e5e5;
+}
+
+/* Filter Buttons */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid;
+}
+
+.stat-card.overdue {
+  background: #fff5f5;
+  border-left-color: #dc3545;
+}
+
+.stat-card.upcoming {
+  background: #fffbf0;
+  border-left-color: #ffc107;
+}
+
+.stat-card.total {
+  background: #f8f9ff;
+  border-left-color: #0d6efd;
+}
+
+.stat-card h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #6c757d;
+}
+
+.stat-card .amount {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card.overdue .amount {
+  color: #dc3545;
+}
+
+.stat-card.upcoming .amount {
+  color: #ffc107;
+}
+
+.stat-card.total .amount {
+  color: #0d6efd;
+}
+
+.stat-card .detail {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 2rem 0 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.filter-tabs button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: #fff;
+  color: #6c757d;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.filter-tabs button.active {
+  background: #17a2b8;
+  color: #fff;
+}
+
+.search-add-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.btn-add-debt {
+  padding: 0.75rem 1.5rem;
+  background: #17a2b8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.debt-table {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.table thead th {
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.overdue {
+  background: #f8d7da;
+  color: #721c24;
+  font-size: 12px !important;
+  border-radius: 20px;
+}
+
+.status-badge.upcoming {
+  background: #fff3cd;
+  color: #856404;
+  font-size: 12px !important;
+  border-radius: 20px;
+}
+
+.status-badge.normal {
+  background: #d1ecf1;
+  color: #0c5460;
+  font-size: 12px !important;
+  border-radius: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.5rem;
+  border: none;
+  background: #e9ecef;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+}
+
+.action-btn.paid {
+  background: #28a745;
+  color: white;
+}
+
+.action-btn.add-debt {
+  background: #ffc107;
+  color: white;
+}
+
+.action-btn.reduce-debt {
+  background: #17a2b8;
+  color: white;
+}
+
+.modal-debtors {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-debtors.show {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-debtors-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-debtors-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.close-modal-debtors {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 0.875rem;
+  background: #17a2b8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  z-index: 2000;
+}
+
+.sms-preview {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.debt-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.debt-actions input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.sms-history-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.sms-history-badge.sent {
+  background: #d4edda;
+  color: #155724;
+}
+
+.sms-history-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.sms-history-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sms-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.sms-history-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.sms-history-item {
+  padding: 1rem;
+  border-left: 4px solid;
+  margin-bottom: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.sms-history-item.auto {
+  border-left-color: #17a2b8;
+}
+
+.sms-history-item.manual {
+  border-left-color: #28a745;
+}
+
+.sms-history-item.overdue {
+  border-left-color: #dc3545;
+}
+
+.sms-history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.sms-history-item-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sms-history-item-time {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.sms-history-item-phone {
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.sms-history-item-message {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.sms-type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.sms-type-badge.auto {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.sms-type-badge.manual {
+  background: #d4edda;
+  color: #155724;
+}
+
+.sms-type-badge.overdue {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.clear-history-btn {
+  padding: 0.5rem 1rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.no-sms-history {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+/* ===============================================
+   ✅ TRANSACTIONS TABLE (Minimalist Professional)
+=============================================== */
+.transaction-row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.transaction-row:hover {
+  background: linear-gradient(to right, #fafafa 0%, #f5f5f5 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Product Info */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.product-category {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Quantity Info */
+.quantity-info {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.qty-value {
+  font-weight: 700;
+  color: #3b82f6;
+  font-size: 1.1rem;
+}
+
+.qty-unit {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Price Info */
+.price-info {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-info .currency {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* DateTime Info */
+.datetime-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date-text {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.time-text {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Payment Badges */
+.payment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payment-badge i {
+  font-size: 0.95rem;
+}
+
+.payment-card {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.payment-cash {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-sold {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.status-sold i {
+  font-size: 0.95rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem !important;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.empty-subtitle {
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+/* ===============================================
+   ✅ SMS HISTORY TABLE (Clean & Professional)
+=============================================== */
+.sms-history-row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+.sms-history-row:hover {
+  background: linear-gradient(to right, #fafafa 0%, #f5f5f5 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Debtor Cell */
+.debtor-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.debtor-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.debtor-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.debtor-active {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.debtor-paid {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+/* Phone Cell */
+.phone-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+}
+
+.phone-cell i {
+  font-size: 0.9rem;
+}
+
+.phone-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.phone-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* SMS Type Badges */
+.sms-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sms-type-badge i {
+  font-size: 0.95rem;
+}
+
+.sms-badge-manual {
+  background: #ede9fe;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+}
+
+.sms-badge-auto {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.sms-badge-overdue {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* DateTime Cell */
+.datetime-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* SMS Status Badge */
+.sms-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.sms-status-sent {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.sms-status-sent i {
+  font-size: 0.95rem;
+}
+
+/* SMS Actions */
+.sms-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.btn-view i {
+  font-size: 0.9rem;
+}
+
+.btn-delete-sms {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-sms:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: translateY(-1px);
+}
+
+.btn-delete-sms i {
+  font-size: 0.9rem;
+}
+
+.sms-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.sms-status-badge i {
+  font-size: 0.9rem;
+}
+
+/* SMS Yuborilgan (Yashil) */
+.sms-status-badge.sms-sent {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+/* Muddati o'tgan eslatma (Qizil) */
+.sms-status-badge.sms-overdue {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+}
+
+/* Kutilayotgan SMS (Ko'k) */
+.sms-status-badge.sms-pending {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+/* SMS yuborilmagan (Kulrang) */
+.sms-status-badge.sms-no-action {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* ===============================================
+   ACTION BUTTONS (Grid Layout)
+=============================================== */
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+/* Call button */
+.action-btn-call {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.action-btn-call:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+/* SMS button */
+.action-btn-sms {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.action-btn-sms:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+/* Add debt button */
+.action-btn-add {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.action-btn-add:hover {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+/* Reduce debt button */
+.action-btn-reduce {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.action-btn-reduce:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+/* Delete button */
+.action-btn-delete {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.action-btn-delete:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+/* ===============================================
+   STATUS BADGES (Large)
+=============================================== */
+.status-badge-large {
+  display: inline-block;
+  padding: 3px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 80px;
+}
+
+.status-badge-large.overdue {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc3545;
+  border: 1px solid #fca5a5;
+  animation: pulse 2s infinite;
+}
+
+.status-badge-large.upcoming {
+  background: #fffbf0;
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+.status-badge-large.normal {
+  background: #f8f9ff;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+  font-size: 12px !important;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* ===============================================
+   SMS HISTORY TABLE BADGES
+=============================================== */
+.sms-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.sms-type-badge i {
+  font-size: 1.1rem;
+}
+
+.sms-type-badge.badge-manual {
+  background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+  color: #5b21b6;
+  border: 1px solid #a78bfa;
+}
+
+.sms-type-badge.badge-auto {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.sms-type-badge.badge-overdue {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.sms-status-sent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid #6ee7b7;
+}
+
+.btn-view-sms {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.btn-view-sms:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-view-sms i {
+  font-size: 1rem;
+}
+
+/* ===============================================
+   SMS STATISTICS CARDS (Dashboard)
+=============================================== */
+.sms-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-box {
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stat-box:nth-child(1) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-box:nth-child(2) {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-box:nth-child(3) {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-box span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-box strong {
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===============================================
+   DEBT COUNTER BADGE (Dashboard)
+=============================================== */
+.debt-count-badge {
+  display: inline-block;
+  margin-top: 8px;
+  /* padding: 6px 14px; */
+  /* background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); */
+  color: #92400e;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  /* border: 1px solid #fcd34d; */
+}
+
+/* ===============================================
+   TABLE IMPROVEMENTS
+=============================================== */
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.modern-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.modern-table thead th {
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modern-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.modern-table tbody tr:hover {
+  background: linear-gradient(to right, #f8fafc 0%, #f1f5f9 100%);
+  transform: scale(1.01);
+}
+
+.modern-table tbody td {
+  padding: 16px 12px;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+/* ===============================================
+   SUCCESS MESSAGE ANIMATION
+=============================================== */
+.success-message {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.success-message i {
+  font-size: 1.5rem;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px) scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+=============================================== */
+@media (max-width: 768px) {
+  .action-buttons-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sms-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-box strong {
+    font-size: 2rem;
+  }
+
+  .sms-status-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+/* ------------- */
+.stock-cell {
+  min-width: 130px;
+}
+
+.stock-text {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.stock-progress {
+  height: 6px;
+  border-radius: 6px;
+}
+
+.table-danger {
+  background-color: rgba(220, 53, 69, 0.06);
+}
+
+/* Low-Stock-Section */
+.low-stock-section {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-header .icon {
+  font-size: 24px;
+}
+
+.section-header h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.section-header p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Card */
+.stock-card {
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+}
+
+.stock-card.danger {
+  background: #fff5f5;
+  border-color: #ffcccc;
+}
+
+.stock-card.warning {
+  background: #fffbe6;
+  border-color: #ffe58f;
+}
+
+.stock-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stock-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.stock-category {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.stock-values {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 6px;
+  background: #e9ecef;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+}
+
+.progress-bar.danger {
+  background-color: #dc3545;
+}
+
+.progress-bar.warning {
+  background-color: #ffc107;
+}
+
+.stock-status {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stock-status.danger {
+  color: #dc3545;
+}
+
+.stock-status.warning {
+  color: #d39e00;
+}
+
+/* Debtors */
+.overdue-wrapper {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+  width: 420px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.overdue-title {
+  color: #dc2626;
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.overdue-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 4px 0 16px;
+}
+
+.overdue-card {
+  background: #fff1f2;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.overdue-left .name {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.overdue-left .amount {
+  color: #dc2626;
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.overdue-days {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===============================================
+   MINIMALISTIK OVERDUE CARDS
+=============================================== */
+#overdueCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.875rem;
+  margin-top: 1rem;
+}
+
+/* EMPTY STATE */
+.overdue-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2.5rem;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+}
+
+.overdue-empty-icon {
+  font-size: 3rem;
+  color: #22c55e;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.overdue-empty-text {
+  font-size: 1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* MINIMALISTIK CARD */
+.overdue-card-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: white;
+  border-radius: 10px;
+  border-left: 3px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+  animation: slideUp 0.4s ease forwards;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overdue-card-mini:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* URGENCY LEVELS */
+.overdue-card-mini.critical {
+  border-left-color: #dc2626;
+}
+
+.overdue-card-mini.critical:hover {
+  background: linear-gradient(90deg, #fef2f2 0%, white 100%);
+}
+
+.overdue-card-mini.warning {
+  border-left-color: #f59e0b;
+}
+
+.overdue-card-mini.warning:hover {
+  background: linear-gradient(90deg, #fffbeb 0%, white 100%);
+}
+
+.overdue-card-mini.mild {
+  border-left-color: #eab308;
+}
+
+.overdue-card-mini.mild:hover {
+  background: linear-gradient(90deg, #fefce8 0%, white 100%);
+}
+
+/* LEFT SECTION - Ism va Qarz */
+.overdue-mini-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.overdue-mini-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overdue-mini-amount {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #dc2626;
+  letter-spacing: -0.02em;
+}
+
+/* RIGHT SECTION - Kunlar */
+.overdue-mini-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.overdue-mini-days {
+  padding: 0.5rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.overdue-mini-days.critical {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1.5px solid #fecaca;
+}
+
+.overdue-mini-days.warning {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+}
+
+.overdue-mini-days.mild {
+  background: #fefce8;
+  color: #854d0e;
+  border: 1.5px solid #fef08a;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  #overdueCards {
+    grid-template-columns: 1fr;
+  }
+
+  .overdue-card-mini {
+    padding: 0.875rem 1rem;
+  }
+
+  .overdue-mini-name {
+    font-size: 0.9375rem;
+  }
+
+  .overdue-mini-amount {
+    font-size: 0.875rem;
+  }
+
+  .overdue-mini-days {
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .overdue-mini-left {
+    gap: 0.25rem;
+  }
+
+  .overdue-mini-name {
+    font-size: 0.875rem;
+  }
+
+  .overdue-mini-amount {
+    font-size: 0.8125rem;
+  }
+
+  .overdue-mini-days {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.625rem;
+  }
+}
+
+/* Admin Profile */
+/* Header */
+.header {
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.header p {
+  color: #64748b;
+  font-size: 16px;
+}
+
+/* Tabs */
+.tabs-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+.tab.active {
+  color: #06b6d4;
+  border-bottom-color: #06b6d4;
+  background: #ecfeff;
+}
+
+/* Content Card */
+.content-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  padding: 40px;
+}
+
+.content-header {
+  margin-bottom: 32px;
+}
+
+.content-header h2 {
+  font-size: 24px;
+  color: #1e293b;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.content-header p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Avatar Section */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatar-wrapper {
+  width: 96px;
+  height: 96px;
+  position: relative;
+}
+
+.avatar,
+.avatar-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.avatar-actions button {
+  padding: 10px 16px;
+  background: #f1f5f9;
+  color: #334155;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.avatar-actions button:hover {
+  background: #e2e8f0;
+}
+
+.avatar-img {
+  border: 2px solid #e5e7eb;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+  /* border: 1px solid; */
+}
+
+.form-input {
+  padding: 10px 30px 10px 30px !important;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.form-input.error {
+  border-color: #ef4444;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+/* Buttons */
+.form-footer {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #06b6d4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary:hover {
+  background: #0891b2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Notification */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  display: none;
+  align-items: center;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+  z-index: 1000;
+}
+
+.notification.show {
+  display: flex;
+}
+
+.notification.success {
+  background: #10b981;
+  color: white;
+}
+
+.notification.error {
+  background: #ef4444;
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Permission Items */
+.permission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.permission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.permission-item span:first-child {
+  color: #334155;
+  font-weight: 500;
+}
+
+.badge {
+  padding: 6px 12px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Security Cards */
+.security-card {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.security-card h3 {
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.security-card p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.btn-secondary {
+  padding: 10px 16px;
+  background: #f1f5f9;
+  color: #334155;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Toggle Switch */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.setting-info h3 {
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.setting-info p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #cbd5e1;
+  border-radius: 24px;
+  transition: 0.3s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch input:checked+.toggle-slider {
+  background: #06b6d4;
+}
+
+.toggle-switch input:checked+.toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* SVG Icons */
+svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content-card {
+    padding: 24px;
+  }
+
+  .avatar-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Profile */
+.topbar {
+  background: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.topbar h5 {
+  font-size: 24px;
+  color: #1e293b;
+  font-weight: 600;
+  margin: 0;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.profile-trigger:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.profile-avatar.show {
+  display: block;
+}
+
+.profile-avatar-fallback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.profile-store {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+.profile-dropdown-icon {
+  width: 16px;
+  height: 16px;
+  color: #64748b;
+  transition: transform 0.3s ease;
+}
+
+.profile-trigger.active .profile-dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.profile-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.profile-dropdown-header {
+  padding: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.profile-dropdown-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.profile-dropdown-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.profile-dropdown-avatar.show {
+  display: block;
+}
+
+.profile-dropdown-avatar-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-dropdown-info h4 {
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.profile-dropdown-info p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.profile-dropdown-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  display: block;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-dropdown-menu {
+  padding: 8px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f8fafc;
+  color: #06b6d4;
+}
+
+.dropdown-item svg {
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+}
+
+.dropdown-item:hover svg {
+  color: #06b6d4;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 8px 0;
+}
+
+.dropdown-item.logout {
+  color: #ef4444;
+}
+
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.dropdown-item.logout svg {
+  color: #ef4444;
+}
+
+.dropdown-item.logout:hover svg {
+  color: #dc2626;
+}
+
+.profile-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-info {
+    display: none;
+  }
+
+  .profile-trigger {
+    padding: 8px;
+  }
+
+  .profile-dropdown {
+    width: calc(100vw - 40px);
+    right: -12px;
+  }
+}
+
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.dropdown-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.demo-info {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.demo-info h3 {
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.demo-info ul {
+  color: #64748b;
+  line-height: 1.8;
+  list-style-position: inside;
+}
+
+.demo-info pre {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+/* =============================================
+   RESPONSIVE QO'SHIMCHA - MAVJUD CSS USTIGA
+   Bu kodni style.css ning OXIRIGA qo'shing
+============================================= */
+
+/* =============================================
+   1. RESPONSIVE VARIABLES
+============================================= */
+:root {
+  /* Responsive Typography */
+  --fs-responsive-xs: clamp(11px, 2vw, 12px);
+  --fs-responsive-sm: clamp(12px, 2.2vw, 13px);
+  --fs-responsive-base: clamp(13px, 2.5vw, 14px);
+  --fs-responsive-md: clamp(14px, 2.8vw, 15px);
+  --fs-responsive-lg: clamp(15px, 3vw, 16px);
+  --fs-responsive-xl: clamp(18px, 3.5vw, 20px);
+  --fs-responsive-2xl: clamp(20px, 4vw, 24px);
+
+  /* Responsive Spacing */
+  --space-responsive-xs: clamp(4px, 1vw, 8px);
+  --space-responsive-sm: clamp(8px, 1.5vw, 12px);
+  --space-responsive-md: clamp(12px, 2vw, 16px);
+  --space-responsive-lg: clamp(16px, 2.5vw, 20px);
+}
+
+/* =============================================
+   2. GLOBAL RESPONSIVE FIXES
+============================================= */
+body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+.d-flex {
+  align-items: stretch;
+}
+
+.content {
+  min-width: 0;
+  overflow-x: visible;
+  width: 100%;
+}
+
+/* =============================================
+   3. TOPBAR RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .topbar {
+    padding: 10px 14px;
+  }
+
+  #pageTitle {
+    font-size: 16px;
+  }
+
+  /* Hide profile text on mobile */
+  .profile-info {
+    display: none !important;
+  }
+
+  .profile-dropdown-icon {
+    display: none !important;
+  }
+
+  .profile-trigger {
+    padding: 6px !important;
+    min-width: auto;
+  }
+
+  .profile-avatar-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-avatar,
+  .profile-avatar-fallback {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-avatar-fallback {
+    font-size: 14px;
+  }
+}
+
+/* Profile dropdown mobile */
+@media (max-width: 767px) {
+  .profile-dropdown {
+    width: calc(100vw - 40px);
+    max-width: 320px;
+    right: -12px;
+  }
+
+  .profile-dropdown-header {
+    padding: 16px;
+  }
+
+  .profile-dropdown-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+}
+
+/* =============================================
+   4. SIDEBAR RESPONSIVE
+============================================= */
+
+/* Tablet - Narrow Sidebar */
+@media (min-width: 768px) and (max-width: 991px) {
+  .sidebar {
+    width: 70px;
+    min-width: 70px;
+    padding: 20px 10px;
+  }
+
+  .sidebar .logo {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px 8px;
+    margin-bottom: 8px;
+  }
+
+  .nav-item svg {
+    margin: 0;
+  }
+
+  /* Hide text on tablet */
+  .nav-item {
+    font-size: 0;
+  }
+
+  .nav-item svg {
+    font-size: 20px;
+  }
+}
+
+/* Mobile - Hide Sidebar */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none !important;
+  }
+
+  .content {
+    margin: 0;
+    padding: 12px;
+    padding-bottom: 80px;
+  }
+}
+
+/* =============================================
+   5. MOBILE BOTTOM NAVIGATION
+============================================= */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    padding: 0 4px;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 9999;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .mobile-bottom-nav button {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2px;
+    font-size: 10px;
+    color: #64748b;
+    padding: 6px 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .mobile-bottom-nav button i {
+    font-size: 20px;
+  }
+
+  .mobile-bottom-nav button.active,
+  .mobile-bottom-nav button:active {
+    color: #06b6d4;
+    background: #f0f9ff;
+  }
+
+  .mobile-bottom-nav button span {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+  .mobile-bottom-nav {
+    height: 60px;
+    padding: 0 2px;
+  }
+
+  .mobile-bottom-nav button {
+    font-size: 9px;
+    padding: 4px 2px;
+  }
+
+  .mobile-bottom-nav button i {
+    font-size: 18px;
+  }
+}
+
+/* =============================================
+   6. CARDS & STATISTICS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .card-box {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .counter,
+  .daily-c,
+  .tranzik-text,
+  .daily-counter {
+    font-size: clamp(1.8rem, 6vw, 2.2rem);
+  }
+
+  .counter-smal {
+    font-size: 13px;
+  }
+
+  .counter-change {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-box {
+    padding: 12px;
+  }
+
+  .counter,
+  .daily-c,
+  .tranzik-text,
+  .daily-counter {
+    font-size: clamp(1.6rem, 7vw, 2rem);
+  }
+}
+
+/* Stats Container Responsive */
+@media (max-width: 767px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 14px;
+  }
+
+  .stat-card .amount {
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+  }
+}
+
+/* =============================================
+   7. TABLES - MOBILE CARDS
+============================================= */
+
+/* Products Table */
+@media (max-width: 767px) {
+
+  #productsSection .table,
+  #productsSection thead {
+    display: block;
+    justify-content: center !important;
+  }
+
+  #productTable tr {
+    width: 400px !important;
+    display: block;
+    background: #fff;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    margin-left: 12px;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f1f5f9;
+  }
+
+  #productTable td {
+    width: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 13px;
+    border: none;
+  }
+
+  #productTable td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  #productTable td:first-child {
+    border-top: none;
+  }
+
+  #productTable td:last-child {
+    border-bottom: none;
+  }
+
+  .product-img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ===== TRANSACTIONS TABLE RESPONSIVE ===== */
+@media (max-width: 767px) {
+  
+  /* Jadval headerini yashirish */
+  #transactionsTable thead {
+    display: none;
+  }
+
+  /* Har bir qatorni card ko'rinishiga o'zgartirish */
+  #transactionsTableBody tr {
+    display: block;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+  }
+
+  #transactionsTableBody tr:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Har bir td ni flex qilib ko'rsatish */
+  #transactionsTableBody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  #transactionsTableBody td:last-child {
+    border-bottom: none;
+  }
+
+  /* Label qo'shish */
+  #transactionsTableBody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #64748b;
+    font-size: 13px;
+    min-width: 90px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* Ma'lumotlarni o'ng tomonga joylashtirish */
+  #transactionsTableBody td > * {
+    text-align: right;
+  }
+
+  /* Product info styling */
+  .product-info {
+    text-align: right;
+    max-width: 180px;
+  }
+
+  .product-name {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+
+  .product-category {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  /* Quantity info */
+  .quantity-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .qty-value {
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .qty-unit {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  /* Price info */
+  .price-info {
+    font-weight: 600;
+    color: #059669;
+  }
+
+  .currency {
+    font-size: 12px;
+    margin-left: 4px;
+  }
+
+  /* DateTime info */
+  .datetime-info {
+    text-align: right;
+  }
+
+  .date-text {
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 2px;
+  }
+
+  .time-text {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  /* Payment badges */
+  .payment-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .payment-card {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .payment-cash {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  /* Status badge */
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .status-sold {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px !important;
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .empty-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+
+  .empty-subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+}
+
+/* ===== DESKTOP STYLING ===== */
+@media (min-width: 768px) {
+  #transactionsTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  #transactionsTable thead {
+    background: #f8fafc;
+  }
+
+  #transactionsTable th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #475569;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  #transactionsTableBody td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .transaction-row {
+    transition: all 0.2s ease;
+  }
+
+  .transaction-row:hover {
+    background: #f8fafc;
+  }
+}
+
+/* Sales Table (Selling section) */
+@media (max-width: 767px) {
+  thead th {
+    display: none !important;
+  }
+
+  #salesTable tr {
+    display: block;
+    background: #fff;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+  }
+
+  #salesTable td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    border: none;
+  }
+
+  #salesTable td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #64748b;
+  }
+}
+
+/* Debtors Table */
+@media (max-width: 767px) {
+
+  thead th {
+    display: none !important;
+  }
+
+  #debtorTableBody tr {
+    width: 95% !important;
+    display: block;
+    background: #fff;
+    padding: 14px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    margin-left: 10px;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.06);
+    /* border: 1px solid red; */
+  }
+
+  #debtorTableBody td {
+    display: flex;
+    justify-content: space-between !important;
+    align-items: flex-start;
+    font-size: 13px;
+    padding: 8px 0;
+    border: none;
+  }
+
+  #debtorTableBody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 12px;
+    min-width: 100px;
+  }
+
+  /* Action buttons grid on mobile */
+  .action-buttons-grid {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 6px;
+  }
+
+  .action-btn {
+    width: 100%;
+    height: 36px;
+  }
+}
+
+/* Generic Table Responsive */
+@media (max-width: 767px) {
+  .table-responsive {
+    /* overflow-x: auto !important; */
+    -webkit-overflow-scrolling: touch;
+
+  }
+
+  .table {
+    min-width: 100%;
+  }
+}
+
+/* =============================================
+   8. CHARTS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .chart-container {
+    padding: 12px;
+  }
+
+  .chart-container canvas {
+    min-height: 220px !important;
+    max-height: 300px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container canvas {
+    min-height: 200px !important;
+  }
+}
+
+/* Row responsive for charts */
+@media (max-width: 991px) {
+  .row.mt-4 {
+    margin-top: 16px !important;
+  }
+
+  .row .col-lg-8,
+  .row .col-lg-4,
+  .row .col-lg-6 {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+}
+
+/* =============================================
+   9. FORMS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+
+  .form-control,
+  .form-select {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  #productSearch,
+  #transactionSearch,
+  .tr-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  /* Modal responsive */
+  .modal-content,
+  .modal-debtors-content {
+    width: calc(100vw - 32px);
+    max-width: 100%;
+    padding: 16px;
+    margin: 16px;
+  }
+
+  .modal-header,
+  .modal-debtors-header {
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  /* Two column forms to single column */
+  .row .col-md-6,
+  .row .col-md-4,
+  .row .col-md-3,
+  .form-grid>div {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}
+
+/* =============================================
+   10. BUTTONS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Button groups stack on mobile */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-group .btn {
+    width: 100%;
+    margin-bottom: 8px;
+    border-radius: 8px !important;
+  }
+
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .d-flex.gap-2>* {
+    width: 100%;
+  }
+}
+
+/* =============================================
+   11. FILTERS & SEARCH RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .filter-tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .filter-tabs button {
+    padding: 8px 14px;
+    font-size: 12px;
+    flex: 1 1 auto;
+    min-width: calc(50% - 3px);
+  }
+
+  .search-add-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-box input {
+    padding: 10px 12px 10px 36px;
+    font-size: 14px;
+  }
+
+  .btn-add-debt {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* =============================================
+   12. BADGES & STATUS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+
+  .badge,
+  .status-badge,
+  .payment-badge,
+  .sms-type-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .status-badge-large {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* =============================================
+   13. OVERDUE CARDS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .overdue-wrapper {
+    width: 100%;
+    padding: 16px;
+  }
+
+  #overdueCards {
+    grid-template-columns: 1fr;
+  }
+
+  .overdue-card-mini {
+    padding: 12px 14px;
+  }
+
+  .overdue-mini-name {
+    font-size: 14px;
+  }
+
+  .overdue-mini-amount {
+    font-size: 13px;
+  }
+
+  .overdue-mini-days {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* =============================================
+   14. LOW STOCK SECTION RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .low-stock-section {
+    padding: 16px;
+  }
+
+  .section-header h4 {
+    font-size: 16px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+  }
+
+  .stock-card {
+    padding: 14px;
+  }
+
+  .stock-title {
+    font-size: 15px;
+  }
+}
+
+/* =============================================
+   15. SETTINGS PAGE RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .header p {
+    font-size: 14px;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .content-card {
+    padding: 20px;
+  }
+
+  .avatar-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar-actions {
+    width: 100%;
+  }
+
+  .avatar-actions button {
+    width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-item {
+    padding: 12px;
+  }
+}
+
+/* =============================================
+   16. NOTIFICATIONS RESPONSIVE
+============================================= */
+@media (max-width: 767px) {
+
+  .notification,
+  .success-message {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: calc(100vw - 24px);
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+/* =============================================
+   17. EXTRA SMALL MOBILE (< 360px)
+============================================= */
+@media (max-width: 360px) {
+  body {
+    font-size: 13px;
+  }
+
+  .content {
+    padding: 8px;
+    padding-bottom: 68px;
+  }
+
+  .topbar {
+    padding: 8px 10px;
+  }
+
+  #pageTitle {
+    font-size: 14px;
+  }
+
+  .card-box {
+    padding: 10px;
+  }
+
+  .counter,
+  .daily-c {
+    font-size: 1.5rem;
+  }
+
+  .mobile-bottom-nav {
+    height: 56px;
+  }
+
+  .mobile-bottom-nav button {
+    font-size: 8px;
+  }
+
+  .mobile-bottom-nav button i {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+}
+
+/* =============================================
+   18. UTILITY RESPONSIVE CLASSES
+============================================= */
+@media (max-width: 767px) {
+  .d-md-none {
+    display: none !important;
+  }
+
+  .d-md-block {
+    display: block !important;
+  }
+
+  .text-md-center {
+    text-align: center !important;
+  }
+
+  .w-md-100 {
+    width: 100% !important;
+  }
+}
+
+/* =============================================
+   19. SCROLL OPTIMIZATION
+============================================= */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 767px) {
+
+  /* Prevent horizontal scroll */
+  html,
+  body {
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Smooth touch scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* =============================================
+   20. PRINT STYLES (Bonus)
+============================================= */
+@media print {
+
+  .sidebar,
+  .mobile-bottom-nav,
+  .topbar,
+  .btn,
+  .action-buttons-grid {
+    display: none !important;
+  }
+
+  .content {
+    padding: 0;
+    width: 100%;
+  }
+
+  .card-box {
+    break-inside: avoid;
+  }
+}
+
+/* Sotuv bildirishnomalari */
+.sale-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideInRight 0.3s ease-out;
+  min-width: 300px;
+}
+
+.sale-alert.success {
+  background-color: #28a745;
+  color: white;
+  border-left: 5px solid #1e7e34;
+}
+
+.sale-alert.error {
+  background-color: #dc3545;
+  color: white;
+  border-left: 5px solid #bd2130;
+}
+
+.sale-alert.hidden {
+  display: none;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
