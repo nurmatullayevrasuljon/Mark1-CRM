@@ -406,7 +406,7 @@ const AuthSystem = (function () {
         // ============================================================
         protectPage: function () {
             const page = window.location.pathname.toLowerCase();
-            const publicPages = ["signup.html", "login.html", "landing.html"];
+            const publicPages = ["signup.html", "login.html", "w-page.html"];
 
             const isPublic = publicPages.some(p => page.includes(p));
 
