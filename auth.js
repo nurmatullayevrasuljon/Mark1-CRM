@@ -230,7 +230,7 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 PROFESSIONAL AUTH SYSTEM - FINAL VERSION
+// 🔐 PROFESSIONAL AUTH SYSTEM - FINAL FIXED VERSION
 // ============================================================
 
 const AuthSystem = (function () {
@@ -240,10 +240,6 @@ const AuthSystem = (function () {
   const CURRENT_USER_KEY = 'crm_current_user';
   const SESSION_KEY = 'crm_session_active';
 
-  // ============================
-  // 🔹 PRIVATE FUNCTIONS
-  // ============================
-  
   function getAllUsers() {
     try {
       const users = localStorage.getItem(USERS_KEY);
@@ -270,9 +266,6 @@ const AuthSystem = (function () {
     return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2);
   }
 
-  // ============================
-  // 🔹 PUBLIC API
-  // ============================
   return {
 
     register: function (data) {
@@ -310,7 +303,7 @@ const AuthSystem = (function () {
       allUsers.push(newUser);
       saveAllUsers(allUsers);
 
-      console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', newUser.email);
+      console.log('✅ Ro\'yxatdan o\'tdi:', newUser.email);
       return { success: true, user: newUser };
     },
 
@@ -343,7 +336,7 @@ const AuthSystem = (function () {
         const data = localStorage.getItem(CURRENT_USER_KEY);
         return data ? JSON.parse(data) : null;
       } catch (e) {
-        console.error('❌ getCurrentUser xatosi:', e);
+        console.error('❌ getCurrentUser error:', e);
         return null;
       }
     },
@@ -351,7 +344,7 @@ const AuthSystem = (function () {
     updateCurrentUserData: function (updates) {
       const currentUser = this.getCurrentUser();
       if (!currentUser) {
-        console.error('❌ Joriy foydalanuvchi topilmadi');
+        console.error('❌ Current user not found');
         return false;
       }
 
@@ -380,7 +373,7 @@ const AuthSystem = (function () {
       if (index !== -1) {
         allUsers[index] = updatedUser;
         saveAllUsers(allUsers);
-        console.log('✅ Ma\'lumotlar yangilandi:', Object.keys(updates));
+        console.log('✅ Data updated:', Object.keys(updates));
       }
 
       return true;
@@ -396,7 +389,7 @@ const AuthSystem = (function () {
     logout: function () {
       const user = this.getCurrentUser();
       if (user) {
-        console.log('👋 Tizimdan chiqdi:', user.email);
+        console.log('👋 Logged out:', user.email);
       }
       
       localStorage.removeItem(CURRENT_USER_KEY);
@@ -407,7 +400,7 @@ const AuthSystem = (function () {
 })();
 
 // ============================================================
-// 🔥 GLOBAL PAGE TRANSITION
+// 🔥 PAGE TRANSITION
 // ============================================================
 (function () {
   const overlay = document.createElement("div");
@@ -536,7 +529,7 @@ function initSignupForm() {
 }
 
 // ============================================================
-// 🔐 LOGIN FORM
+// 🔐 LOGIN FORM - HECH QANDAY AUTH CHECK YO'Q!
 // ============================================================
 function initLoginForm() {
   const form = document.getElementById("loginForm");
@@ -624,48 +617,32 @@ function initLandingPage() {
 }
 
 // ============================================================
-// 🎯 INITIALIZATION - AQLLI ROUTING
+// 🎯 INITIALIZATION - HECH QANDAY AUTO-REDIRECT YO'Q
 // ============================================================
 document.addEventListener("DOMContentLoaded", function () {
   const path = window.location.pathname.toLowerCase();
   
-  console.log('📄 Current page:', path);
+  console.log('📄 Page loaded:', path);
 
-  // ✅ SAHIFALARNI ANIQLASH
-  const isSignup = path.includes('signup');
-  const isLogin = path.includes('login');
-  const isLanding = path.includes('landing') || path === '/' || path === '/index.htm';
-  const isIndex = path.includes('index.html');
-
-  // ✅ SAHIFAGA QARAB INIT
-  if (isSignup) {
-    console.log('➡️ Signup page');
+  // Sahifalarni aniqlash
+  if (path.includes('signup')) {
+    console.log('▶️ Signup page init');
     initSignupForm();
   } 
-  else if (isLogin) {
-    console.log('➡️ Login page');
+  else if (path.includes('login')) {
+    console.log('▶️ Login page init - NO AUTH CHECK HERE!');
     initLoginForm();
   } 
-  else if (isLanding) {
-    console.log('➡️ Landing page');
+  else if (path.includes('landing') || path === '/' || path === '/index.htm') {
+    console.log('▶️ Landing page init');
     initLandingPage();
   } 
-  else if (isIndex) {
-    console.log('➡️ Dashboard page');
-    
-    // ⚠️ FAQAT SHU YERDA AUTH CHECK!
-    if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Session yo\'q - login.html ga redirect');
-      window.location.href = 'login.html';
-    } else {
-      console.log('✅ Session valid - dashboard yuklandi');
-    }
-  }
-  // ✅ Navbar bor sahifalar uchun
   else if (document.getElementById('navbar')) {
-    console.log('➡️ Page with navbar - landing init');
+    console.log('▶️ Navbar detected - landing init');
     initLandingPage();
   }
+  
+  // ⚠️ MUHIM: login.html va signup.html da HECH QANDAY auth check yo'q!
 });
 
-console.log("🔥 AUTH SYSTEM TAYYOR");
+console.log("🔥 AUTH SYSTEM LOADED");

@@ -12,7 +12,23 @@
 //     return;
 //   }
 // })();
-
+// ============================================================
+// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
+// ============================================================
+(function() {
+  const currentPath = window.location.pathname.toLowerCase();
+  
+  // Agar index.html sahifasida bo'lsak
+  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
+    // Session tekshirish
+    if (!AuthSystem.isSessionValid()) {
+      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
+      window.location.href = 'login.html';
+      return;
+    }
+    console.log('✅ Session valid - user authenticated');
+  }
+})();
 // ============================================================
 // 📦 USER DATA LOADING
 // ============================================================
