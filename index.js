@@ -208,10 +208,10 @@ function protectPage() {
   }
 
   // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
-  if (!isUserLoggedIn()) {
-    console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
-    window.location.href = 'login.html';
-  }
+  // if (!isUserLoggedIn()) {
+  //   console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
+  //   window.location.href = 'login.html';
+  // }
 }
 
 // ============================================================
