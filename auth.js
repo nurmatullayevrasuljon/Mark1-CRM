@@ -230,15 +230,12 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FIXED)
+// 🔐 PROFESSIONAL AUTH SYSTEM - FINAL VERSION
 // ============================================================
 
 const AuthSystem = (function () {
   'use strict';
 
-  // ============================
-  // 🔹 STORAGE KEYS
-  // ============================
   const USERS_KEY = 'crm_all_users';
   const CURRENT_USER_KEY = 'crm_current_user';
   const SESSION_KEY = 'crm_session_active';
@@ -278,9 +275,6 @@ const AuthSystem = (function () {
   // ============================
   return {
 
-    // ============================================================
-    // 📝 RO'YXATDAN O'TKAZISH
-    // ============================================================
     register: function (data) {
       const allUsers = getAllUsers();
 
@@ -300,15 +294,12 @@ const AuthSystem = (function () {
         password: hashPassword(data.password),
         role: "Boshqaruv",
         createdAt: new Date().toISOString(),
-
-        // Dashboard uchun bo'sh struktura
         products: [],
         categories: ['Electronics'],
         sales: [],
         debtors: [],
         paidDebtors: [],
         smsHistory: [],
-
         stats: {
           customers: 0,
           deals: 0,
@@ -323,9 +314,6 @@ const AuthSystem = (function () {
       return { success: true, user: newUser };
     },
 
-    // ============================================================
-    // 🔐 LOGIN
-    // ============================================================
     login: function (emailOrPhone, password) {
       const users = getAllUsers();
       const hashed = hashPassword(password);
@@ -343,7 +331,6 @@ const AuthSystem = (function () {
         };
       }
 
-      // Session o'rnatish
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       localStorage.setItem(SESSION_KEY, "true");
 
@@ -351,9 +338,6 @@ const AuthSystem = (function () {
       return { success: true, user };
     },
 
-    // ============================================================
-    // 👤 HOZIRGI USERNI OLISH
-    // ============================================================
     getCurrentUser: function () {
       try {
         const data = localStorage.getItem(CURRENT_USER_KEY);
@@ -364,9 +348,6 @@ const AuthSystem = (function () {
       }
     },
 
-    // ============================================================
-    // 💾 MA'LUMOTLARNI YANGILASH (ASOSIY FUNKSIYA)
-    // ============================================================
     updateCurrentUserData: function (updates) {
       const currentUser = this.getCurrentUser();
       if (!currentUser) {
@@ -374,7 +355,6 @@ const AuthSystem = (function () {
         return false;
       }
 
-      // Deep merge - har bir maydon to'g'ri yangilanadi
       const updatedUser = JSON.parse(JSON.stringify(currentUser));
 
       Object.keys(updates).forEach(key => {
@@ -392,10 +372,8 @@ const AuthSystem = (function () {
         }
       });
 
-      // 1. CURRENT USER ni yangilash
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
 
-      // 2. GLOBAL USERS bazasini yangilash
       const allUsers = getAllUsers();
       const index = allUsers.findIndex(u => u.userId === currentUser.userId);
 
@@ -408,9 +386,6 @@ const AuthSystem = (function () {
       return true;
     },
 
-    // ============================================================
-    // ✅ SESSIYA TEKSHIRISH
-    // ============================================================
     isSessionValid: function () {
       return (
         localStorage.getItem(SESSION_KEY) === "true" &&
@@ -418,9 +393,6 @@ const AuthSystem = (function () {
       );
     },
 
-    // ============================================================
-    // 🚪 LOGOUT
-    // ============================================================
     logout: function () {
       const user = this.getCurrentUser();
       if (user) {
@@ -429,17 +401,13 @@ const AuthSystem = (function () {
       
       localStorage.removeItem(CURRENT_USER_KEY);
       localStorage.removeItem(SESSION_KEY);
-      
-      // ✅ FIX: Faqat logout tugmasi bosilganda redirect qilish
-      if (!window.location.pathname.includes('login.html')) {
-        window.location.href = "login.html";
-      }
+      window.location.href = "login.html";
     }
   };
 })();
 
 // ============================================================
-// 🔥 GLOBAL PAGE TRANSITION (FIXED)
+// 🔥 GLOBAL PAGE TRANSITION
 // ============================================================
 (function () {
   const overlay = document.createElement("div");
@@ -485,7 +453,7 @@ const AuthSystem = (function () {
 })();
 
 // ============================================================
-// 📝 SIGNUP FORM HANDLER
+// 📝 SIGNUP FORM
 // ============================================================
 function initSignupForm() {
   const form = document.getElementById("signupForm");
@@ -544,7 +512,6 @@ function initSignupForm() {
     }
   });
 
-  // Google Login
   const googleBtn = document.getElementById('googleBtn');
   if (googleBtn) {
     googleBtn.addEventListener('click', function(e) {
@@ -569,7 +536,7 @@ function initSignupForm() {
 }
 
 // ============================================================
-// 🔐 LOGIN FORM HANDLER (FIXED - NO REDIRECT LOOP)
+// 🔐 LOGIN FORM
 // ============================================================
 function initLoginForm() {
   const form = document.getElementById("loginForm");
@@ -582,7 +549,6 @@ function initLoginForm() {
   const phoneTab = document.getElementById("phoneTab");
   const label = document.getElementById("loginLabel");
 
-  // Tab switching
   if (emailTab && phoneTab && label && loginInput) {
     emailTab.onclick = () => {
       emailTab.classList.add("active");
@@ -633,7 +599,7 @@ function initLoginForm() {
 }
 
 // ============================================================
-// 🏠 LANDING PAGE INIT
+// 🏠 LANDING PAGE
 // ============================================================
 function initLandingPage() {
   const navbar = document.getElementById('navbar');
@@ -655,48 +621,51 @@ function initLandingPage() {
 
   if (startBtn) startBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'signup.html'; };
   if (trialBtn) trialBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'signup.html'; };
-
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
-      if (href !== '#' && href.length > 1) {
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          navbar.classList.remove('mobile-open');
-          mobileMenuBtn.textContent = '☰';
-        }
-      }
-    });
-  });
 }
 
 // ============================================================
-// 🎯 MAIN INITIALIZATION (FIXED - NO LOOPS)
+// 🎯 INITIALIZATION - AQLLI ROUTING
 // ============================================================
 document.addEventListener("DOMContentLoaded", function () {
-  const currentPage = window.location.pathname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
+  
+  console.log('📄 Current page:', path);
 
-  // ✅ Login va Signup sahifalarida AUTH CHECK QIL MASLIK!
-  if (currentPage.includes('signup')) {
+  // ✅ SAHIFALARNI ANIQLASH
+  const isSignup = path.includes('signup');
+  const isLogin = path.includes('login');
+  const isLanding = path.includes('landing') || path === '/' || path === '/index.htm';
+  const isIndex = path.includes('index.html');
+
+  // ✅ SAHIFAGA QARAB INIT
+  if (isSignup) {
+    console.log('➡️ Signup page');
     initSignupForm();
-  }
-  else if (currentPage.includes('login')) {
+  } 
+  else if (isLogin) {
+    console.log('➡️ Login page');
     initLoginForm();
-  }
-  else if (currentPage.includes('w-page') || currentPage === '/' || currentPage.endsWith('.html') === false) {
+  } 
+  else if (isLanding) {
+    console.log('➡️ Landing page');
     initLandingPage();
-  }
-  // ⚠️ FAQAT INDEX.HTML DA AUTH CHECK
-  else if (currentPage.includes('index')) {
-    // Auth check - faqat index sahifada
+  } 
+  else if (isIndex) {
+    console.log('➡️ Dashboard page');
+    
+    // ⚠️ FAQAT SHU YERDA AUTH CHECK!
     if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
+      console.log('⚠️ Session yo\'q - login.html ga redirect');
       window.location.href = 'login.html';
+    } else {
+      console.log('✅ Session valid - dashboard yuklandi');
     }
+  }
+  // ✅ Navbar bor sahifalar uchun
+  else if (document.getElementById('navbar')) {
+    console.log('➡️ Page with navbar - landing init');
+    initLandingPage();
   }
 });
 
-console.log("🔥 AUTH SYSTEM TAYYOR - BARCHA MUAMMOLAR TUZATILDI");
+console.log("🔥 AUTH SYSTEM TAYYOR");
