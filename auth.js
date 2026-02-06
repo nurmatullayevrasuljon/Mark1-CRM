@@ -230,7 +230,7 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 PROFESSIONAL AUTH SYSTEM - FINAL FIXED VERSION
+// 🔐 AUTH SYSTEM - ZERO REDIRECT VERSION
 // ============================================================
 
 const AuthSystem = (function () {
@@ -242,8 +242,7 @@ const AuthSystem = (function () {
 
   function getAllUsers() {
     try {
-      const users = localStorage.getItem(USERS_KEY);
-      return users ? JSON.parse(users) : [];
+      return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
     } catch {
       return [];
     }
@@ -267,7 +266,6 @@ const AuthSystem = (function () {
   }
 
   return {
-
     register: function (data) {
       const allUsers = getAllUsers();
 
@@ -293,17 +291,11 @@ const AuthSystem = (function () {
         debtors: [],
         paidDebtors: [],
         smsHistory: [],
-        stats: {
-          customers: 0,
-          deals: 0,
-          today: 0
-        }
+        stats: { customers: 0, deals: 0, today: 0 }
       };
 
       allUsers.push(newUser);
       saveAllUsers(allUsers);
-
-      console.log('✅ Ro\'yxatdan o\'tdi:', newUser.email);
       return { success: true, user: newUser };
     },
 
@@ -311,23 +303,17 @@ const AuthSystem = (function () {
       const users = getAllUsers();
       const hashed = hashPassword(password);
 
-      const user = users.find(
-        u =>
-          (u.email === emailOrPhone || u.phone === emailOrPhone) &&
-          u.password === hashed
+      const user = users.find(u =>
+        (u.email === emailOrPhone || u.phone === emailOrPhone) &&
+        u.password === hashed
       );
 
       if (!user) {
-        return { 
-          success: false, 
-          message: "Email/Telefon yoki parol noto'g'ri!" 
-        };
+        return { success: false, message: "Email/Telefon yoki parol noto'g'ri!" };
       }
 
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       localStorage.setItem(SESSION_KEY, "true");
-
-      console.log('✅ Tizimga kirdi:', user.email);
       return { success: true, user };
     },
 
@@ -335,32 +321,23 @@ const AuthSystem = (function () {
       try {
         const data = localStorage.getItem(CURRENT_USER_KEY);
         return data ? JSON.parse(data) : null;
-      } catch (e) {
-        console.error('❌ getCurrentUser error:', e);
+      } catch {
         return null;
       }
     },
 
     updateCurrentUserData: function (updates) {
       const currentUser = this.getCurrentUser();
-      if (!currentUser) {
-        console.error('❌ Current user not found');
-        return false;
-      }
+      if (!currentUser) return false;
 
       const updatedUser = JSON.parse(JSON.stringify(currentUser));
 
       Object.keys(updates).forEach(key => {
         if (Array.isArray(updates[key])) {
           updatedUser[key] = [...updates[key]];
-        }
-        else if (typeof updates[key] === "object" && updates[key] !== null) {
-          updatedUser[key] = {
-            ...updatedUser[key],
-            ...updates[key]
-          };
-        }
-        else {
+        } else if (typeof updates[key] === "object" && updates[key] !== null) {
+          updatedUser[key] = { ...updatedUser[key], ...updates[key] };
+        } else {
           updatedUser[key] = updates[key];
         }
       });
@@ -373,25 +350,16 @@ const AuthSystem = (function () {
       if (index !== -1) {
         allUsers[index] = updatedUser;
         saveAllUsers(allUsers);
-        console.log('✅ Data updated:', Object.keys(updates));
       }
 
       return true;
     },
 
     isSessionValid: function () {
-      return (
-        localStorage.getItem(SESSION_KEY) === "true" &&
-        this.getCurrentUser() !== null
-      );
+      return localStorage.getItem(SESSION_KEY) === "true" && this.getCurrentUser() !== null;
     },
 
     logout: function () {
-      const user = this.getCurrentUser();
-      if (user) {
-        console.log('👋 Logged out:', user.email);
-      }
-      
       localStorage.removeItem(CURRENT_USER_KEY);
       localStorage.removeItem(SESSION_KEY);
       window.location.href = "login.html";
@@ -405,15 +373,7 @@ const AuthSystem = (function () {
 (function () {
   const overlay = document.createElement("div");
   overlay.className = "page-overlay";
-  overlay.style.cssText = `
-    position: fixed;
-    inset: 0;
-    background: #0f172a;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-  `;
+  overlay.style.cssText = `position:fixed;inset:0;background:#0f172a;z-index:9999;opacity:0;transition:opacity 0.6s ease;pointer-events:none;`;
   document.body.appendChild(overlay);
 
   window.addEventListener("pageshow", () => {
@@ -424,21 +384,14 @@ const AuthSystem = (function () {
   window.goToPage = function (url) {
     overlay.style.opacity = "1";
     document.body.classList.add("page-exit");
-    setTimeout(() => {
-      window.location.href = url;
-    }, 650);
+    setTimeout(() => window.location.href = url, 650);
   };
 
   document.addEventListener("click", function (e) {
     const link = e.target.closest("a");
-    if (
-      link &&
-      link.href &&
-      !link.hasAttribute("target") &&
-      !link.hasAttribute("download") &&
-      link.origin === window.location.origin &&
-      !link.href.includes('#')
-    ) {
+    if (link && link.href && !link.hasAttribute("target") && 
+        !link.hasAttribute("download") && link.origin === window.location.origin && 
+        !link.href.includes('#')) {
       e.preventDefault();
       goToPage(link.href);
     }
@@ -446,12 +399,10 @@ const AuthSystem = (function () {
 })();
 
 // ============================================================
-// 📝 SIGNUP FORM
+// 📝 SIGNUP
 // ============================================================
-function initSignupForm() {
+if (document.getElementById("signupForm")) {
   const form = document.getElementById("signupForm");
-  if (!form) return;
-
   const createBtn = document.getElementById("createBtn");
   const terms = document.getElementById("terms");
   const firstName = document.getElementById("firstName");
@@ -485,18 +436,16 @@ function initSignupForm() {
     createBtn.innerText = 'Yaratilmoqda...';
     createBtn.disabled = true;
 
-    const userData = {
+    const result = AuthSystem.register({
       fullName: firstName.value.trim(),
       email: email.value.trim(),
       phone: '+998 ' + telInputs[0].value.trim(),
       storeName: telInputs[1].value.trim(),
       password: password.value
-    };
-
-    const result = AuthSystem.register(userData);
+    });
 
     if (result.success) {
-      AuthSystem.login(userData.email, userData.password);
+      AuthSystem.login(result.user.email, password.value);
       setTimeout(() => window.location.href = 'index.html', 300);
     } else {
       alert(result.message);
@@ -507,66 +456,35 @@ function initSignupForm() {
 
   const googleBtn = document.getElementById('googleBtn');
   if (googleBtn) {
-    googleBtn.addEventListener('click', function(e) {
+    googleBtn.onclick = (e) => {
       e.preventDefault();
       const id = Math.random().toString(36).substr(2, 9);
-      
-      const demo = {
-        fullName: `Demo User ${id.substr(0, 5)}`,
+      const result = AuthSystem.register({
+        fullName: `Demo ${id.substr(0, 5)}`,
         email: `demo_${id}@gmail.com`,
         phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
         storeName: 'Demo Store',
         password: `demo${id}`
-      };
-
-      const result = AuthSystem.register(demo);
+      });
       if (result.success) {
-        AuthSystem.login(demo.email, demo.password);
+        AuthSystem.login(result.user.email, `demo${id}`);
         window.location.href = 'index.html';
       }
-    });
+    };
   }
 }
 
 // ============================================================
-// 🔐 LOGIN FORM - HECH QANDAY AUTH CHECK YO'Q!
+// 🔐 LOGIN - HECH QANDAY REDIRECT YO'Q
 // ============================================================
-function initLoginForm() {
+if (document.getElementById("loginForm")) {
   const form = document.getElementById("loginForm");
-  if (!form) return;
-
   const loginBtn = document.getElementById("loginBtn");
   const loginInput = document.getElementById("loginInput");
   const password = document.getElementById("password");
-  const emailTab = document.getElementById("emailTab");
-  const phoneTab = document.getElementById("phoneTab");
-  const label = document.getElementById("loginLabel");
-
-  if (emailTab && phoneTab && label && loginInput) {
-    emailTab.onclick = () => {
-      emailTab.classList.add("active");
-      phoneTab.classList.remove("active");
-      label.innerText = "E-pochta manzili";
-      loginInput.type = "email";
-      loginInput.placeholder = "you@example.com";
-      loginInput.value = "";
-      checkForm();
-    };
-
-    phoneTab.onclick = () => {
-      phoneTab.classList.add("active");
-      emailTab.classList.remove("active");
-      label.innerText = "Telefon raqam";
-      loginInput.type = "tel";
-      loginInput.placeholder = "+998 90 123 45 67";
-      loginInput.value = "";
-      checkForm();
-    };
-  }
 
   function checkForm() {
-    const isValid = loginInput.value.trim().length > 4 && password.value.length >= 6;
-    loginBtn.disabled = !isValid;
+    loginBtn.disabled = !(loginInput.value.trim().length > 4 && password.value.length >= 6);
   }
 
   loginInput.addEventListener('input', checkForm);
@@ -591,58 +509,4 @@ function initLoginForm() {
   });
 }
 
-// ============================================================
-// 🏠 LANDING PAGE
-// ============================================================
-function initLandingPage() {
-  const navbar = document.getElementById('navbar');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-
-  if (!navbar || !mobileMenuBtn) return;
-
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  });
-
-  mobileMenuBtn.addEventListener('click', () => {
-    navbar.classList.toggle('mobile-open');
-    mobileMenuBtn.textContent = navbar.classList.contains('mobile-open') ? '✕' : '☰';
-  });
-
-  const startBtn = document.getElementById('startBtn');
-  const trialBtn = document.getElementById('trialBtn');
-
-  if (startBtn) startBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'signup.html'; };
-  if (trialBtn) trialBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'signup.html'; };
-}
-
-// ============================================================
-// 🎯 INITIALIZATION - HECH QANDAY AUTO-REDIRECT YO'Q
-// ============================================================
-document.addEventListener("DOMContentLoaded", function () {
-  const path = window.location.pathname.toLowerCase();
-  
-  console.log('📄 Page loaded:', path);
-
-  // Sahifalarni aniqlash
-  if (path.includes('signup')) {
-    console.log('▶️ Signup page init');
-    initSignupForm();
-  } 
-  else if (path.includes('login')) {
-    console.log('▶️ Login page init - NO AUTH CHECK HERE!');
-    initLoginForm();
-  } 
-  else if (path.includes('landing') || path === '/' || path === '/index.htm') {
-    console.log('▶️ Landing page init');
-    initLandingPage();
-  } 
-  else if (document.getElementById('navbar')) {
-    console.log('▶️ Navbar detected - landing init');
-    initLandingPage();
-  }
-  
-  // ⚠️ MUHIM: login.html va signup.html da HECH QANDAY auth check yo'q!
-});
-
-console.log("🔥 AUTH SYSTEM LOADED");
+console.log("🔥 AUTH LOADED");
