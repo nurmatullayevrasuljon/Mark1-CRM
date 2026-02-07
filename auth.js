@@ -231,7 +231,7 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (COMPLETE FIXED)
+// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FINAL FIX)
 // ============================================================
 
 const AuthSystem = (function () {
@@ -248,7 +248,6 @@ const AuthSystem = (function () {
     // 🔹 PRIVATE FUNCTIONS
     // ============================
     
-    // Barcha userlarni olish
     function getAllUsers() {
         try {
             const users = localStorage.getItem(USERS_KEY);
@@ -259,17 +258,14 @@ const AuthSystem = (function () {
         }
     }
 
-    // Barcha userlarni saqlash
     function saveAllUsers(users) {
         try {
             localStorage.setItem(USERS_KEY, JSON.stringify(users));
-            console.log('✅ Barcha userlar saqlandi');
         } catch (error) {
             console.error('❌ Userlarni saqlashda xato:', error);
         }
     }
 
-    // Parolni xeshlash
     function hashPassword(password) {
         let hash = 0;
         for (let i = 0; i < password.length; i++) {
@@ -279,7 +275,6 @@ const AuthSystem = (function () {
         return hash.toString(36);
     }
 
-    // Random ID generator
     function generateUserId() {
         return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     }
@@ -295,7 +290,6 @@ const AuthSystem = (function () {
         register: function (data) {
             const allUsers = getAllUsers();
 
-            // Email orqali tekshirish
             if (allUsers.find(u => u.email === data.email)) {
                 return { 
                     success: false, 
@@ -312,15 +306,12 @@ const AuthSystem = (function () {
                 password: hashPassword(data.password),
                 role: "Boshqaruv",
                 createdAt: new Date().toISOString(),
-
-                // 🔹 Dashboard uchun struktura
                 products: [],
                 categories: ['Electronics'],
                 sales: [],
                 debtors: [],
                 paidDebtors: [],
                 smsHistory: [],
-
                 stats: {
                     customers: 0,
                     deals: 0,
@@ -331,7 +322,11 @@ const AuthSystem = (function () {
             allUsers.push(newUser);
             saveAllUsers(allUsers);
 
-            console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', newUser.email);
+            // ✅ Ro'yxatdan o'tgandan keyin AVTOMATIK LOGIN
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
+            localStorage.setItem(SESSION_KEY, "true");
+
+            console.log('✅ Ro\'yxatdan o\'tdi va tizimga kirdi:', newUser.email);
             return { success: true, user: newUser };
         },
 
@@ -355,7 +350,6 @@ const AuthSystem = (function () {
                 };
             }
 
-            // Session o'rnatish
             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
             localStorage.setItem(SESSION_KEY, "true");
 
@@ -364,7 +358,7 @@ const AuthSystem = (function () {
         },
 
         // ============================================================
-        // 👤 HOZIRGI USERNI OLISH (YANGILANGAN VERSIYA)
+        // 👤 HOZIRGI USERNI OLISH
         // ============================================================
         getCurrentUser: function () {
             try {
@@ -379,13 +373,10 @@ const AuthSystem = (function () {
                 }
 
                 const user = JSON.parse(userData);
-                
-                // 🔥 MUHIM: Global bazadan eng yangi ma'lumotlarni olish
                 const allUsers = getAllUsers();
                 const latestUser = allUsers.find(u => u.userId === user.userId);
                 
                 if (latestUser) {
-                    // Current user ni yangilash
                     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(latestUser));
                     return latestUser;
                 }
@@ -398,7 +389,7 @@ const AuthSystem = (function () {
         },
 
         // ============================================================
-        // 💾 MA'LUMOTLARNI YANGILASH (TO'LIQ TUZATILGAN)
+        // 💾 MA'LUMOTLARNI YANGILASH
         // ============================================================
         updateCurrentUserData: function (updates) {
             const currentUser = this.getCurrentUser();
@@ -408,16 +399,13 @@ const AuthSystem = (function () {
             }
 
             try {
-                // Deep merge - har bir maydon to'g'ri yangilanadi
                 const updatedUser = JSON.parse(JSON.stringify(currentUser));
 
                 Object.keys(updates).forEach(key => {
                     if (Array.isArray(updates[key])) {
-                        // Massiv bo'lsa to'liq yangilanadi
                         updatedUser[key] = [...updates[key]];
                     }
                     else if (typeof updates[key] === "object" && updates[key] !== null) {
-                        // Obyekt bo'lsa merge qilinadi
                         updatedUser[key] = {
                             ...updatedUser[key],
                             ...updates[key]
@@ -428,22 +416,19 @@ const AuthSystem = (function () {
                     }
                 });
 
-                // 1. GLOBAL USERS bazasini BIRINCHI yangilash
                 const allUsers = getAllUsers();
                 const index = allUsers.findIndex(u => u.userId === currentUser.userId);
 
                 if (index !== -1) {
                     allUsers[index] = updatedUser;
                     saveAllUsers(allUsers);
-                    console.log('✅ Global baza yangilandi:', currentUser.email);
                 } else {
                     console.error('❌ User global bazada topilmadi');
                     return false;
                 }
 
-                // 2. CURRENT USER ni yangilash
                 localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
-                console.log('✅ Current user yangilandi');
+                console.log('✅ Ma\'lumotlar yangilandi');
 
                 return true;
             } catch (error) {
@@ -473,60 +458,76 @@ const AuthSystem = (function () {
             localStorage.removeItem(CURRENT_USER_KEY);
             localStorage.removeItem(SESSION_KEY);
             
-            // Logout qilgandan keyin login sahifasiga yo'naltirish
             if (!window.location.pathname.toLowerCase().includes('login.html')) {
                 window.location.href = "login.html";
             }
         },
 
         // ============================================================
-        // 🛡️ SAHIFANI HIMOYA QILISH (TO'LIQ TUZATILGAN)
+        // 🛡️ SAHIFANI HIMOYA QILISH (FINAL VERSION)
         // ============================================================
         protectPage: function () {
             const currentPath = window.location.pathname.toLowerCase();
             const currentPage = currentPath.split('/').pop() || 'index.html';
             
-            // Public sahifalar ro'yxati (bu sahifalarga hamma kirishi mumkin)
-            const publicPages = ["signup.html", "login.html", "w-page.html"];
-            
-            // Hozirgi sahifa public sahifa ekanligini tekshirish
-            const isPublicPage = publicPages.some(page => currentPage === page);
-
-            console.log('🔍 Sahifa:', currentPage, '| Public:', isPublicPage, '| Session:', this.isSessionValid());
+            const isSignup = currentPage === 'signup.html';
+            const isLogin = currentPage === 'login.html';
+            const isWelcome = currentPage === 'w-page.html' || currentPage === '';
+            const hasSession = this.isSessionValid();
 
             // ============================================================
-            // CASE 1: Public sahifada BO'LMASLIK kerak (index.html va boshqalar)
+            // SIGNUP.HTML - RO'YXATDAN O'TISH
             // ============================================================
-            if (!isPublicPage) {
-                // Agar session yo'q bo'lsa -> login ga yo'naltirish
-                if (!this.isSessionValid()) {
-                    console.log('⚠️ Session yo\'q - Login sahifasiga yo\'naltirish');
-                    window.location.replace('login.html');
+            if (isSignup) {
+                // Agar allaqachon tizimga kirgan bo'lsa
+                if (hasSession) {
+                    console.log('✅ Session bor - Dashboard ga');
+                    window.location.replace('index.html');
                     return false;
                 }
-                // Session bor -> sahifada qolish mumkin
-                console.log('✅ Session aktiv - Sahifa ochiq');
+                // Session yo'q - signup sahifasida qolishi mumkin
+                console.log('✅ Signup sahifa - Ro\'yxatdan o\'tish mumkin');
                 return true;
             }
 
             // ============================================================
-            // CASE 2: Public sahifada (login.html, signup.html)
+            // LOGIN.HTML - KIRISH
             // ============================================================
-            
-            // Agar allaqachon tizimga kirgan bo'lsa -> dashboard ga yo'naltirish
-            if (this.isSessionValid()) {
-                console.log('✅ Allaqachon tizimga kirgan - Dashboard ga yo\'naltirish');
-                window.location.replace('index.html');
+            if (isLogin) {
+                // Agar allaqachon tizimga kirgan bo'lsa
+                if (hasSession) {
+                    console.log('✅ Session bor - Dashboard ga');
+                    window.location.replace('index.html');
+                    return false;
+                }
+                // Session yo'q - login sahifasida qolishi mumkin
+                console.log('✅ Login sahifa - Kirish mumkin');
+                return true;
+            }
+
+            // ============================================================
+            // WELCOME PAGE (W-PAGE.HTML)
+            // ============================================================
+            if (isWelcome) {
+                console.log('✅ Welcome sahifa');
+                return true;
+            }
+
+            // ============================================================
+            // BOSHQA BARCHA SAHIFALAR (INDEX.HTML va boshqalar)
+            // ============================================================
+            if (!hasSession) {
+                console.log('⚠️ Session yo\'q - Login ga yo\'naltirish');
+                window.location.replace('login.html');
                 return false;
             }
 
-            // Session yo'q -> login/signup sahifasida qolishi mumkin
-            console.log('✅ Public sahifa - Kirish/Ro\'yxatdan o\'tish mumkin');
+            console.log('✅ Session aktiv - Sahifa ochiq');
             return true;
         },
 
         // ============================================================
-        // 🔄 MA'LUMOTLARNI SINXRONLASH (YANGI FUNKSIYA)
+        // 🔄 SINXRONLASH
         // ============================================================
         syncUserData: function () {
             const currentUser = localStorage.getItem(CURRENT_USER_KEY);
@@ -539,7 +540,6 @@ const AuthSystem = (function () {
 
                 if (latestUser) {
                     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(latestUser));
-                    console.log('🔄 Ma\'lumotlar sinxronlashtirildi');
                 }
             } catch (error) {
                 console.error('❌ Sinxronlashda xato:', error);
@@ -552,9 +552,6 @@ const AuthSystem = (function () {
 // 🚀 AVTOMATIK ISHGA TUSHIRISH
 // ============================================================
 (function initAuth() {
-    console.log("🔥 AUTH SYSTEM YUKLANMOQDA...");
-    
-    // Sahifani himoya qilish
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             AuthSystem.protectPage();
@@ -563,7 +560,6 @@ const AuthSystem = (function () {
         AuthSystem.protectPage();
     }
 
-    // Har 30 sekundda ma'lumotlarni sinxronlash (faqat private sahifalarda)
     const currentPage = window.location.pathname.toLowerCase();
     const isPublicPage = ["signup.html", "login.html", "w-page.html"].some(page => 
         currentPage.includes(page)
@@ -575,5 +571,5 @@ const AuthSystem = (function () {
         }, 30000);
     }
 
-    console.log("✅ AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
+    console.log("✅ AUTH SYSTEM TAYYOR");
 })();
