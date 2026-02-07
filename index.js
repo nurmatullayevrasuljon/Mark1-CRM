@@ -203,7 +203,7 @@ function protectPage() {
   const currentPage = window.location.pathname;
 
   // Login va signup sahifalarni tekshirmaslik
-  if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('landing')) {
+  if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('w-page')) {
     return;
   }
 
