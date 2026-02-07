@@ -31,19 +31,19 @@
   };
 
   // Barcha <a> linklar uchun
-  document.addEventListener("click", function (e) {
-    const link = e.target.closest("a");
-    if (
-      link &&
-      link.href &&
-      !link.hasAttribute("target") &&
-      !link.hasAttribute("download") &&
-      link.origin === window.location.origin
-    ) {
-      e.preventDefault();
-      goToPage(link.href);
-    }
-  });
+  // document.addEventListener("click", function (e) {
+  //   const link = e.target.closest("a");
+  //   if (
+  //     link &&
+  //     link.href &&
+  //     !link.hasAttribute("target") &&
+  //     !link.hasAttribute("download") &&
+  //     link.origin === window.location.origin
+  //   ) {
+  //     e.preventDefault();
+  //     goToPage(link.href);
+  //   }
+  // });
 })();
 
 // ============================================================
