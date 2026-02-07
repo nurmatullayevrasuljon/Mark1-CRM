@@ -31,19 +31,19 @@
   };
 
   // Barcha <a> linklar uchun
-  // document.addEventListener("click", function (e) {
-  //   const link = e.target.closest("a");
-  //   if (
-  //     link &&
-  //     link.href &&
-  //     !link.hasAttribute("target") &&
-  //     !link.hasAttribute("download") &&
-  //     link.origin === window.location.origin
-  //   ) {
-  //     e.preventDefault();
-  //     goToPage(link.href);
-  //   }
-  // });
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a");
+    if (
+      link &&
+      link.href &&
+      !link.hasAttribute("target") &&
+      !link.hasAttribute("download") &&
+      link.origin === window.location.origin
+    ) {
+      e.preventDefault();
+      goToPage(link.href);
+    }
+  });
 })();
 
 // ============================================================
@@ -199,20 +199,20 @@ function logout() {
 }
 
 // Sahifa himoyasi - faqat tizimga kirganlar ko'rishi mumkin
-// function protectPage() {
-//   const currentPage = window.location.pathname;
+function protectPage() {
+  const currentPage = window.location.pathname;
 
-//   // Login va signup sahifalarni tekshirmaslik
-//   if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('w-page')) {
-//     return;
-//   }
+  // Login va signup sahifalarni tekshirmaslik
+  if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('landing')) {
+    return;
+  }
 
-//   // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
-//   if (!isUserLoggedIn()) {
-//     console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
-//     window.location.href = 'login.html';
-//   }
-// }
+  // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
+  if (!isUserLoggedIn()) {
+    console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
+    window.location.href = 'login.html';
+  }
+}
 
 // ============================================================
 // SIGNUP FORM - RO'YXATDAN O'TISH

@@ -229,28 +229,3 @@ const AuthSystem = (function () {
 })();
 
 console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
-// ============================================================
-// 🛡️ SAHIFANI HIMOYA QILISH (100% to‘g‘ri versiya)
-// ============================================================
-protectPage: function () {
-    const page = window.location.pathname.toLowerCase();
-
-    const publicPages = [
-        "signup.html",
-        "login.html",
-        "landing.html",
-        "w-page.html",
-        ""
-    ];
-
-    const isPublic = publicPages.some(p => page.includes(p));
-
-    if (isPublic) return true;
-
-    if (!this.isSessionValid()) {
-        window.location.replace("login.html");
-        return false;
-    }
-
-    return true;
-}
