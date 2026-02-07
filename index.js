@@ -199,20 +199,20 @@ function logout() {
 }
 
 // Sahifa himoyasi - faqat tizimga kirganlar ko'rishi mumkin
-function protectPage() {
-  const currentPage = window.location.pathname;
+// function protectPage() {
+//   const currentPage = window.location.pathname;
 
-  // Login va signup sahifalarni tekshirmaslik
-  if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('w-page')) {
-    return;
-  }
+//   // Login va signup sahifalarni tekshirmaslik
+//   if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('w-page')) {
+//     return;
+//   }
 
-  // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
-  if (!isUserLoggedIn()) {
-    console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
-    window.location.href = 'login.html';
-  }
-}
+//   // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
+//   if (!isUserLoggedIn()) {
+//     console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
+//     window.location.href = 'login.html';
+//   }
+// }
 
 // ============================================================
 // SIGNUP FORM - RO'YXATDAN O'TISH
