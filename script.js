@@ -1,17 +1,17 @@
 // ============================================================
 // 🔐 AUTH CHECK - HAR SAHIFADA
 // ============================================================
-// (function() {
-//   const currentPage = window.location.pathname.toLowerCase();
-//   const publicPages = ['signup.html', 'login.html', 'index.html'];
+(function() {
+  const currentPage = window.location.pathname.toLowerCase();
+  const publicPages = ['signup.html', 'login.html', 'index.html'];
   
-//   const isPublicPage = publicPages.some(page => currentPage.includes(page));
+  const isPublicPage = publicPages.some(page => currentPage.includes(page));
   
-//   if (!isPublicPage && !AuthSystem.isSessionValid()) {
-//     window.location.href = 'login.html';
-//     return;
-//   }
-// })();
+  if (!isPublicPage && !AuthSystem.isSessionValid()) {
+    window.location.href = 'login.html';
+    return;
+  }
+})();
 // ============================================================
 // 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
 // ============================================================

@@ -50,370 +50,370 @@
 // AUTHENTICATION & STORAGE SYSTEM
 // ============================================================
 
-// // Barcha foydalanuvchilarni olish
-// function getAllUsers() {
-//   try {
-//     const users = localStorage.getItem('allUsers');
-//     return users ? JSON.parse(users) : [];
-//   } catch (error) {
-//     console.error('❌ Foydalanuvchilarni olishda xato:', error);
-//     return [];
-//   }
-// }
+// Barcha foydalanuvchilarni olish
+function getAllUsers() {
+  try {
+    const users = localStorage.getItem('allUsers');
+    return users ? JSON.parse(users) : [];
+  } catch (error) {
+    console.error('❌ Foydalanuvchilarni olishda xato:', error);
+    return [];
+  }
+}
 
-// // Barcha foydalanuvchilarni saqlash
-// function saveAllUsers(users) {
-//   try {
-//     localStorage.setItem('allUsers', JSON.stringify(users));
-//     console.log('✅ Barcha foydalanuvchilar saqlandi:', users.length);
-//     return true;
-//   } catch (error) {
-//     console.error('❌ Foydalanuvchilarni saqlashda xato:', error);
-//     return false;
-//   }
-// }
+// Barcha foydalanuvchilarni saqlash
+function saveAllUsers(users) {
+  try {
+    localStorage.setItem('allUsers', JSON.stringify(users));
+    console.log('✅ Barcha foydalanuvchilar saqlandi:', users.length);
+    return true;
+  } catch (error) {
+    console.error('❌ Foydalanuvchilarni saqlashda xato:', error);
+    return false;
+  }
+}
 
-// // Yangi foydalanuvchi qo'shish
-// function registerUser(userData) {
-//   try {
-//     const allUsers = getAllUsers();
+// Yangi foydalanuvchi qo'shish
+function registerUser(userData) {
+  try {
+    const allUsers = getAllUsers();
 
-//     // ✅ FAQAT EMAIL BO'YICHA TEKSHIRISH (telefon emas!)
-//     const existingUser = allUsers.find(u => u.email === userData.email);
+    // ✅ FAQAT EMAIL BO'YICHA TEKSHIRISH (telefon emas!)
+    const existingUser = allUsers.find(u => u.email === userData.email);
 
-//     if (existingUser) {
-//       console.log('⚠️ Bu email allaqachon ro\'yxatdan o\'tgan:', userData.email);
-//       return {
-//         success: false,
-//         message: 'Bu email allaqachon ro\'yxatdan o\'tgan!\n\nIltimos, tizimga kiring.'
-//       };
-//     }
+    if (existingUser) {
+      console.log('⚠️ Bu email allaqachon ro\'yxatdan o\'tgan:', userData.email);
+      return {
+        success: false,
+        message: 'Bu email allaqachon ro\'yxatdan o\'tgan!\n\nIltimos, tizimga kiring.'
+      };
+    }
 
-//     // Yangi foydalanuvchiga ID berish
-//     userData.userId = Date.now().toString();
-//     userData.registeredAt = new Date().toISOString();
+    // Yangi foydalanuvchiga ID berish
+    userData.userId = Date.now().toString();
+    userData.registeredAt = new Date().toISOString();
 
-//     // Ro'yxatga qo'shish
-//     allUsers.push(userData);
-//     saveAllUsers(allUsers);
+    // Ro'yxatga qo'shish
+    allUsers.push(userData);
+    saveAllUsers(allUsers);
 
-//     console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', userData.email);
-//     return { success: true, user: userData };
-//   } catch (error) {
-//     console.error('❌ Ro\'yxatdan o\'tishda xato:', error);
-//     return { success: false, message: 'Ro\'yxatdan o\'tishda xato yuz berdi' };
-//   }
-// }
+    console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', userData.email);
+    return { success: true, user: userData };
+  } catch (error) {
+    console.error('❌ Ro\'yxatdan o\'tishda xato:', error);
+    return { success: false, message: 'Ro\'yxatdan o\'tishda xato yuz berdi' };
+  }
+}
 
-// // Login - foydalanuvchini topish
-// function loginUser(emailOrPhone, password) {
-//   try {
-//     const allUsers = getAllUsers();
+// Login - foydalanuvchini topish
+function loginUser(emailOrPhone, password) {
+  try {
+    const allUsers = getAllUsers();
 
-//     // Email yoki telefon orqali topish
-//     const user = allUsers.find(u =>
-//       (u.email === emailOrPhone || u.phone === emailOrPhone) &&
-//       u.password === password
-//     );
+    // Email yoki telefon orqali topish
+    const user = allUsers.find(u =>
+      (u.email === emailOrPhone || u.phone === emailOrPhone) &&
+      u.password === password
+    );
 
-//     if (user) {
-//       console.log('✅ Foydalanuvchi topildi va tizimga kirdi:', user);
-//       return { success: true, user: user };
-//     } else {
-//       console.log('❌ Email/telefon yoki parol noto\'g\'ri');
-//       return { success: false, message: 'Email/telefon yoki parol noto\'g\'ri' };
-//     }
-//   } catch (error) {
-//     console.error('❌ Tizimga kirishda xato:', error);
-//     return { success: false, message: 'Tizimga kirishda xato yuz berdi' };
-//   }
-// }
+    if (user) {
+      console.log('✅ Foydalanuvchi topildi va tizimga kirdi:', user);
+      return { success: true, user: user };
+    } else {
+      console.log('❌ Email/telefon yoki parol noto\'g\'ri');
+      return { success: false, message: 'Email/telefon yoki parol noto\'g\'ri' };
+    }
+  } catch (error) {
+    console.error('❌ Tizimga kirishda xato:', error);
+    return { success: false, message: 'Tizimga kirishda xato yuz berdi' };
+  }
+}
 
-// // Joriy foydalanuvchini saqlash (session)
-// function setCurrentUser(userData) {
-//   try {
-//     localStorage.setItem('currentUser', JSON.stringify(userData));
-//     localStorage.setItem('isLoggedIn', 'true');
-//     console.log('✅ Joriy foydalanuvchi o\'rnatildi:', userData);
-//     return true;
-//   } catch (error) {
-//     console.error('❌ Joriy foydalanuvchini saqlashda xato:', error);
-//     return false;
-//   }
-// }
+// Joriy foydalanuvchini saqlash (session)
+function setCurrentUser(userData) {
+  try {
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    localStorage.setItem('isLoggedIn', 'true');
+    console.log('✅ Joriy foydalanuvchi o\'rnatildi:', userData);
+    return true;
+  } catch (error) {
+    console.error('❌ Joriy foydalanuvchini saqlashda xato:', error);
+    return false;
+  }
+}
 
-// // Joriy foydalanuvchini olish
-// function getCurrentUser() {
-//   try {
-//     const userData = localStorage.getItem('currentUser');
-//     return userData ? JSON.parse(userData) : null;
-//   } catch (error) {
-//     console.error('❌ Joriy foydalanuvchini olishda xato:', error);
-//     return null;
-//   }
-// }
+// Joriy foydalanuvchini olish
+function getCurrentUser() {
+  try {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+  } catch (error) {
+    console.error('❌ Joriy foydalanuvchini olishda xato:', error);
+    return null;
+  }
+}
 
-// // Foydalanuvchi tizimga kirganmi tekshirish
-// function isUserLoggedIn() {
-//   return localStorage.getItem('isLoggedIn') === 'true' && getCurrentUser() !== null;
-// }
+// Foydalanuvchi tizimga kirganmi tekshirish
+function isUserLoggedIn() {
+  return localStorage.getItem('isLoggedIn') === 'true' && getCurrentUser() !== null;
+}
 
-// // Foydalanuvchi ma'lumotlarini yangilash
-// function updateCurrentUser(updatedData) {
-//   try {
-//     const currentUser = getCurrentUser();
-//     if (!currentUser) {
-//       console.log('❌ Joriy foydalanuvchi topilmadi');
-//       return false;
-//     }
+// Foydalanuvchi ma'lumotlarini yangilash
+function updateCurrentUser(updatedData) {
+  try {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      console.log('❌ Joriy foydalanuvchi topilmadi');
+      return false;
+    }
 
-//     // Ma'lumotlarni yangilash
-//     const newUserData = { ...currentUser, ...updatedData };
+    // Ma'lumotlarni yangilash
+    const newUserData = { ...currentUser, ...updatedData };
 
-//     // Barcha foydalanuvchilarda ham yangilash
-//     const allUsers = getAllUsers();
-//     const userIndex = allUsers.findIndex(u => u.userId === currentUser.userId);
+    // Barcha foydalanuvchilarda ham yangilash
+    const allUsers = getAllUsers();
+    const userIndex = allUsers.findIndex(u => u.userId === currentUser.userId);
 
-//     if (userIndex !== -1) {
-//       allUsers[userIndex] = newUserData;
-//       saveAllUsers(allUsers);
-//     }
+    if (userIndex !== -1) {
+      allUsers[userIndex] = newUserData;
+      saveAllUsers(allUsers);
+    }
 
-//     // Joriy sessiyani yangilash
-//     setCurrentUser(newUserData);
+    // Joriy sessiyani yangilash
+    setCurrentUser(newUserData);
 
-//     console.log('✅ Foydalanuvchi ma\'lumotlari yangilandi:', newUserData);
-//     return true;
-//   } catch (error) {
-//     console.error('❌ Ma\'lumotlarni yangilashda xato:', error);
-//     return false;
-//   }
-// }
+    console.log('✅ Foydalanuvchi ma\'lumotlari yangilandi:', newUserData);
+    return true;
+  } catch (error) {
+    console.error('❌ Ma\'lumotlarni yangilashda xato:', error);
+    return false;
+  }
+}
 
-// // Chiqish funksiyasi
-// function logout() {
-//   localStorage.removeItem('currentUser');
-//   localStorage.removeItem('isLoggedIn');
-//   console.log('👋 Foydalanuvchi tizimdan chiqdi');
-//   window.location.href = 'login.html';
-// }
+// Chiqish funksiyasi
+function logout() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('isLoggedIn');
+  console.log('👋 Foydalanuvchi tizimdan chiqdi');
+  window.location.href = 'login.html';
+}
 
-// // Sahifa himoyasi - faqat tizimga kirganlar ko'rishi mumkin
-// function protectPage() {
-//   const currentPage = window.location.pathname;
+// Sahifa himoyasi - faqat tizimga kirganlar ko'rishi mumkin
+function protectPage() {
+  const currentPage = window.location.pathname;
 
-//   // Login va signup sahifalarni tekshirmaslik
-//   if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('landing')) {
-//     return;
-//   }
+  // Login va signup sahifalarni tekshirmaslik
+  if (currentPage.includes('login') || currentPage.includes('signup') || currentPage.includes('landing')) {
+    return;
+  }
 
-//   // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
-//   if (!isUserLoggedIn()) {
-//     console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
-//     window.location.href = 'login.html';
-//   }
-// }
+  // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
+  if (!isUserLoggedIn()) {
+    console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
+    window.location.href = 'login.html';
+  }
+}
 
-// // ============================================================
-// // SIGNUP FORM - RO'YXATDAN O'TISH
-// // ============================================================
-// function initSignupForm() {
-//   console.log("🚀 Signup form init boshlandi...");
+// ============================================================
+// SIGNUP FORM - RO'YXATDAN O'TISH
+// ============================================================
+function initSignupForm() {
+  console.log("🚀 Signup form init boshlandi...");
 
-//   const form = document.getElementById("signupForm");
+  const form = document.getElementById("signupForm");
 
-//   if (!form) {
-//     console.log("⚠️ signupForm topilmadi");
-//     return;
-//   }
+  if (!form) {
+    console.log("⚠️ signupForm topilmadi");
+    return;
+  }
 
-//   console.log("✅ signupForm topildi!");
+  console.log("✅ signupForm topildi!");
 
-//   const createBtn = document.getElementById("createBtn");
-//   const terms = document.getElementById("terms");
-//   const firstName = document.getElementById("firstName");
-//   const email = document.getElementById("email");
-//   const password = document.getElementById("password");
-//   const telInputs = document.querySelectorAll('input[name="tel"]');
+  const createBtn = document.getElementById("createBtn");
+  const terms = document.getElementById("terms");
+  const firstName = document.getElementById("firstName");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const telInputs = document.querySelectorAll('input[name="tel"]');
 
-//   console.log("📋 Elementlar:", {
-//     createBtn: !!createBtn,
-//     terms: !!terms,
-//     firstName: !!firstName,
-//     email: !!email,
-//     password: !!password,
-//     telInputs: telInputs.length
-//   });
+  console.log("📋 Elementlar:", {
+    createBtn: !!createBtn,
+    terms: !!terms,
+    firstName: !!firstName,
+    email: !!email,
+    password: !!password,
+    telInputs: telInputs.length
+  });
 
-//   if (!createBtn || !terms || !firstName || !email || !password) {
-//     console.error("❌ Muhim elementlar topilmadi!");
-//     return;
-//   }
+  if (!createBtn || !terms || !firstName || !email || !password) {
+    console.error("❌ Muhim elementlar topilmadi!");
+    return;
+  }
 
-//   // Validatsiya funksiyasi
-//   function validateForm() {
-//     const firstNameValue = firstName.value.trim();
-//     const firstNameValid = firstNameValue.length > 0;
+  // Validatsiya funksiyasi
+  function validateForm() {
+    const firstNameValue = firstName.value.trim();
+    const firstNameValid = firstNameValue.length > 0;
 
-//     const emailValue = email.value.trim();
-//     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+    const emailValue = email.value.trim();
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
 
-//     const passwordValue = password.value;
-//     const passwordValid = passwordValue.length >= 6;
+    const passwordValue = password.value;
+    const passwordValid = passwordValue.length >= 6;
 
-//     let allTelFilled = true;
-//     telInputs.forEach(input => {
-//       if (input.value.trim() === "") {
-//         allTelFilled = false;
-//       }
-//     });
+    let allTelFilled = true;
+    telInputs.forEach(input => {
+      if (input.value.trim() === "") {
+        allTelFilled = false;
+      }
+    });
 
-//     const termsChecked = terms.checked;
+    const termsChecked = terms.checked;
 
-//     const isValid = firstNameValid &&
-//       emailValid &&
-//       passwordValid &&
-//       allTelFilled &&
-//       termsChecked;
+    const isValid = firstNameValid &&
+      emailValid &&
+      passwordValid &&
+      allTelFilled &&
+      termsChecked;
 
-//     console.log("🔍 Validatsiya:", {
-//       firstName: firstNameValid,
-//       email: emailValid,
-//       password: passwordValid,
-//       tel: allTelFilled,
-//       terms: termsChecked,
-//       result: isValid ? "✅" : "❌"
-//     });
+    console.log("🔍 Validatsiya:", {
+      firstName: firstNameValid,
+      email: emailValid,
+      password: passwordValid,
+      tel: allTelFilled,
+      terms: termsChecked,
+      result: isValid ? "✅" : "❌"
+    });
 
-//     createBtn.disabled = !isValid;
+    createBtn.disabled = !isValid;
 
-//     if (isValid) {
-//       createBtn.classList.add("active");
-//       console.log("✅ TUGMA AKTIV!");
-//     } else {
-//       createBtn.classList.remove("active");
-//     }
+    if (isValid) {
+      createBtn.classList.add("active");
+      console.log("✅ TUGMA AKTIV!");
+    } else {
+      createBtn.classList.remove("active");
+    }
 
-//     return isValid;
-//   }
+    return isValid;
+  }
 
-//   // Event listeners
-//   firstName.addEventListener("input", validateForm);
-//   email.addEventListener("input", validateForm);
-//   password.addEventListener("input", validateForm);
+  // Event listeners
+  firstName.addEventListener("input", validateForm);
+  email.addEventListener("input", validateForm);
+  password.addEventListener("input", validateForm);
 
-//   telInputs.forEach(input => {
-//     input.addEventListener("input", validateForm);
-//   });
+  telInputs.forEach(input => {
+    input.addEventListener("input", validateForm);
+  });
 
-//   terms.addEventListener("change", validateForm);
+  terms.addEventListener("change", validateForm);
 
-//   // Boshlang'ich validatsiya
-//   validateForm();
+  // Boshlang'ich validatsiya
+  validateForm();
 
-//   // FORM SUBMIT - RO'YXATDAN O'TISH
-//   form.addEventListener("submit", function (e) {
-//     e.preventDefault();
-//     console.log("📤 Form submit - Ro'yxatdan o'tish!");
+  // FORM SUBMIT - RO'YXATDAN O'TISH
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log("📤 Form submit - Ro'yxatdan o'tish!");
 
-//     if (!validateForm()) {
-//       console.log("❌ Validatsiya xatosi");
-//       form.classList.add("was-validated");
-//       return;
-//     }
+    if (!validateForm()) {
+      console.log("❌ Validatsiya xatosi");
+      form.classList.add("was-validated");
+      return;
+    }
 
-//     createBtn.innerText = "Yaratilmoqda...";
-//     createBtn.disabled = true;
+    createBtn.innerText = "Yaratilmoqda...";
+    createBtn.disabled = true;
 
-//     const userData = {
-//       fullName: firstName.value.trim(),
-//       email: email.value.trim(),
-//       phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
-//       storeName: telInputs[1] ? telInputs[1].value.trim() : "",
-//       password: password.value,
-//       role: "Boshqaruv",
-//       stats: {
-//         customers: 0,
-//         deals: 0,
-//         today: 0
-//       }
-//     };
+    const userData = {
+      fullName: firstName.value.trim(),
+      email: email.value.trim(),
+      phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
+      storeName: telInputs[1] ? telInputs[1].value.trim() : "",
+      password: password.value,
+      role: "Boshqaruv",
+      stats: {
+        customers: 0,
+        deals: 0,
+        today: 0
+      }
+    };
 
-//     console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
+    console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
 
-//     // Ro'yxatdan o'tkazish
-//     const result = registerUser(userData);
+    // Ro'yxatdan o'tkazish
+    const result = registerUser(userData);
 
-//     if (result.success) {
-//       // Tizimga avtomatik kirish
-//       setCurrentUser(result.user);
+    if (result.success) {
+      // Tizimga avtomatik kirish
+      setCurrentUser(result.user);
 
-//       console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+      console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
 
-//       setTimeout(() => {
-//         window.location.href = "index.html";
-//       }, 500);
-//     } else {
-//       // ✅ Xatolik - alert va login sahifasiga yo'naltirish
-//       alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 500);
+    } else {
+      // ✅ Xatolik - alert va login sahifasiga yo'naltirish
+      alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
 
-//       setTimeout(() => {
-//         window.location.href = "login.html";
-//       }, 1500);
-//     }
-//   });
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
+    }
+  });
 
-//   // ✅✅✅ GOOGLE LOGIN - TO'G'RILANGAN ✅✅✅
-//   const googleBtn = document.getElementById("googleBtn");
-//   if (googleBtn) {
-//     googleBtn.addEventListener("click", function (e) {
-//       e.preventDefault();
-//       console.log("🔵 Google Login boshlandi!");
+  // ✅✅✅ GOOGLE LOGIN - TO'G'RILANGAN ✅✅✅
+  const googleBtn = document.getElementById("googleBtn");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      console.log("🔵 Google Login boshlandi!");
 
-//       // ✅ HAR SAFAR YANGI TASODIFIY MA'LUMOTLAR YARATISH
-//       const randomId = Math.random().toString(36).substr(2, 9);
-//       const timestamp = Date.now();
+      // ✅ HAR SAFAR YANGI TASODIFIY MA'LUMOTLAR YARATISH
+      const randomId = Math.random().toString(36).substr(2, 9);
+      const timestamp = Date.now();
 
-//       const demoUser = {
-//         fullName: `Google User ${randomId.substr(0, 5)}`,
-//         email: `user_${randomId}@gmail.com`, // ✅ Har safar boshqa email!
-//         phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
-//         storeName: "Google Store",
-//         password: `google_${randomId}`,
-//         role: "Boshqaruv",
-//         stats: {
-//           customers: 0,
-//           deals: 0,
-//           today: 0
-//         }
-//       };
+      const demoUser = {
+        fullName: `Google User ${randomId.substr(0, 5)}`,
+        email: `user_${randomId}@gmail.com`, // ✅ Har safar boshqa email!
+        phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
+        storeName: "Google Store",
+        password: `google_${randomId}`,
+        role: "Boshqaruv",
+        stats: {
+          customers: 0,
+          deals: 0,
+          today: 0
+        }
+      };
 
-//       console.log("📧 Yangi email yaratildi:", demoUser.email);
+      console.log("📧 Yangi email yaratildi:", demoUser.email);
 
-//       // Ro'yxatdan o'tkazish
-//       const result = registerUser(demoUser);
+      // Ro'yxatdan o'tkazish
+      const result = registerUser(demoUser);
 
-//       if (result.success) {
-//         console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
-//         setCurrentUser(result.user);
+      if (result.success) {
+        console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
+        setCurrentUser(result.user);
 
-//         setTimeout(() => {
-//           window.location.href = "index.html";
-//         }, 300);
-//       } else {
-//         // ✅ Xatolik - alert va login sahifasiga yo'naltirish
-//         console.error("❌ Xato:", result.message);
-//         alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 300);
+      } else {
+        // ✅ Xatolik - alert va login sahifasiga yo'naltirish
+        console.error("❌ Xato:", result.message);
+        alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
 
-//         setTimeout(() => {
-//           window.location.href = "login.html";
-//         }, 1500);
-//       }
-//     });
-//   }
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      }
+    });
+  }
 
-//   console.log("✅ Signup form tayyor!");
-// }
+  console.log("✅ Signup form tayyor!");
+}
 // document.addEventListener('DOMContentLoaded', function() {
 //   const form = document.getElementById('signupForm');
 //   if (!form) return;
