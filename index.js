@@ -822,7 +822,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Dashboard/Index sahifa
   else if (currentPage.includes('index')) {
     console.log("➡️ Dashboard sahifa");
-    initDashboard();
+    // initDashboard();
   }
   // Boshqa sahifalar uchun navbar tekshiruvi
   else {

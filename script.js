@@ -3496,25 +3496,50 @@ function saveUserData(userData) {
 }
 
 // Foydalanuvchini tekshirish
-function checkAuth() {
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
-  console.log('Dashboard - Checking auth:', isLoggedIn);
+// function checkAuth() {
+//   const isLoggedIn = localStorage.getItem('isLoggedIn');
+//   console.log('Dashboard - Checking auth:', isLoggedIn);
   
-  if (!isLoggedIn) {
-    console.log('Not logged in, redirecting...');
-    window.location.href = 'signup.html';
+//   if (!isLoggedIn) {
+//     console.log('Not logged in, redirecting...');
+//     window.location.href = 'signup.html';
+//     return false;
+//   }
+//   return true;
+// }
+// ================= AUTH FIX =================
+
+// Auth tekshirish
+function checkAuth() {
+  const user = AuthSystem.getCurrentUser();
+
+  if (!user) {
+    console.log("⚠️ User topilmadi → login.html");
+    window.location.href = "login.html";
     return false;
   }
+
   return true;
 }
 
-// Chiqish funksiyasi
+// Logout
 function logout() {
-  console.log('Logging out...');
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('isLoggedIn');
-  window.location.href = 'signup.html';
+  AuthSystem.logout();
 }
+
+
+
+// Chiqish funksiyasi
+// function logout() {
+//   console.log('Logging out...');
+//   localStorage.removeItem('currentUser');
+//   localStorage.removeItem('isLoggedIn');
+//   // window.location.href = 'signup.html';
+// }
+function logout() {
+  AuthSystem.logout();
+}
+
 
 /* ========== PROFILE DISPLAY ========== */
 
