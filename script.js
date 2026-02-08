@@ -3515,7 +3515,7 @@ function checkAuth() {
 
   if (!user) {
     console.log("⚠️ User topilmadi → login.html");
-    window.location.href = "login.html";
+    // window.location.href = "login.html";
     return false;
   }
 
