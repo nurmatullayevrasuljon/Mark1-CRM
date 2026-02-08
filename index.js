@@ -208,295 +208,241 @@ function protectPage() {
   }
 
   // Agar tizimga kirmagan bo'lsa, login sahifasiga yo'naltirish
-  if (!isUserLoggedIn()) {
-    console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
-    window.location.href = 'login.html';
-  }
+  // if (!isUserLoggedIn()) {
+  //   console.log('⚠️ Tizimga kirilmagan, login sahifasiga yo\'naltirilmoqda...');
+  //   window.location.href = 'login.html';
+  // }
 }
 
 // ============================================================
 // SIGNUP FORM - RO'YXATDAN O'TISH
 // ============================================================
-function initSignupForm() {
-  console.log("🚀 Signup form init boshlandi...");
+// function initSignupForm() {
+//   console.log("🚀 Signup form init boshlandi...");
 
-  const form = document.getElementById("signupForm");
+//   const form = document.getElementById("signupForm");
 
-  if (!form) {
-    console.log("⚠️ signupForm topilmadi");
-    return;
-  }
+//   if (!form) {
+//     console.log("⚠️ signupForm topilmadi");
+//     return;
+//   }
 
-  console.log("✅ signupForm topildi!");
+//   console.log("✅ signupForm topildi!");
 
-  const createBtn = document.getElementById("createBtn");
-  const terms = document.getElementById("terms");
-  const firstName = document.getElementById("firstName");
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
-  const telInputs = document.querySelectorAll('input[name="tel"]');
-
-  console.log("📋 Elementlar:", {
-    createBtn: !!createBtn,
-    terms: !!terms,
-    firstName: !!firstName,
-    email: !!email,
-    password: !!password,
-    telInputs: telInputs.length
-  });
-
-  if (!createBtn || !terms || !firstName || !email || !password) {
-    console.error("❌ Muhim elementlar topilmadi!");
-    return;
-  }
-
-  // Validatsiya funksiyasi
-  function validateForm() {
-    const firstNameValue = firstName.value.trim();
-    const firstNameValid = firstNameValue.length > 0;
-
-    const emailValue = email.value.trim();
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-
-    const passwordValue = password.value;
-    const passwordValid = passwordValue.length >= 6;
-
-    let allTelFilled = true;
-    telInputs.forEach(input => {
-      if (input.value.trim() === "") {
-        allTelFilled = false;
-      }
-    });
-
-    const termsChecked = terms.checked;
-
-    const isValid = firstNameValid &&
-      emailValid &&
-      passwordValid &&
-      allTelFilled &&
-      termsChecked;
-
-    console.log("🔍 Validatsiya:", {
-      firstName: firstNameValid,
-      email: emailValid,
-      password: passwordValid,
-      tel: allTelFilled,
-      terms: termsChecked,
-      result: isValid ? "✅" : "❌"
-    });
-
-    createBtn.disabled = !isValid;
-
-    if (isValid) {
-      createBtn.classList.add("active");
-      console.log("✅ TUGMA AKTIV!");
-    } else {
-      createBtn.classList.remove("active");
-    }
-
-    return isValid;
-  }
-
-  // Event listeners
-  firstName.addEventListener("input", validateForm);
-  email.addEventListener("input", validateForm);
-  password.addEventListener("input", validateForm);
-
-  telInputs.forEach(input => {
-    input.addEventListener("input", validateForm);
-  });
-
-  terms.addEventListener("change", validateForm);
-
-  // Boshlang'ich validatsiya
-  validateForm();
-
-  // FORM SUBMIT - RO'YXATDAN O'TISH
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    console.log("📤 Form submit - Ro'yxatdan o'tish!");
-
-    if (!validateForm()) {
-      console.log("❌ Validatsiya xatosi");
-      form.classList.add("was-validated");
-      return;
-    }
-
-    createBtn.innerText = "Yaratilmoqda...";
-    createBtn.disabled = true;
-
-    const userData = {
-      fullName: firstName.value.trim(),
-      email: email.value.trim(),
-      phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
-      storeName: telInputs[1] ? telInputs[1].value.trim() : "",
-      password: password.value,
-      role: "Boshqaruv",
-      stats: {
-        customers: 0,
-        deals: 0,
-        today: 0
-      }
-    };
-
-    console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
-
-    // Ro'yxatdan o'tkazish
-    const result = registerUser(userData);
-
-    if (result.success) {
-      // Tizimga avtomatik kirish
-      setCurrentUser(result.user);
-
-      console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
-
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 500);
-    } else {
-      // ✅ Xatolik - alert va login sahifasiga yo'naltirish
-      alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
-    }
-  });
-
-  // ✅✅✅ GOOGLE LOGIN - TO'G'RILANGAN ✅✅✅
-  const googleBtn = document.getElementById("googleBtn");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      console.log("🔵 Google Login boshlandi!");
-
-      // ✅ HAR SAFAR YANGI TASODIFIY MA'LUMOTLAR YARATISH
-      const randomId = Math.random().toString(36).substr(2, 9);
-      const timestamp = Date.now();
-
-      const demoUser = {
-        fullName: `Google User ${randomId.substr(0, 5)}`,
-        email: `user_${randomId}@gmail.com`, // ✅ Har safar boshqa email!
-        phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
-        storeName: "Google Store",
-        password: `google_${randomId}`,
-        role: "Boshqaruv",
-        stats: {
-          customers: 0,
-          deals: 0,
-          today: 0
-        }
-      };
-
-      console.log("📧 Yangi email yaratildi:", demoUser.email);
-
-      // Ro'yxatdan o'tkazish
-      const result = registerUser(demoUser);
-
-      if (result.success) {
-        console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
-        setCurrentUser(result.user);
-
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 300);
-      } else {
-        // ✅ Xatolik - alert va login sahifasiga yo'naltirish
-        console.error("❌ Xato:", result.message);
-        alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
-      }
-    });
-  }
-
-  console.log("✅ Signup form tayyor!");
-}
-// document.addEventListener('DOMContentLoaded', function() {
-//   const form = document.getElementById('signupForm');
-//   if (!form) return;
-
-//   const createBtn = document.getElementById('createBtn');
-//   const terms = document.getElementById('terms');
-//   const firstName = document.getElementById('firstName');
-//   const email = document.getElementById('email');
-//   const password = document.getElementById('password');
+//   const createBtn = document.getElementById("createBtn");
+//   const terms = document.getElementById("terms");
+//   const firstName = document.getElementById("firstName");
+//   const email = document.getElementById("email");
+//   const password = document.getElementById("password");
 //   const telInputs = document.querySelectorAll('input[name="tel"]');
 
-//   // Validatsiya
+//   console.log("📋 Elementlar:", {
+//     createBtn: !!createBtn,
+//     terms: !!terms,
+//     firstName: !!firstName,
+//     email: !!email,
+//     password: !!password,
+//     telInputs: telInputs.length
+//   });
+
+//   if (!createBtn || !terms || !firstName || !email || !password) {
+//     console.error("❌ Muhim elementlar topilmadi!");
+//     return;
+//   }
+
+//   // Validatsiya funksiyasi
 //   function validateForm() {
-//     const isValid = 
-//       firstName.value.trim().length > 0 &&
-//       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) &&
-//       password.value.length >= 6 &&
-//       Array.from(telInputs).every(input => input.value.trim() !== '') &&
-//       terms.checked;
+//     const firstNameValue = firstName.value.trim();
+//     const firstNameValid = firstNameValue.length > 0;
+
+//     const emailValue = email.value.trim();
+//     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+//     const passwordValue = password.value;
+//     const passwordValid = passwordValue.length >= 6;
+
+//     let allTelFilled = true;
+//     telInputs.forEach(input => {
+//       if (input.value.trim() === "") {
+//         allTelFilled = false;
+//       }
+//     });
+
+//     const termsChecked = terms.checked;
+
+//     const isValid = firstNameValid &&
+//       emailValid &&
+//       passwordValid &&
+//       allTelFilled &&
+//       termsChecked;
+
+//     console.log("🔍 Validatsiya:", {
+//       firstName: firstNameValid,
+//       email: emailValid,
+//       password: passwordValid,
+//       tel: allTelFilled,
+//       terms: termsChecked,
+//       result: isValid ? "✅" : "❌"
+//     });
 
 //     createBtn.disabled = !isValid;
-//     createBtn.classList.toggle('active', isValid);
+
+//     if (isValid) {
+//       createBtn.classList.add("active");
+//       console.log("✅ TUGMA AKTIV!");
+//     } else {
+//       createBtn.classList.remove("active");
+//     }
+
 //     return isValid;
 //   }
 
-//   firstName.addEventListener('input', validateForm);
-//   email.addEventListener('input', validateForm);
-//   password.addEventListener('input', validateForm);
-//   telInputs.forEach(input => input.addEventListener('input', validateForm));
-//   terms.addEventListener('change', validateForm);
+//   // Event listeners
+//   firstName.addEventListener("input", validateForm);
+//   email.addEventListener("input", validateForm);
+//   password.addEventListener("input", validateForm);
 
-//   // Submit
-//   form.addEventListener('submit', function(e) {
+//   telInputs.forEach(input => {
+//     input.addEventListener("input", validateForm);
+//   });
+
+//   terms.addEventListener("change", validateForm);
+
+//   // Boshlang'ich validatsiya
+//   validateForm();
+
+//   // FORM SUBMIT - RO'YXATDAN O'TISH
+//   form.addEventListener("submit", function (e) {
 //     e.preventDefault();
-//     if (!validateForm()) return;
+//     console.log("📤 Form submit - Ro'yxatdan o'tish!");
 
-//     createBtn.innerText = 'Yaratilmoqda...';
+//     if (!validateForm()) {
+//       console.log("❌ Validatsiya xatosi");
+//       form.classList.add("was-validated");
+//       return;
+//     }
+
+//     createBtn.innerText = "Yaratilmoqda...";
 //     createBtn.disabled = true;
 
 //     const userData = {
 //       fullName: firstName.value.trim(),
 //       email: email.value.trim(),
-//       phone: '+998 ' + telInputs[0].value.trim(),
-//       storeName: telInputs[1].value.trim(),
-//       password: password.value
+//       phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
+//       storeName: telInputs[1] ? telInputs[1].value.trim() : "",
+//       password: password.value,
+//       role: "Boshqaruv",
+//       stats: {
+//         customers: 0,
+//         deals: 0,
+//         today: 0
+//       }
 //     };
 
-//     const result = AuthSystem.register(userData);
+//     console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
+
+//     // Ro'yxatdan o'tkazish
+//     const result = registerUser(userData);
 
 //     if (result.success) {
-//       AuthSystem.login(userData.email, userData.password);
-//       alert('✅ Ro\'yxatdan o\'tdingiz!');
-//       window.location.href = 'index.html';
+//       // Tizimga avtomatik kirish
+//       setCurrentUser(result.user);
+
+//       console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+
+//       setTimeout(() => {
+//         window.location.href = "index.html";
+//       }, 500);
 //     } else {
-//       alert(result.message);
-//       createBtn.innerText = 'Yaratish';
-//       createBtn.disabled = false;
+//       // ✅ Xatolik - alert va login sahifasiga yo'naltirish
+//       alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+
+//       setTimeout(() => {
+//         window.location.href = "login.html";
+//       }, 1500);
 //     }
 //   });
 
-//   // Google Login
-//   const googleBtn = document.getElementById('googleBtn');
+//   // ✅✅✅ GOOGLE LOGIN - TO'G'RILANGAN ✅✅✅
+//   const googleBtn = document.getElementById("googleBtn");
 //   if (googleBtn) {
-//     googleBtn.addEventListener('click', function(e) {
+//     googleBtn.addEventListener("click", function (e) {
 //       e.preventDefault();
-//       const id = Math.random().toString(36).substr(2, 9);
-      
-//       const demo = {
-//         fullName: `Demo User ${id.substr(0, 5)}`,
-//         email: `demo_${id}@gmail.com`,
+//       console.log("🔵 Google Login boshlandi!");
+
+//       // ✅ HAR SAFAR YANGI TASODIFIY MA'LUMOTLAR YARATISH
+//       const randomId = Math.random().toString(36).substr(2, 9);
+//       const timestamp = Date.now();
+
+//       const demoUser = {
+//         fullName: `Google User ${randomId.substr(0, 5)}`,
+//         email: `user_${randomId}@gmail.com`, // ✅ Har safar boshqa email!
 //         phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
-//         storeName: 'Demo Store',
-//         password: `demo${id}`
+//         storeName: "Google Store",
+//         password: `google_${randomId}`,
+//         role: "Boshqaruv",
+//         stats: {
+//           customers: 0,
+//           deals: 0,
+//           today: 0
+//         }
 //       };
 
-//       const result = AuthSystem.register(demo);
+//       console.log("📧 Yangi email yaratildi:", demoUser.email);
+
+//       // Ro'yxatdan o'tkazish
+//       const result = registerUser(demoUser);
+
 //       if (result.success) {
-//         AuthSystem.login(demo.email, demo.password);
-//         window.location.href = 'index.html';
+//         console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
+//         setCurrentUser(result.user);
+
+//         setTimeout(() => {
+//           window.location.href = "index.html";
+//         }, 300);
+//       } else {
+//         // ✅ Xatolik - alert va login sahifasiga yo'naltirish
+//         console.error("❌ Xato:", result.message);
+//         alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+
+//         setTimeout(() => {
+//           window.location.href = "login.html";
+//         }, 1500);
 //       }
 //     });
 //   }
-// });
+
+//   console.log("✅ Signup form tayyor!");
+// }
+function initSignupForm() {
+  const form = document.getElementById("signupForm");
+
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // 🔹 inputlardan qiymat olish
+    const userData = {
+      fullName: document.getElementById("fullName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      password: document.getElementById("password").value.trim(),
+    };
+
+    // ✅ MANA SHU YERDA
+    const result = Auth.register(userData);
+
+    if (!result.success) {
+      alert(result.message);
+      return;
+    }
+
+    alert("✅ Ro‘yxatdan o‘tdingiz!");
+    window.location.href = "index.html";
+  });
+}
+
 
 // ============================================================
 // LOGIN FORM - TIZIMGA KIRISH
@@ -551,40 +497,53 @@ function initLoginForm() {
   password.addEventListener("input", checkLoginForm);
 
   // Submit - TIZIMGA KIRISH
+  // form.addEventListener("submit", e => {
+  //   e.preventDefault();
+
+  //   if (!form.checkValidity()) {
+  //     form.classList.add("was-validated");
+  //     return;
+  //   }
+
+  //   loginBtn.innerText = "Kirish...";
+  //   loginBtn.disabled = true;
+
+  //   const emailOrPhone = loginInput.value.trim();
+  //   const pass = password.value;
+
+  //   console.log("🔐 Tizimga kirish urinishi:", emailOrPhone);
+
+  //   // Foydalanuvchini topish
+  //   const result = loginUser(emailOrPhone, pass);
+
+  //   if (result.success) {
+  //     // Tizimga kirish
+  //     setCurrentUser(result.user);
+
+  //     console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
+
+  //     setTimeout(() => {
+  //       window.location.href = "index.html";
+  //     }, 500);
+  //   } else {
+  //     alert(result.message);
+  //     loginBtn.innerText = "Kirish";
+  //     loginBtn.disabled = false;
+  //   }
+  // });
   form.addEventListener("submit", e => {
     e.preventDefault();
 
-    if (!form.checkValidity()) {
-      form.classList.add("was-validated");
+    const result = Auth.login(loginInput.value, password.value);
+
+    if (!result.success) {
+      alert(result.message);
       return;
     }
 
-    loginBtn.innerText = "Kirish...";
-    loginBtn.disabled = true;
-
-    const emailOrPhone = loginInput.value.trim();
-    const pass = password.value;
-
-    console.log("🔐 Tizimga kirish urinishi:", emailOrPhone);
-
-    // Foydalanuvchini topish
-    const result = loginUser(emailOrPhone, pass);
-
-    if (result.success) {
-      // Tizimga kirish
-      setCurrentUser(result.user);
-
-      console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
-
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 500);
-    } else {
-      alert(result.message);
-      loginBtn.innerText = "Kirish";
-      loginBtn.disabled = false;
-    }
+    window.location.href = "index.html";
   });
+
 
   console.log("✅ Login form tayyor!");
 }

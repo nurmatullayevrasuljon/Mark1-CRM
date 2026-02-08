@@ -1,238 +1,342 @@
-// ============================================================
-// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FINAL FIXED)
-// ============================================================
+// // ============================================================
+// // 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM
+// // ============================================================
 
-const AuthSystem = (function () {
-    'use strict';
+// const AuthSystem = (function () {
+//     'use strict';
 
-    const USERS_KEY = 'crm_all_users';
-    const CURRENT_USER_KEY = 'crm_current_user';
-    const SESSION_KEY = 'crm_session_active';
+//     // ============================
+//     // 🔹 STORAGE KEYS (YAGONAlik uchun)
+//     // ============================
+//     const USERS_KEY = 'crm_all_users';
+//     const CURRENT_USER_KEY = 'crm_current_user';
+//     const SESSION_KEY = 'crm_session_active';
 
-    function getAllUsers() {
-        try {
-            const users = localStorage.getItem(USERS_KEY);
-            return users ? JSON.parse(users) : [];
-        } catch {
-            return [];
-        }
-    }
+//     // ============================
+//     // 🔹 PRIVATE FUNCTIONS
+//     // ============================
+    
+//     // Barcha userlarni olish
+//     function getAllUsers() {
+//         try {
+//             const users = localStorage.getItem(USERS_KEY);
+//             return users ? JSON.parse(users) : [];
+//         } catch {
+//             return [];
+//         }
+//     }
 
-    function saveAllUsers(users) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
+//     // Barcha userlarni saqlash
+//     function saveAllUsers(users) {
+//         localStorage.setItem(USERS_KEY, JSON.stringify(users));
+//     }
 
-    function hashPassword(password) {
-        let hash = 0;
-        for (let i = 0; i < password.length; i++) {
-            hash = (hash << 5) - hash + password.charCodeAt(i);
-            hash |= 0;
-        }
-        return hash.toString(36);
-    }
+//     // Parolni xeshlash
+//     function hashPassword(password) {
+//         let hash = 0;
+//         for (let i = 0; i < password.length; i++) {
+//             hash = (hash << 5) - hash + password.charCodeAt(i);
+//             hash |= 0;
+//         }
+//         return hash.toString(36);
+//     }
 
-    function generateUserId() {
-        return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    }
+//     // Random ID generator
+//     function generateUserId() {
+//         return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+//     }
 
-    return {
-        register: function (data) {
-            const allUsers = getAllUsers();
+//     // ============================
+//     // 🔹 PUBLIC API
+//     // ============================
+//     return {
 
-            if (allUsers.find(u => u.email === data.email)) {
-                return { 
-                    success: false, 
-                    message: "Bu email allaqachon ro'yxatdan o'tgan!" 
-                };
-            }
+//         // ============================================================
+//         // 📝 RO'YXATDAN O'TKAZISH
+//         // ============================================================
+//         register: function (data) {
+//             const allUsers = getAllUsers();
 
-            const newUser = {
-                userId: generateUserId(),
-                fullName: data.fullName,
-                email: data.email,
-                phone: data.phone,
-                storeName: data.storeName,
-                password: hashPassword(data.password),
-                role: "Boshqaruv",
-                createdAt: new Date().toISOString(),
-                products: [],
-                categories: ['Electronics'],
-                sales: [],
-                debtors: [],
-                paidDebtors: [],
-                smsHistory: [],
-                stats: {
-                    customers: 0,
-                    deals: 0,
-                    today: 0
-                }
-            };
+//             // Email orqali tekshirish
+//             if (allUsers.find(u => u.email === data.email)) {
+//                 return { 
+//                     success: false, 
+//                     message: "Bu email allaqachon ro'yxatdan o'tgan!" 
+//                 };
+//             }
 
-            allUsers.push(newUser);
-            saveAllUsers(allUsers);
+//             const newUser = {
+//                 userId: generateUserId(),
+//                 fullName: data.fullName,
+//                 email: data.email,
+//                 phone: data.phone,
+//                 storeName: data.storeName,
+//                 password: hashPassword(data.password),
+//                 role: "Boshqaruv",
+//                 createdAt: new Date().toISOString(),
 
-            // ✅ AVTOMATIK LOGIN
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
-            localStorage.setItem(SESSION_KEY, "true");
+//                 // 🔹 Dashboard uchun bo'sh struktura
+//                 products: [],
+//                 categories: ['Electronics'],
+//                 sales: [],
+//                 debtors: [],
+//                 paidDebtors: [],
+//                 smsHistory: [],
 
-            return { success: true, user: newUser };
-        },
+//                 stats: {
+//                     customers: 0,
+//                     deals: 0,
+//                     today: 0
+//                 }
+//             };
 
-        login: function (emailOrPhone, password) {
-            const users = getAllUsers();
-            const hashed = hashPassword(password);
+//             allUsers.push(newUser);
+//             saveAllUsers(allUsers);
 
-            const user = users.find(
-                u =>
-                    (u.email === emailOrPhone || u.phone === emailOrPhone) &&
-                    u.password === hashed
-            );
+//             console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', newUser.email);
+//             return { success: true, user: newUser };
+//         },
 
-            if (!user) {
-                return { 
-                    success: false, 
-                    message: "Email/Telefon yoki parol noto'g'ri!" 
-                };
-            }
+//         // ============================================================
+//         // 🔐 LOGIN
+//         // ============================================================
+//         login: function (emailOrPhone, password) {
+//             const users = getAllUsers();
+//             const hashed = hashPassword(password);
 
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-            localStorage.setItem(SESSION_KEY, "true");
+//             const user = users.find(
+//                 u =>
+//                     (u.email === emailOrPhone || u.phone === emailOrPhone) &&
+//                     u.password === hashed
+//             );
 
-            return { success: true, user };
-        },
+//             if (!user) {
+//                 return { 
+//                     success: false, 
+//                     message: "Email/Telefon yoki parol noto'g'ri!" 
+//                 };
+//             }
 
-        // ✅ FIXED - Eng yangi ma'lumotni qaytaradi
-        getCurrentUser: function () {
-            try {
-                if (localStorage.getItem(SESSION_KEY) !== "true") {
-                    return null;
-                }
+//             // Session o'rnatish
+//             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+//             localStorage.setItem(SESSION_KEY, "true");
 
-                const userData = localStorage.getItem(CURRENT_USER_KEY);
-                if (!userData) return null;
+//             console.log('✅ Tizimga kirdi:', user.email);
+//             return { success: true, user };
+//         },
 
-                const user = JSON.parse(userData);
-                
-                // Global bazadan eng yangi ma'lumotni olish
-                const allUsers = getAllUsers();
-                const latestUser = allUsers.find(u => u.userId === user.userId);
-                
-                if (latestUser) {
-                    // Current user ni yangilash
-                    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(latestUser));
-                    return latestUser;
-                }
-                
-                return user;
-            } catch {
-                return null;
-            }
-        },
+//         // ============================================================
+//         // 👤 HOZIRGI USERNI OLISH
+//         // ============================================================
+//         getCurrentUser: function () {
+//             try {
+//                 const data = localStorage.getItem(CURRENT_USER_KEY);
+//                 return data ? JSON.parse(data) : null;
+//             } catch {
+//                 return null;
+//             }
+//         },
 
-        // ✅ FIXED - Birinchi global baza, keyin current user
-        updateCurrentUserData: function (updates) {
-            const currentUser = this.getCurrentUser();
-            if (!currentUser) {
-                console.error('❌ Joriy foydalanuvchi topilmadi');
-                return false;
-            }
+//         // ============================================================
+//         // 💾 MA'LUMOTLARNI YANGILASH (ASOSIY FUNKSIYA)
+//         // ============================================================
+//         updateCurrentUserData: function (updates) {
+//             const currentUser = this.getCurrentUser();
+//             if (!currentUser) {
+//                 console.error('❌ Joriy foydalanuvchi topilmadi');
+//                 return false;
+//             }
 
-            const updatedUser = JSON.parse(JSON.stringify(currentUser));
+//             // Deep merge - har bir maydon to'g'ri yangilanadi
+//             const updatedUser = JSON.parse(JSON.stringify(currentUser));
 
-            Object.keys(updates).forEach(key => {
-                if (Array.isArray(updates[key])) {
-                    updatedUser[key] = [...updates[key]];
-                }
-                else if (typeof updates[key] === "object" && updates[key] !== null) {
-                    updatedUser[key] = {
-                        ...updatedUser[key],
-                        ...updates[key]
-                    };
-                }
-                else {
-                    updatedUser[key] = updates[key];
-                }
-            });
+//             Object.keys(updates).forEach(key => {
+//                 if (Array.isArray(updates[key])) {
+//                     // Massiv bo'lsa to'liq yangilanadi
+//                     updatedUser[key] = [...updates[key]];
+//                 }
+//                 else if (typeof updates[key] === "object" && updates[key] !== null) {
+//                     // Obyekt bo'lsa merge qilinadi
+//                     updatedUser[key] = {
+//                         ...updatedUser[key],
+//                         ...updates[key]
+//                     };
+//                 }
+//                 else {
+//                     updatedUser[key] = updates[key];
+//                 }
+//             });
 
-            // 1. Global bazani yangilash
-            const allUsers = getAllUsers();
-            const index = allUsers.findIndex(u => u.userId === currentUser.userId);
+//             // 1. CURRENT USER ni yangilash
+//             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
 
-            if (index !== -1) {
-                allUsers[index] = updatedUser;
-                saveAllUsers(allUsers);
-            }
+//             // 2. GLOBAL USERS bazasini yangilash
+//             const allUsers = getAllUsers();
+//             const index = allUsers.findIndex(u => u.userId === currentUser.userId);
 
-            // 2. Current user ni yangilash
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
+//             if (index !== -1) {
+//                 allUsers[index] = updatedUser;
+//                 saveAllUsers(allUsers);
+//                 console.log('✅ Ma\'lumotlar yangilandi:', currentUser.email);
+//             }
 
-            return true;
-        },
+//             return true;
+//         },
 
-        isSessionValid: function () {
-            return (
-                localStorage.getItem(SESSION_KEY) === "true" &&
-                this.getCurrentUser() !== null
-            );
-        },
+//         // ============================================================
+//         // ✅ SESSIYA TEKSHIRISH
+//         // ============================================================
+//         isSessionValid: function () {
+//             return (
+//                 localStorage.getItem(SESSION_KEY) === "true" &&
+//                 this.getCurrentUser() !== null
+//             );
+//         },
 
-        logout: function () {
-            localStorage.removeItem(CURRENT_USER_KEY);
-            localStorage.removeItem(SESSION_KEY);
-            window.location.href = "login.html";
-        },
-
-        // ✅ FIXED - Infinite loop yo'q
-        protectPage: function () {
-            const path = window.location.pathname.toLowerCase();
-            const page = path.split('/').pop() || 'index.html';
+//         // ============================================================
+//         // 🚪 LOGOUT
+//         // ============================================================
+//         logout: function () {
+//             const user = this.getCurrentUser();
+//             if (user) {
+//                 console.log('👋 Tizimdan chiqdi:', user.email);
+//             }
             
-            const isSignup = page === 'signup.html';
-            const isLogin = page === 'login.html';
-            const isLanding = page === 'landing.html' || page === 'w-page.html';
-            const hasSession = this.isSessionValid();
+//             localStorage.removeItem(CURRENT_USER_KEY);
+//             localStorage.removeItem(SESSION_KEY);
+//             window.location.href = "login.html";
+//         },
 
-            // Signup sahifa
-            if (isSignup) {
-                if (hasSession) {
-                    window.location.replace('index.html');
-                    return false;
-                }
-                return true;
-            }
+//         // ============================================================
+//         // 🛡️ SAHIFANI HIMOYA QILISH
+//         // ============================================================
+//         protectPage: function () {
+//             const page = window.location.pathname.toLowerCase();
+//             const publicPages = ["signup.html", "login.html", "landing.html"];
 
-            // Login sahifa
-            if (isLogin) {
-                if (hasSession) {
-                    window.location.replace('index.html');
-                    return false;
-                }
-                return true;
-            }
+//             const isPublic = publicPages.some(p => page.includes(p));
 
-            // Landing/Welcome
-            if (isLanding) {
-                return true;
-            }
+//             if (!isPublic && !this.isSessionValid()) {
+//                 console.log('⚠️ Ruxsatsiz kirish - login sahifasiga yo\'naltirish');
+//                 window.location.href = "login.html";
+//                 return false;
+//             }
 
-            // Boshqa sahifalar - himoyalangan
-            if (!hasSession) {
-                window.location.replace('login.html');
-                return false;
-            }
+//             return true;
+//         }
+//     };
+// })();
 
-            return true;
-        }
+// console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
+
+const Auth = (() => {
+  "use strict";
+
+  // ✅ SINGLE SOURCE OF TRUTH
+  const USERS_KEY = "crm_users";
+  const SESSION_KEY = "crm_session";
+
+  // -----------------------------
+  // USERS STORAGE
+  // -----------------------------
+  function getUsers() {
+    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
+  // -----------------------------
+  // SESSION STORAGE
+  // -----------------------------
+  function setSession(user) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  }
+
+  function getSession() {
+    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  }
+
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+  }
+
+  // -----------------------------
+  // REGISTER
+  // -----------------------------
+  function register(data) {
+    const users = getUsers();
+
+    if (users.some(u => u.email === data.email)) {
+      return { success: false, message: "Bu email band!" };
+    }
+
+    const newUser = {
+      id: Date.now(),
+      fullName: data.fullName,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+      createdAt: new Date().toISOString()
     };
+
+    users.push(newUser);
+    saveUsers(users);
+
+    setSession(newUser);
+
+    return { success: true, user: newUser };
+  }
+
+  // -----------------------------
+  // LOGIN
+  // -----------------------------
+  function login(loginValue, password) {
+    const users = getUsers();
+
+    const user = users.find(
+      u =>
+        (u.email === loginValue || u.phone === loginValue) &&
+        u.password === password
+    );
+
+    if (!user) {
+      return { success: false, message: "Login yoki parol xato!" };
+    }
+
+    setSession(user);
+
+    return { success: true, user };
+  }
+
+  // -----------------------------
+  // LOGOUT
+  // -----------------------------
+  function logout() {
+    clearSession();
+    window.location.href = "login.html";
+  }
+
+  // -----------------------------
+  // PAGE PROTECT
+  // -----------------------------
+  function protect() {
+    const publicPages = ["login.html", "signup.html", "landing.html"];
+    const current = window.location.pathname.toLowerCase();
+
+    if (publicPages.some(p => current.includes(p))) return;
+
+    if (!getSession()) {
+      window.location.replace("login.html");
+    }
+  }
+
+  return {
+    register,
+    login,
+    logout,
+    protect,
+    getSession
+  };
 })();
-
-// ✅ AUTO INIT - FAQAT 1 MARTA
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-        AuthSystem.protectPage();
-    });
-} else {
-    AuthSystem.protectPage();
-}
-
-console.log("🔥 AUTH SYSTEM TAYYOR");
