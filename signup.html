@@ -126,8 +126,7 @@
 <script>
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { AuthSystem.protectPage(); }); } else { AuthSystem.protectPage(); }
     function goToLogin() { window.location.href = 'login.html';}
-    (function () { if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { setTimeout(function () { AuthSystem.protectPage(); }, 100); }); } else { setTimeout(function () { AuthSystem.protectPage(); }, 100); } })();
-
+    
 </script>
 
 </html>
