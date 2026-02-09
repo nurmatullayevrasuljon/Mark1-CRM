@@ -230,96 +230,253 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🛡️ PAGE PROTECTION (FIXED - NO NAVIGATION BLOCKS)
+// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FIXED)
 // ============================================================
-protectPage: function () {
-    const path = window.location.pathname.toLowerCase();
-    const page = path.split('/').pop() || 'index.html';
-    
-    console.log('🛡️ Protecting page:', page);
-    
-    const publicPages = ['login.html', 'signup.html'];
-    const isPublic = publicPages.includes(page);
-    const hasValidSession = this.isSessionValid();
-    
-    console.log('🔍 Page protection check:', {
-        page,
-        isPublic,
-        hasValidSession
-    });
-    
-    // ✅ PUBLIC SAHIFALAR ORASIDA ERKIN O'TISH
-    if (isPublic) {
-        if (hasValidSession) {
-            // Already logged in, redirect to dashboard
-            console.log('🔄 User already logged in, redirecting to dashboard');
-            window.location.href = 'index.html';
-            return false;
-        }
-        // Public page va login yo'q - ruxsat
-        console.log('✅ Public page access allowed');
-        return true;
-    }
-    
-    // ✅ PRIVATE SAHIFALAR UCHUN LOGIN TALAB
-    if (!isPublic && !hasValidSession) {
-        console.log('🔄 Private page requires login, redirecting...');
-        
-        // ✅ FIRST-TIME USERS UCHUN SIGNUP DEFAULT
-        const hasAnyUsers = this.hasRegisteredUsers();
-        if (!hasAnyUsers) {
-            console.log('🆕 No users found, redirecting to signup');
-            window.location.href = 'signup.html';
-        } else {
-            console.log('👤 Users exist, redirecting to login');
-            window.location.href = 'login.html';
-        }
-        return false;
-    }
-    
-    console.log('✅ Page access allowed');
-    return true;
-},
 
-// ============================================================
-// 🚪 LOGOUT (FIXED - LOGIN GA YO'NALTIRISH)
-// ============================================================
-logout: function () {
-    const user = this.getCurrentUser();
-    if (user) {
-        console.log('👋 Logout:', user.email);
-    }
+const AuthSystem = (function () {
+    'use strict';
+
+    // ============================
+    // 🔹 STORAGE KEYS
+    // ============================
+    const USERS_KEY = 'crm_all_users';
+    const CURRENT_USER_KEY = 'crm_current_user';
+    const SESSION_KEY = 'crm_session_active';
+
+    // ✅ BACKWARD COMPATIBILITY - eski keylar bilan ham ishlash
+    const OLD_USER_KEY = 'currentUser';
+    const OLD_SESSION_KEY = 'isLoggedIn';
+
+    // ============================
+    // 🔹 PRIVATE FUNCTIONS
+    // ============================
     
-    // Clear ALL auth keys
-    const keysToRemove = [
-        SESSION_KEY,
-        CURRENT_USER_KEY,
-        'isLoggedIn',
-        'currentUser',
-        'crm_session_active',
-        'crm_current_user'
-    ];
-    
-    keysToRemove.forEach(key => {
+    function getAllUsers() {
         try {
-            localStorage.removeItem(key);
-        } catch (e) {
-            console.warn('Could not remove key:', key);
+            const users = localStorage.getItem(USERS_KEY);
+            return users ? JSON.parse(users) : [];
+        } catch {
+            return [];
         }
-    });
-    
-    console.log('✅ All auth data cleared');
-    
-    // ✅ LOGOUT DAN KEYIN LOGIN.HTML GA (signup emas!)
-    setTimeout(() => {
-        window.location.href = 'login.html';
-    }, 100);
-},
+    }
 
-// ============================================================
-// 🆕 HELPER FUNCTION - USERS BORLIGINI TEKSHIRISH
-// ============================================================
-hasRegisteredUsers: function() {
-    const users = getAllUsers();
-    return users.length > 0;
-}
+    function saveAllUsers(users) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+
+    function hashPassword(password) {
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            hash = (hash << 5) - hash + password.charCodeAt(i);
+            hash |= 0;
+        }
+        return hash.toString(36);
+    }
+
+    function generateUserId() {
+        return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    }
+
+    // ============================
+    // 🔹 PUBLIC API
+    // ============================
+    return {
+
+        // ============================================================
+        // 📝 RO'YXATDAN O'TKAZISH
+        // ============================================================
+        register: function (data) {
+            const allUsers = getAllUsers();
+
+            if (allUsers.find(u => u.email === data.email)) {
+                return { 
+                    success: false, 
+                    message: "Bu email allaqachon ro'yxatdan o'tgan!" 
+                };
+            }
+
+            const newUser = {
+                userId: generateUserId(),
+                fullName: data.fullName,
+                email: data.email,
+                phone: data.phone,
+                storeName: data.storeName,
+                password: hashPassword(data.password),
+                role: data.role || "Boshqaruv",
+                createdAt: new Date().toISOString(),
+
+                // Dashboard data
+                products: [],
+                categories: ['Electronics'],
+                sales: [],
+                debtors: [],
+                paidDebtors: [],
+                smsHistory: [],
+
+                stats: {
+                    customers: 0,
+                    deals: 0,
+                    today: 0
+                }
+            };
+
+            allUsers.push(newUser);
+            saveAllUsers(allUsers);
+
+            console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', newUser.email);
+            return { success: true, user: newUser };
+        },
+
+        // ============================================================
+        // 🔐 LOGIN (FIXED - ikkala keyga ham yozadi)
+        // ============================================================
+        login: function (emailOrPhone, password) {
+            const users = getAllUsers();
+            const hashed = hashPassword(password);
+
+            const user = users.find(
+                u =>
+                    (u.email === emailOrPhone || u.phone === emailOrPhone) &&
+                    u.password === hashed
+            );
+
+            if (!user) {
+                return { 
+                    success: false, 
+                    message: "Email/Telefon yoki parol noto'g'ri!" 
+                };
+            }
+
+            // ✅ IKKALA FORMAT ham ishlasin
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+            localStorage.setItem(SESSION_KEY, "true");
+            
+            // Backward compatibility
+            localStorage.setItem(OLD_USER_KEY, JSON.stringify(user));
+            localStorage.setItem(OLD_SESSION_KEY, "true");
+
+            console.log('✅ Tizimga kirdi:', user.email);
+            return { success: true, user };
+        },
+
+        // ============================================================
+        // 👤 HOZIRGI USERNI OLISH (FIXED)
+        // ============================================================
+        getCurrentUser: function () {
+            try {
+                // Avval yangi keydan tekshirish
+                let data = localStorage.getItem(CURRENT_USER_KEY);
+                
+                // Agar bo'lmasa, eski keydan olish
+                if (!data) {
+                    data = localStorage.getItem(OLD_USER_KEY);
+                    
+                    // Agar eski key topilsa, yangi keyga ham yozish
+                    if (data) {
+                        localStorage.setItem(CURRENT_USER_KEY, data);
+                        localStorage.setItem(SESSION_KEY, "true");
+                    }
+                }
+                
+                return data ? JSON.parse(data) : null;
+            } catch {
+                return null;
+            }
+        },
+
+        // ============================================================
+        // 💾 MA'LUMOTLARNI YANGILASH
+        // ============================================================
+        updateCurrentUserData: function (updates) {
+            const currentUser = this.getCurrentUser();
+            if (!currentUser) {
+                console.error('❌ Joriy foydalanuvchi topilmadi');
+                return false;
+            }
+
+            const updatedUser = JSON.parse(JSON.stringify(currentUser));
+
+            Object.keys(updates).forEach(key => {
+                if (Array.isArray(updates[key])) {
+                    updatedUser[key] = [...updates[key]];
+                }
+                else if (typeof updates[key] === "object" && updates[key] !== null) {
+                    updatedUser[key] = {
+                        ...updatedUser[key],
+                        ...updates[key]
+                    };
+                }
+                else {
+                    updatedUser[key] = updates[key];
+                }
+            });
+
+            // IKKALA formatga ham yozish
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
+            localStorage.setItem(OLD_USER_KEY, JSON.stringify(updatedUser));
+
+            // Global bazani yangilash
+            const allUsers = getAllUsers();
+            const index = allUsers.findIndex(u => u.userId === currentUser.userId);
+
+            if (index !== -1) {
+                allUsers[index] = updatedUser;
+                saveAllUsers(allUsers);
+                console.log('✅ Ma\'lumotlar yangilandi:', currentUser.email);
+            }
+
+            return true;
+        },
+
+        // ============================================================
+        // ✅ SESSIYA TEKSHIRISH (FIXED)
+        // ============================================================
+        isSessionValid: function () {
+            // Yangi yoki eski formatda session borligini tekshirish
+            const hasNewSession = localStorage.getItem(SESSION_KEY) === "true";
+            const hasOldSession = localStorage.getItem(OLD_SESSION_KEY) === "true";
+            const hasUser = this.getCurrentUser() !== null;
+
+            return (hasNewSession || hasOldSession) && hasUser;
+        },
+
+        // ============================================================
+        // 🚪 LOGOUT (FIXED - barcha keylarni tozalash)
+        // ============================================================
+        logout: function () {
+            const user = this.getCurrentUser();
+            if (user) {
+                console.log('👋 Tizimdan chiqdi:', user.email);
+            }
+            
+            // Barcha session keylarni tozalash
+            localStorage.removeItem(CURRENT_USER_KEY);
+            localStorage.removeItem(SESSION_KEY);
+            localStorage.removeItem(OLD_USER_KEY);
+            localStorage.removeItem(OLD_SESSION_KEY);
+            
+            window.location.href = "login.html";
+        },
+
+        // ============================================================
+        // 🛡️ SAHIFANI HIMOYA QILISH (FIXED - loop oldini olish)
+        // ============================================================
+        protectPage: function () {
+            const page = window.location.pathname.toLowerCase();
+            const publicPages = ["signup.html", "login.html", "landing.html", "index.html"];
+
+            const isPublic = publicPages.some(p => page.includes(p));
+
+            // Faqat PUBLIC emas sahifalarda tekshirish
+            if (!isPublic && !this.isSessionValid()) {
+                console.log('⚠️ Ruxsatsiz kirish - login sahifasiga yo\'naltirish');
+                window.location.href = "login.html";
+                return false;
+            }
+
+            return true;
+        }
+    };
+})();
+
+console.log("🔥 AUTH SYSTEM TAYYOR (PRODUCTION FIXED)");
