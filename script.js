@@ -1,90 +1,9 @@
 // ============================================================
-// 🚨 CRITICAL PATCH - Script.js boshiga qo'shish
-// ============================================================
-
-// ✅ AuthSystem mavjudligini tekshirish
-if (typeof AuthSystem === 'undefined') {
-  console.error('❌ AuthSystem not loaded! Include auth.js first.');
-  window.location.href = 'login.html';
-}
-
-// ✅ Global data variables (old localStorage calls removed)
-let products = [];
-let categories = ["Electronics"];
-let sales = [];
-let debtors = [];
-let paidDebtors = [];
-let smsHistory = [];
-
-// ✅ Data loader from AuthSystem only
-function loadAllUserData() {
-  const userData = AuthSystem.getCurrentUser();
-  if (!userData) {
-    console.error('❌ No user data found');
-    AuthSystem.logout();
-    return false;
-  }
-
-  products = userData.products || [];
-  categories = userData.categories || ['Electronics'];
-  sales = userData.sales || [];
-  debtors = userData.debtors || [];
-  paidDebtors = userData.paidDebtors || [];
-  smsHistory = userData.smsHistory || [];
-  
-  console.log('✅ Data loaded for user:', userData.email);
-  return true;
-}
-
-// ✅ Unified save functions
-function saveProducts() { AuthSystem.updateCurrentUserData({ products }); }
-function saveCategories() { AuthSystem.updateCurrentUserData({ categories }); }
-function saveSales() { AuthSystem.updateCurrentUserData({ sales }); }
-function saveDebtors() { AuthSystem.updateCurrentUserData({ debtors, paidDebtors }); }
-function saveSmsHistory() { AuthSystem.updateCurrentUserData({ smsHistory }); }
-
-// ============================================================
-// KEYIN SIZNING BARCHA ESKI KODINGIZ (o'zgarishsiz)...
-// Faqat DOMContentLoaded qismini yuqoridagi kabi yangilash
-// ============================================================
-
-// // ============================================================
-// // 🔐 AUTH CHECK - HAR SAHIFADA
-// // ============================================================
-// (function() {
-//   const currentPage = window.location.pathname.toLowerCase();
-//   const publicPages = ['signup.html', 'login.html', 'index.html'];
-  
-//   const isPublicPage = publicPages.some(page => currentPage.includes(page));
-  
-//   if (!isPublicPage && !AuthSystem.isSessionValid()) {
-//     window.location.href = 'login.html';
-//     return;
-//   }
-// })();
-// // ============================================================
-// // 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
-// // ============================================================
-// (function() {
-//   const currentPath = window.location.pathname.toLowerCase();
-  
-//   // Agar index.html sahifasida bo'lsak
-//   if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
-//     // Session tekshirish
-//     if (!AuthSystem.isSessionValid()) {
-//       console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
-//       window.location.href = 'login.html';
-//       return;
-//     }
-//     console.log('✅ Session valid - user authenticated');
-//   }
-// })();
-// ============================================================
-// 🔐 AUTH CHECK - FIXED (index.html private qilindi)
+// 🔐 AUTH CHECK - HAR SAHIFADA
 // ============================================================
 (function() {
   const currentPage = window.location.pathname.toLowerCase();
-  const publicPages = ['signup.html', 'login.html'];  // ✅ index.html o'chirildi
+  const publicPages = ['signup.html', 'login.html', 'index.html'];
   
   const isPublicPage = publicPages.some(page => currentPage.includes(page));
   
@@ -92,23 +11,16 @@ function saveSmsHistory() { AuthSystem.updateCurrentUserData({ smsHistory }); }
     window.location.href = 'login.html';
     return;
   }
-  
-  // ✅ Agar login sahifasida bo'lsa va session valid bo'lsa, dashboard ga yo'naltir
-  if (isPublicPage && AuthSystem.isSessionValid()) {
-    if (currentPage.includes('login.html') || currentPage.includes('signup.html')) {
-      window.location.href = 'index.html';
-      return;
-    }
-  }
 })();
-
 // ============================================================
-// 🔐 INDEX.HTML UCHUN AUTH CHECK (yangilandi)
+// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
 // ============================================================
 (function() {
   const currentPath = window.location.pathname.toLowerCase();
   
-  if (currentPath.includes('index.html') || currentPath.endsWith('/') || currentPath.endsWith('/index')) {
+  // Agar index.html sahifasida bo'lsak
+  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
+    // Session tekshirish
     if (!AuthSystem.isSessionValid()) {
       console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
       window.location.href = 'login.html';
@@ -117,10 +29,6 @@ function saveSmsHistory() { AuthSystem.updateCurrentUserData({ smsHistory }); }
     console.log('✅ Session valid - user authenticated');
   }
 })();
-
-// Qolgan kod bir xil...
-
-
 // ============================================================
 // 📦 USER DATA LOADING
 // ============================================================
@@ -355,67 +263,15 @@ function isToday(dateStr) {
   );
 }
 
-// /* ===============================================
-//    STORAGE
-// =============================================== */
-// let products = JSON.parse(localStorage.getItem("products")) || [];
-// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
-// let sales = JSON.parse(localStorage.getItem("sales")) || [];
-// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
-// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
-// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
-// let editingId = null;
-// let currentFilter = 'all';
-// let currentSmsDebtorId = null;
-// let transactionFilter = "daily";
-// let transactionSearchQuery = "";
-
-// // Chart instances
-// let chartInstances = {
-//   weekly: null,
-//   daily: null
-// };
-
-// function saveProducts() {
-//   localStorage.setItem("products", JSON.stringify(products));
-// }
-
-// function saveCategories() {
-//   localStorage.setItem("categories", JSON.stringify(categories));
-// }
-
-// function saveSales() {
-//   localStorage.setItem("sales", JSON.stringify(sales));
-// }
-
-// function saveDebtors() {
-//   localStorage.setItem('crmDebtors', JSON.stringify(debtors));
-//   localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
-// }
-
-// function saveSmsHistory() {
-//   localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
-// }
-
 /* ===============================================
-   UNIFIED STORAGE - FAQAT AuthSystem ishlatish
+   STORAGE
 =============================================== */
-
-// ❌ ESKI KOD (o'chirish kerak):
-// let products = JSON.parse(localStorage.getItem("products")) || [];
-// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
-// let sales = JSON.parse(localStorage.getItem("sales")) || [];
-// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
-// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
-// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
-
-// ✅ YANGI UNIFIED SISTEM:
-let products = [];
-let categories = ["Electronics"];
-let sales = [];
-let debtors = [];
-let paidDebtors = [];
-let smsHistory = [];
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
+let sales = JSON.parse(localStorage.getItem("sales")) || [];
+let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
+let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
+let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
 let editingId = null;
 let currentFilter = 'all';
 let currentSmsDebtorId = null;
@@ -428,53 +284,26 @@ let chartInstances = {
   daily: null
 };
 
-// ✅ DATA LOADING FUNCTION (AuthSystem dan)
-function loadAllUserData() {
-  const userData = AuthSystem.getCurrentUser();
-  if (!userData) {
-    console.error('❌ User data not found, logging out');
-    AuthSystem.logout();
-    return;
-  }
-
-  // AuthSystem dan data yuklash
-  products = userData.products || [];
-  categories = userData.categories || ['Electronics'];
-  sales = userData.sales || [];
-  debtors = userData.debtors || [];
-  paidDebtors = userData.paidDebtors || [];
-  smsHistory = userData.smsHistory || [];
-  
-  console.log('✅ All user data loaded from AuthSystem:', userData.email);
-}
-
-// ✅ UNIFIED SAVE FUNCTIONS (faqat AuthSystem ga)
 function saveProducts() {
-  AuthSystem.updateCurrentUserData({ products });
+  localStorage.setItem("products", JSON.stringify(products));
 }
 
 function saveCategories() {
-  AuthSystem.updateCurrentUserData({ categories });
+  localStorage.setItem("categories", JSON.stringify(categories));
 }
 
 function saveSales() {
-  AuthSystem.updateCurrentUserData({ sales });
+  localStorage.setItem("sales", JSON.stringify(sales));
 }
 
 function saveDebtors() {
-  AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+  localStorage.setItem('crmDebtors', JSON.stringify(debtors));
+  localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
 }
 
 function saveSmsHistory() {
-  AuthSystem.updateCurrentUserData({ smsHistory });
+  localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
 }
-
-// ❌ ESKI SAVE FUNCTIONS ni o'chirish kerak:
-// function saveProducts() {
-//   localStorage.setItem("products", JSON.stringify(products));
-// }
-// va hokazo...
-
 
 /* ===============================================
    COUNTER ANIMATION
@@ -2602,147 +2431,21 @@ function showSuccessMessage(message) {
 /* ===============================================
    ✅ SAHIFA YUKLANGANDA (INITIALIZATION)
 =============================================== */
-// document.addEventListener("DOMContentLoaded", () => {
-//   const savedPage = localStorage.getItem("activePage") || "dashboard";
-//   const savedTitle = localStorage.getItem("activePageTitle") || "Dashboard";
-
-//   openPage(savedPage, savedTitle);
-
-//   if (checkAndResetDailyIfNeeded()) {
-//     renderTransactions();
-//   }
-
-//   renderCategories();
-//   renderProducts();
-//   renderSaleProducts();
-//   renderSales();
-//   renderTransactions();
-//   updateDailySalesCounter();
-//   updateDailySalesPageCounter();
-//   updateTotalTransactions();
-//   updateMonthlyRevenueUI();
-//   updateProfitUI();
-//   updateTotalDebtCounter();
-//   updateCharts();
-
-//   // SMS tizimi
-//   renderSmsHistory();
-//   renderDebtors();
-//   updateStatistics();
-
-//   // ✅ Avtomatik SMS tizimini ishga tushirish (08:00 da)
-//   startAutoSmsScheduler();
-
-//   // Har daqiqada kun o'zgarganini tekshirish
-//   setInterval(() => {
-//     if (checkAndResetDailyIfNeeded()) {
-//       updateDailySalesCounter();
-//       updateDailySalesPageCounter();
-//       renderSales();
-//       renderTransactions();
-//       updateTotalTransactions();
-//       updateMonthlyRevenueUI();
-//       updateProfitUI();
-//       updateCharts();
-//     }
-//   }, 60000);
-
-//   // Event listeners
-//   // const debtorForm = document.getElementById('debtorForm');
-//   // if (debtorForm) {
-//   //   debtorForm.addEventListener('submit', handleSubmit);
-//   // }
-
-//   const adjustForm = document.getElementById('adjustForm');
-//   if (adjustForm) {
-//     adjustForm.addEventListener('submit', handleAdjustDebt);
-//   }
-
-//   const smsForm = document.getElementById('smsForm');
-//   if (smsForm) {
-//     smsForm.addEventListener('submit', sendSms);
-//   }
-
-//   const smsMessage = document.getElementById('smsMessage');
-//   if (smsMessage) {
-//     smsMessage.addEventListener('input', function () {
-//       const preview = document.getElementById('smsPreview');
-//       if (preview) {
-//         preview.textContent = this.value;
-//       }
-//     });
-//   }
-
-//   document.querySelectorAll('.filter-tabs button').forEach(button => {
-//     button.addEventListener('click', function () {
-//       document.querySelectorAll('.filter-tabs button').forEach(btn => btn.classList.remove('active'));
-//       this.classList.add('active');
-//       currentFilter = this.dataset.filter;
-//       renderDebtors();
-//     });
-//   });
-
-//   const searchInput = document.getElementById('searchInput');
-//   if (searchInput) {
-//     searchInput.addEventListener('input', function () {
-//       renderDebtors();
-//     });
-//   }
-
-//   const debtorModal = document.getElementById('debtorModal');
-//   if (debtorModal) {
-//     debtorModal.addEventListener('click', function (e) {
-//       if (e.target === this) closeModal();
-//     });
-//   }
-
-//   const smsModal = document.getElementById('smsModal');
-//   if (smsModal) {
-//     smsModal.addEventListener('click', function (e) {
-//       if (e.target === this) closeSmsModal();
-//     });
-//   }
-
-//   const adjustDebtModal = document.getElementById('adjustDebtModal');
-//   if (adjustDebtModal) {
-//     adjustDebtModal.addEventListener('click', function (e) {
-//       if (e.target === this) closeAdjustModal();
-//     });
-//   }
-// });
-/* ===============================================
-   ✅ FIXED INITIALIZATION
-=============================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  console.log('🎬 Application initializing...');
-  
-  // ✅ 1. Data yuklanishini kutish
-  if (!AuthSystem.isSessionValid()) {
-    console.log('❌ No valid session, redirecting to login');
-    window.location.href = 'login.html';
-    return;
-  }
-  
-  // ✅ 2. User data yuklash (eng muhim!)
-  loadAllUserData();
-  
-  // ✅ 3. Keyin boshqa funksiyalarni chaqirish
   const savedPage = localStorage.getItem("activePage") || "dashboard";
   const savedTitle = localStorage.getItem("activePageTitle") || "Dashboard";
+
   openPage(savedPage, savedTitle);
 
   if (checkAndResetDailyIfNeeded()) {
     renderTransactions();
   }
 
-  // UI renderlar
   renderCategories();
   renderProducts();
   renderSaleProducts();
   renderSales();
   renderTransactions();
-  
-  // Counterlar
   updateDailySalesCounter();
   updateDailySalesPageCounter();
   updateTotalTransactions();
@@ -2755,9 +2458,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderSmsHistory();
   renderDebtors();
   updateStatistics();
+
+  // ✅ Avtomatik SMS tizimini ishga tushirish (08:00 da)
   startAutoSmsScheduler();
 
-  // Timers
+  // Har daqiqada kun o'zgarganini tekshirish
   setInterval(() => {
     if (checkAndResetDailyIfNeeded()) {
       updateDailySalesCounter();
@@ -2771,9 +2476,69 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 60000);
 
-  // Event listeners (eski kod bir xil qoladi)...
-});
+  // Event listeners
+  // const debtorForm = document.getElementById('debtorForm');
+  // if (debtorForm) {
+  //   debtorForm.addEventListener('submit', handleSubmit);
+  // }
 
+  const adjustForm = document.getElementById('adjustForm');
+  if (adjustForm) {
+    adjustForm.addEventListener('submit', handleAdjustDebt);
+  }
+
+  const smsForm = document.getElementById('smsForm');
+  if (smsForm) {
+    smsForm.addEventListener('submit', sendSms);
+  }
+
+  const smsMessage = document.getElementById('smsMessage');
+  if (smsMessage) {
+    smsMessage.addEventListener('input', function () {
+      const preview = document.getElementById('smsPreview');
+      if (preview) {
+        preview.textContent = this.value;
+      }
+    });
+  }
+
+  document.querySelectorAll('.filter-tabs button').forEach(button => {
+    button.addEventListener('click', function () {
+      document.querySelectorAll('.filter-tabs button').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      renderDebtors();
+    });
+  });
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      renderDebtors();
+    });
+  }
+
+  const debtorModal = document.getElementById('debtorModal');
+  if (debtorModal) {
+    debtorModal.addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  }
+
+  const smsModal = document.getElementById('smsModal');
+  if (smsModal) {
+    smsModal.addEventListener('click', function (e) {
+      if (e.target === this) closeSmsModal();
+    });
+  }
+
+  const adjustDebtModal = document.getElementById('adjustDebtModal');
+  if (adjustDebtModal) {
+    adjustDebtModal.addEventListener('click', function (e) {
+      if (e.target === this) closeAdjustModal();
+    });
+  }
+});
 
 // Kam qolgan tavarlar 
 function getStockMeta(product) {
