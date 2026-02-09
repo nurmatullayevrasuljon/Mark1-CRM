@@ -86,7 +86,9 @@
     <script src="auth.js" defer></script>
     <script src="index.js" defer></script>
     <script src="script.js" defer></script>
-    <script> if (AuthSystem && AuthSystem.isSessionValid()) { window.location.href = 'index.html'; }</script>
+    <script>
+        if (document.readyState === 'loading') {    document.addEventListener('DOMContentLoaded', function() {        AuthSystem.protectPage();    });} else {    AuthSystem.protectPage();}
+    </script>
 
 </body>
 

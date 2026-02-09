@@ -1,40 +1,98 @@
-// ============================================================
-// 🔐 AUTH CHECK - HAR SAHIFADA
-// ============================================================
-(function() {
-  const currentPage = window.location.pathname.toLowerCase();
-  const publicPages = ['signup.html', 'login.html', 'index.html'];
+// // ============================================================
+// // 🔐 AUTH CHECK - HAR SAHIFADA
+// // ============================================================
+// (function() {
+//   const currentPage = window.location.pathname.toLowerCase();
+//   const publicPages = ['signup.html', 'login.html', 'index.html'];
   
-  const isPublicPage = publicPages.some(page => currentPage.includes(page));
+//   const isPublicPage = publicPages.some(page => currentPage.includes(page));
   
-  if (!isPublicPage && !AuthSystem.isSessionValid()) {
-    window.location.href = 'login.html';
-    return;
-  }
-})();
-// ============================================================
-// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
-// ============================================================
-(function() {
-  const currentPath = window.location.pathname.toLowerCase();
+//   if (!isPublicPage && !AuthSystem.isSessionValid()) {
+//     window.location.href = 'login.html';
+//     return;
+//   }
+// })();
+// // ============================================================
+// // 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
+// // ============================================================
+// (function() {
+//   const currentPath = window.location.pathname.toLowerCase();
   
-  // Agar index.html sahifasida bo'lsak
-  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
-    // Session tekshirish
-    if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
-      window.location.href = 'login.html';
-      return;
-    }
-    console.log('✅ Session valid - user authenticated');
-  }
-})();
+//   // Agar index.html sahifasida bo'lsak
+//   if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
+//     // Session tekshirish
+//     if (!AuthSystem.isSessionValid()) {
+//       console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
+//       window.location.href = 'login.html';
+//       return;
+//     }
+//     console.log('✅ Session valid - user authenticated');
+//   }
+// })();
+// // ============================================================
+// // 📦 USER DATA LOADING
+// // ============================================================
+// function loadUserData() {
+//   const userData = AuthSystem.getCurrentUser();
+//   if (!userData) {
+//     AuthSystem.logout();
+//     return;
+//   }
+
+//   // Ma'lumotlarni yuklash
+//   products = userData.products || [];
+//   categories = userData.categories || ['Electronics'];
+//   sales = userData.sales || [];
+//   debtors = userData.debtors || [];
+//   paidDebtors = userData.paidDebtors || [];
+//   smsHistory = userData.smsHistory || [];
+  
+//   console.log('✅ User data loaded:', userData.email);
+// }
+
+// // ============================================================
+// // 💾 SAVE FUNCTIONS - UPDATED
+// // ============================================================
+// function saveProducts() {
+//   AuthSystem.updateCurrentUserData({ products });
+// }
+
+// function saveCategories() {
+//   AuthSystem.updateCurrentUserData({ categories });
+// }
+
+// function saveSales() {
+//   AuthSystem.updateCurrentUserData({ sales });
+// }
+
+// function saveDebtors() {
+//   AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+// }
+
+// function saveSmsHistory() {
+//   AuthSystem.updateCurrentUserData({ smsHistory });
+// }
+
+// // ============================================================
+// // 🎯 INITIALIZATION
+// // ============================================================
+// document.addEventListener('DOMContentLoaded', function() {
+//   console.log('🎬 Dashboard initializing...');
+  
+//   // 1. Ma'lumotlarni yuklash
+//   loadUserData();
+  
+//   // 2. Boshqa barcha funksiyalar...
+//   // (Sizning eski kodingiz)
+// });
+
 // ============================================================
-// 📦 USER DATA LOADING
+// 📦 USER DATA LOADING (SODDALASHTIRILGAN)
 // ============================================================
 function loadUserData() {
   const userData = AuthSystem.getCurrentUser();
   if (!userData) {
+    console.error('❌ No user data found');
     AuthSystem.logout();
     return;
   }
@@ -50,41 +108,8 @@ function loadUserData() {
   console.log('✅ User data loaded:', userData.email);
 }
 
-// ============================================================
-// 💾 SAVE FUNCTIONS - UPDATED
-// ============================================================
-function saveProducts() {
-  AuthSystem.updateCurrentUserData({ products });
-}
+// KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
-function saveCategories() {
-  AuthSystem.updateCurrentUserData({ categories });
-}
-
-function saveSales() {
-  AuthSystem.updateCurrentUserData({ sales });
-}
-
-function saveDebtors() {
-  AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
-}
-
-function saveSmsHistory() {
-  AuthSystem.updateCurrentUserData({ smsHistory });
-}
-
-// ============================================================
-// 🎯 INITIALIZATION
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🎬 Dashboard initializing...');
-  
-  // 1. Ma'lumotlarni yuklash
-  loadUserData();
-  
-  // 2. Boshqa barcha funksiyalar...
-  // (Sizning eski kodingiz)
-});
 
 // KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
