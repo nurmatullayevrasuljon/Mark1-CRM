@@ -1,62 +1,34 @@
 // ============================================================
-// 🔐 AUTH CHECK - INDEX.HTML UCHUN (PRODUCTION READY)
+// 🔐 AUTH CHECK - HAR SAHIFADA
+// ============================================================
+(function() {
+  const currentPage = window.location.pathname.toLowerCase();
+  const publicPages = ['signup.html', 'login.html', 'index.html'];
+  
+  const isPublicPage = publicPages.some(page => currentPage.includes(page));
+  
+  if (!isPublicPage && !AuthSystem.isSessionValid()) {
+    window.location.href = 'login.html';
+    return;
+  }
+})();
+// ============================================================
+// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
 // ============================================================
 (function() {
   const currentPath = window.location.pathname.toLowerCase();
   
-  // Faqat index.html da auth tekshirish
-  if (currentPath.includes('index.html') || currentPath.endsWith('/') || currentPath === '') {
-    
-    // AuthSystem mavjudligini tekshirish
-    if (typeof AuthSystem === 'undefined') {
-      console.error('❌ AuthSystem topilmadi! auth.js yuklanmaganmi?');
-      alert('Tizim xatosi: Authentication kutubxonasi topilmadi!');
-      return;
-    }
-
+  // Agar index.html sahifasida bo'lsak
+  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
     // Session tekshirish
     if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Sessiya yo\'q - login sahifasiga yo\'naltirish');
-      window.location.replace('login.html');
+      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
+      window.location.href = 'login.html';
       return;
     }
-    
-    console.log('✅ Session mavjud - dashboard yuklanyapti');
+    console.log('✅ Session valid - user authenticated');
   }
 })();
-
-// ============================================================
-// 📦 USER DATA LOADING (PERSISTENT)
-// ============================================================
-// function loadUserData() {
-//   console.log('🔄 User ma\'lumotlari yuklanmoqda...');
-  
-//   const userData = AuthSystem.getCurrentUser();
-  
-//   if (!userData) {
-//     console.error('❌ Foydalanuvchi topilmadi');
-//     AuthSystem.logout();
-//     return;
-//   }
-
-//   // ✅ GLOBAL VARIABLES ga YUKLAYMIZ (script.js da ishlatish uchun)
-//   products = userData.products || [];
-//   categories = userData.categories || ['Electronics'];
-//   sales = userData.sales || [];
-//   debtors = userData.debtors || [];
-//   paidDebtors = userData.paidDebtors || [];
-//   smsHistory = userData.smsHistory || [];
-  
-//   console.log('✅ Ma\'lumotlar yuklandi:', {
-//     products: products.length,
-//     sales: sales.length,
-//     debtors: debtors.length,
-//     categories: categories.length
-//   });
-  
-//   console.log('📧 Foydalanuvchi:', userData.email);
-// }
-
 // ============================================================
 // 📦 USER DATA LOADING
 // ============================================================
@@ -66,125 +38,55 @@ function loadUserData() {
     AuthSystem.logout();
     return;
   }
-  
+
+  // Ma'lumotlarni yuklash
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
   debtors = userData.debtors || [];
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
+  
+  console.log('✅ User data loaded:', userData.email);
 }
 
+// ============================================================
+// 💾 SAVE FUNCTIONS - UPDATED
+// ============================================================
 function saveProducts() {
-  AuthSystem.updateCurrentUserData({ products: products });
+  AuthSystem.updateCurrentUserData({ products });
 }
 
 function saveCategories() {
-  AuthSystem.updateCurrentUserData({ categories: categories });
+  AuthSystem.updateCurrentUserData({ categories });
 }
 
 function saveSales() {
-  AuthSystem.updateCurrentUserData({ sales: sales });
+  AuthSystem.updateCurrentUserData({ sales });
 }
 
 function saveDebtors() {
-  AuthSystem.updateCurrentUserData({ 
-    debtors: debtors,
-    paidDebtors: paidDebtors 
-  });
+  AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
 }
 
 function saveSmsHistory() {
-  AuthSystem.updateCurrentUserData({ smsHistory: smsHistory });
-}
-
-
-// ============================================================
-// 💾 SAVE FUNCTIONS - AuthSystem ga SAQLASH (PERSISTENT)
-// ============================================================
-
-function saveProducts() {
-  AuthSystem.updateCurrentUserData({ products: products });
-  console.log('💾 Products saqlandi:', products.length);
-}
-
-function saveCategories() {
-  AuthSystem.updateCurrentUserData({ categories: categories });
-  console.log('💾 Categories saqlandi:', categories.length);
-}
-
-function saveSales() {
-  AuthSystem.updateCurrentUserData({ sales: sales });
-  console.log('💾 Sales saqlandi:', sales.length);
-}
-
-function saveDebtors() {
-  AuthSystem.updateCurrentUserData({ 
-    debtors: debtors,
-    paidDebtors: paidDebtors 
-  });
-  console.log('💾 Debtors saqlandi:', debtors.length);
-}
-
-function saveSmsHistory() {
-  AuthSystem.updateCurrentUserData({ smsHistory: smsHistory });
-  console.log('💾 SMS History saqlandi:', smsHistory.length);
+  AuthSystem.updateCurrentUserData({ smsHistory });
 }
 
 // ============================================================
-// 🎯 INITIALIZATION - DOMContentLoaded da BIRINCHI BAJARILADI
+// 🎯 INITIALIZATION
 // ============================================================
-// document.addEventListener('DOMContentLoaded', function() {
-//   console.log('🎬 Dashboard initializing...');
-  
-//   // 1️⃣ BIRINCHI - Ma'lumotlarni yuklash
-//   loadUserData();
-  
-//   // 2️⃣ IKKINCHI - Boshqa barcha funksiyalar
-//   // (Sizning eski kodingiz shu yerdan davom etadi)
-// });
 document.addEventListener('DOMContentLoaded', function() {
   console.log('🎬 Dashboard initializing...');
   
-  // 1️⃣ BIRINCHI - Ma'lumotlarni yuklash
+  // 1. Ma'lumotlarni yuklash
   loadUserData();
   
-  // 2️⃣ IKKINCHI - UI render
-  renderCategories();
-  renderProducts();
-  renderSaleProducts();
-  renderSales();
-  renderTransactions();
-  updateDailySalesCounter();
-  updateDailySalesPageCounter();
-  updateTotalTransactions();
-  updateMonthlyRevenueUI();
-  updateProfitUI();
-  updateTotalDebtCounter();
-  updateCharts();
-  renderSmsHistory();
-  renderDebtors();
-  updateStatistics();
-  startAutoSmsScheduler();
-  
-  // Kun o'zgarishini tekshirish
-  setInterval(() => {
-    if (checkAndResetDailyIfNeeded()) {
-      updateDailySalesCounter();
-      updateDailySalesPageCounter();
-      renderSales();
-      renderTransactions();
-      updateTotalTransactions();
-      updateMonthlyRevenueUI();
-      updateProfitUI();
-      updateCharts();
-    }
-  }, 60000);
+  // 2. Boshqa barcha funksiyalar...
+  // (Sizning eski kodingiz)
 });
 
-// ============================================================
-// KEYIN SIZNING BARCHA ESKI KODINGIZ DAVOM ETADI...
-// ============================================================
+// KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
 
 // Welcome text animation
@@ -3581,20 +3483,10 @@ document.querySelectorAll("table").forEach(table => {
 /* ========== AUTHENTICATION & STORAGE ========== */
 
 // Foydalanuvchi ma'lumotlarini olish
-// function getUserData() {
-//   const userData = localStorage.getItem('currentUser');
-//   console.log('Dashboard - Getting user data:', userData);
-//   return userData ? JSON.parse(userData) : null;
-// }
-// Logout button
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (confirm('Haqiqatan ham chiqmoqchimisiz?')) {
-      AuthSystem.logout();
-    }
-  });
+function getUserData() {
+  const userData = localStorage.getItem('currentUser');
+  console.log('Dashboard - Getting user data:', userData);
+  return userData ? JSON.parse(userData) : null;
 }
 
 // Foydalanuvchi ma'lumotlarini saqlash
