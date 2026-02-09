@@ -1,3 +1,53 @@
+// ============================================================
+// 🚨 CRITICAL PATCH - Script.js boshiga qo'shish
+// ============================================================
+
+// ✅ AuthSystem mavjudligini tekshirish
+if (typeof AuthSystem === 'undefined') {
+  console.error('❌ AuthSystem not loaded! Include auth.js first.');
+  window.location.href = 'login.html';
+}
+
+// ✅ Global data variables (old localStorage calls removed)
+let products = [];
+let categories = ["Electronics"];
+let sales = [];
+let debtors = [];
+let paidDebtors = [];
+let smsHistory = [];
+
+// ✅ Data loader from AuthSystem only
+function loadAllUserData() {
+  const userData = AuthSystem.getCurrentUser();
+  if (!userData) {
+    console.error('❌ No user data found');
+    AuthSystem.logout();
+    return false;
+  }
+
+  products = userData.products || [];
+  categories = userData.categories || ['Electronics'];
+  sales = userData.sales || [];
+  debtors = userData.debtors || [];
+  paidDebtors = userData.paidDebtors || [];
+  smsHistory = userData.smsHistory || [];
+  
+  console.log('✅ Data loaded for user:', userData.email);
+  return true;
+}
+
+// ✅ Unified save functions
+function saveProducts() { AuthSystem.updateCurrentUserData({ products }); }
+function saveCategories() { AuthSystem.updateCurrentUserData({ categories }); }
+function saveSales() { AuthSystem.updateCurrentUserData({ sales }); }
+function saveDebtors() { AuthSystem.updateCurrentUserData({ debtors, paidDebtors }); }
+function saveSmsHistory() { AuthSystem.updateCurrentUserData({ smsHistory }); }
+
+// ============================================================
+// KEYIN SIZNING BARCHA ESKI KODINGIZ (o'zgarishsiz)...
+// Faqat DOMContentLoaded qismini yuqoridagi kabi yangilash
+// ============================================================
+
 // // ============================================================
 // // 🔐 AUTH CHECK - HAR SAHIFADA
 // // ============================================================
@@ -347,33 +397,47 @@ function isToday(dateStr) {
 //   localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
 // }
 
-// ============================================================
-// 🚨 CRITICAL PATCH - Script.js boshiga qo'shish
-// ============================================================
+/* ===============================================
+   UNIFIED STORAGE - FAQAT AuthSystem ishlatish
+=============================================== */
 
-// ✅ AuthSystem mavjudligini tekshirish
-if (typeof AuthSystem === 'undefined') {
-  console.error('❌ AuthSystem not loaded! Include auth.js first.');
-  window.location.href = 'login.html';
-}
+// ❌ ESKI KOD (o'chirish kerak):
+// let products = JSON.parse(localStorage.getItem("products")) || [];
+// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
+// let sales = JSON.parse(localStorage.getItem("sales")) || [];
+// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
+// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
+// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
 
-// ✅ Global data variables (old localStorage calls removed)
+// ✅ YANGI UNIFIED SISTEM:
 let products = [];
 let categories = ["Electronics"];
 let sales = [];
 let debtors = [];
 let paidDebtors = [];
 let smsHistory = [];
+let editingId = null;
+let currentFilter = 'all';
+let currentSmsDebtorId = null;
+let transactionFilter = "daily";
+let transactionSearchQuery = "";
 
-// ✅ Data loader from AuthSystem only
+// Chart instances
+let chartInstances = {
+  weekly: null,
+  daily: null
+};
+
+// ✅ DATA LOADING FUNCTION (AuthSystem dan)
 function loadAllUserData() {
   const userData = AuthSystem.getCurrentUser();
   if (!userData) {
-    console.error('❌ No user data found');
+    console.error('❌ User data not found, logging out');
     AuthSystem.logout();
-    return false;
+    return;
   }
 
+  // AuthSystem dan data yuklash
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
@@ -381,22 +445,35 @@ function loadAllUserData() {
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
   
-  console.log('✅ Data loaded for user:', userData.email);
-  return true;
+  console.log('✅ All user data loaded from AuthSystem:', userData.email);
 }
 
-// ✅ Unified save functions
-function saveProducts() { AuthSystem.updateCurrentUserData({ products }); }
-function saveCategories() { AuthSystem.updateCurrentUserData({ categories }); }
-function saveSales() { AuthSystem.updateCurrentUserData({ sales }); }
-function saveDebtors() { AuthSystem.updateCurrentUserData({ debtors, paidDebtors }); }
-function saveSmsHistory() { AuthSystem.updateCurrentUserData({ smsHistory }); }
+// ✅ UNIFIED SAVE FUNCTIONS (faqat AuthSystem ga)
+function saveProducts() {
+  AuthSystem.updateCurrentUserData({ products });
+}
 
-// ============================================================
-// KEYIN SIZNING BARCHA ESKI KODINGIZ (o'zgarishsiz)...
-// Faqat DOMContentLoaded qismini yuqoridagi kabi yangilash
-// ============================================================
+function saveCategories() {
+  AuthSystem.updateCurrentUserData({ categories });
+}
 
+function saveSales() {
+  AuthSystem.updateCurrentUserData({ sales });
+}
+
+function saveDebtors() {
+  AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+}
+
+function saveSmsHistory() {
+  AuthSystem.updateCurrentUserData({ smsHistory });
+}
+
+// ❌ ESKI SAVE FUNCTIONS ni o'chirish kerak:
+// function saveProducts() {
+//   localStorage.setItem("products", JSON.stringify(products));
+// }
+// va hokazo...
 
 
 /* ===============================================
