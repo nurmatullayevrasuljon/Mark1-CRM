@@ -228,21 +228,6 @@
 // })();
 
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
-// ============================================================
-// 🛡️ AUTH GUARD — SAFE REDIRECT
-// ============================================================
-(function () {
-  const page = location.pathname.toLowerCase();
-  const isAuth = AuthSystem.isSessionValid();
-
-  if (page.includes("index")) {
-    if (!isAuth) location.replace("login.html");
-  }
-
-  if (page.includes("login") || page.includes("signup")) {
-    if (isAuth) location.replace("index.html");
-  }
-})();
 
 // ============================================================
 // 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FIXED)

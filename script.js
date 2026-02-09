@@ -266,23 +266,6 @@ function isToday(dateStr) {
 /* ===============================================
    STORAGE
 =============================================== */
-// ============================================================
-// 🔒 SAFE USER DATA OVERRIDE (FUNCTIONS BREAK BO'LMAYDI)
-// ============================================================
-(function () {
-  const user = AuthSystem.getCurrentUser();
-  if (!user) return;
-
-  // GLOBAL VARIABLE'larni user ichidan yuklash
-  window.products = user.products || window.products || [];
-  window.categories = user.categories || window.categories || ["Electronics"];
-  window.sales = user.sales || window.sales || [];
-  window.debtors = user.debtors || window.debtors || [];
-  window.paidDebtors = user.paidDebtors || window.paidDebtors || [];
-  window.smsHistory = user.smsHistory || window.smsHistory || [];
-})();
-
-
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
 let sales = JSON.parse(localStorage.getItem("sales")) || [];
@@ -300,20 +283,6 @@ let chartInstances = {
   weekly: null,
   daily: null
 };
-// ============================================================
-// 💾 SAFE SAVE OVERRIDE (DATA LOST BO'LMAYDI)
-// ============================================================
-function syncUserData() {
-  AuthSystem.updateCurrentUserData({
-    products,
-    categories,
-    sales,
-    debtors,
-    paidDebtors,
-    smsHistory
-  });
-}
-
 
 function saveProducts() {
   localStorage.setItem("products", JSON.stringify(products));
