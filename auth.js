@@ -459,21 +459,44 @@ const AuthSystem = (function () {
         },
 
         // ============================================================
-        // 🛡️ SAHIFANI HIMOYA QILISH (FIXED - loop oldini olish)
+        // 🛡️ SAHIFANI HIMOYA QILISH (PROFESSIONAL)
         // ============================================================
         protectPage: function () {
             const page = window.location.pathname.toLowerCase();
-            const publicPages = ["signup.html", "login.html", "landing.html", "index.html"];
+            const isSessionValid = this.isSessionValid();
 
-            const isPublic = publicPages.some(p => page.includes(p));
-
-            // Faqat PUBLIC emas sahifalarda tekshirish
-            if (!isPublic && !this.isSessionValid()) {
-                console.log('⚠️ Ruxsatsiz kirish - login sahifasiga yo\'naltirish');
-                window.location.href = "login.html";
-                return false;
+            // INDEX.HTML - faqat login qilganlar kirishi mumkin
+            if (page.includes('index.html') || page.endsWith('/') || page === '') {
+                if (!isSessionValid) {
+                    console.log('⚠️ Index.html - Session yo\'q, Login sahifasiga yo\'naltirish');
+                    window.location.replace("login.html");
+                    return false;
+                }
+                console.log('✅ Index.html - Session mavjud');
+                return true;
             }
 
+            // LOGIN.HTML - agar allaqachon login qilgan bo'lsa, index ga yo'naltirish
+            if (page.includes('login.html')) {
+                if (isSessionValid) {
+                    console.log('⚠️ Login.html - Allaqachon tizimda, Index ga yo\'naltirish');
+                    window.location.replace("index.html");
+                    return false;
+                }
+                return true;
+            }
+
+            // SIGNUP.HTML - agar allaqachon login qilgan bo'lsa, index ga yo'naltirish
+            if (page.includes('signup.html')) {
+                if (isSessionValid) {
+                    console.log('⚠️ Signup.html - Allaqachon tizimda, Index ga yo\'naltirish');
+                    window.location.replace("index.html");
+                    return false;
+                }
+                return true;
+            }
+
+            // Boshqa sahifalar - landing.html, etc
             return true;
         }
     };

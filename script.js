@@ -1,45 +1,45 @@
 // ============================================================
-// 🔐 AUTH CHECK - HAR SAHIFADA
-// ============================================================
-(function() {
-  const currentPage = window.location.pathname.toLowerCase();
-  const publicPages = ['signup.html', 'login.html', 'index.html'];
-  
-  const isPublicPage = publicPages.some(page => currentPage.includes(page));
-  
-  if (!isPublicPage && !AuthSystem.isSessionValid()) {
-    window.location.href = 'login.html';
-    return;
-  }
-})();
-// ============================================================
-// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
+// 🔐 AUTH CHECK - INDEX.HTML UCHUN (PRODUCTION READY)
 // ============================================================
 (function() {
   const currentPath = window.location.pathname.toLowerCase();
   
-  // Agar index.html sahifasida bo'lsak
-  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
-    // Session tekshirish
-    if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
-      window.location.href = 'login.html';
+  // Faqat index.html da auth tekshirish
+  if (currentPath.includes('index.html') || currentPath.endsWith('/') || currentPath === '') {
+    
+    // AuthSystem mavjudligini tekshirish
+    if (typeof AuthSystem === 'undefined') {
+      console.error('❌ AuthSystem topilmadi! auth.js yuklanmaganmi?');
+      alert('Tizim xatosi: Authentication kutubxonasi topilmadi!');
       return;
     }
-    console.log('✅ Session valid - user authenticated');
+
+    // Session tekshirish
+    if (!AuthSystem.isSessionValid()) {
+      console.log('⚠️ Sessiya yo\'q - login sahifasiga yo\'naltirish');
+      window.location.replace('login.html');
+      return;
+    }
+    
+    console.log('✅ Session mavjud - dashboard yuklanyapti');
   }
 })();
+
 // ============================================================
-// 📦 USER DATA LOADING
+// 📦 USER DATA LOADING (PERSISTENT)
 // ============================================================
 function loadUserData() {
+  console.log('🔄 User ma\'lumotlari yuklanmoqda...');
+  
   const userData = AuthSystem.getCurrentUser();
+  
   if (!userData) {
+    console.error('❌ Foydalanuvchi topilmadi');
     AuthSystem.logout();
     return;
   }
 
-  // Ma'lumotlarni yuklash
+  // ✅ GLOBAL VARIABLES ga YUKLAYMIZ (script.js da ishlatish uchun)
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
@@ -47,46 +47,64 @@ function loadUserData() {
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
   
-  console.log('✅ User data loaded:', userData.email);
+  console.log('✅ Ma\'lumotlar yuklandi:', {
+    products: products.length,
+    sales: sales.length,
+    debtors: debtors.length,
+    categories: categories.length
+  });
+  
+  console.log('📧 Foydalanuvchi:', userData.email);
 }
 
 // ============================================================
-// 💾 SAVE FUNCTIONS - UPDATED
+// 💾 SAVE FUNCTIONS - AuthSystem ga SAQLASH (PERSISTENT)
 // ============================================================
+
 function saveProducts() {
-  AuthSystem.updateCurrentUserData({ products });
+  AuthSystem.updateCurrentUserData({ products: products });
+  console.log('💾 Products saqlandi:', products.length);
 }
 
 function saveCategories() {
-  AuthSystem.updateCurrentUserData({ categories });
+  AuthSystem.updateCurrentUserData({ categories: categories });
+  console.log('💾 Categories saqlandi:', categories.length);
 }
 
 function saveSales() {
-  AuthSystem.updateCurrentUserData({ sales });
+  AuthSystem.updateCurrentUserData({ sales: sales });
+  console.log('💾 Sales saqlandi:', sales.length);
 }
 
 function saveDebtors() {
-  AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+  AuthSystem.updateCurrentUserData({ 
+    debtors: debtors,
+    paidDebtors: paidDebtors 
+  });
+  console.log('💾 Debtors saqlandi:', debtors.length);
 }
 
 function saveSmsHistory() {
-  AuthSystem.updateCurrentUserData({ smsHistory });
+  AuthSystem.updateCurrentUserData({ smsHistory: smsHistory });
+  console.log('💾 SMS History saqlandi:', smsHistory.length);
 }
 
 // ============================================================
-// 🎯 INITIALIZATION
+// 🎯 INITIALIZATION - DOMContentLoaded da BIRINCHI BAJARILADI
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   console.log('🎬 Dashboard initializing...');
   
-  // 1. Ma'lumotlarni yuklash
+  // 1️⃣ BIRINCHI - Ma'lumotlarni yuklash
   loadUserData();
   
-  // 2. Boshqa barcha funksiyalar...
-  // (Sizning eski kodingiz)
+  // 2️⃣ IKKINCHI - Boshqa barcha funksiyalar
+  // (Sizning eski kodingiz shu yerdan davom etadi)
 });
 
-// KEYIN SIZNING BARCHA ESKI KODINGIZ...
+// ============================================================
+// KEYIN SIZNING BARCHA ESKI KODINGIZ DAVOM ETADI...
+// ============================================================
 
 
 // Welcome text animation
