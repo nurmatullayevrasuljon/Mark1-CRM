@@ -28,34 +28,76 @@
 // ============================================================
 // 📦 USER DATA LOADING (PERSISTENT)
 // ============================================================
+// function loadUserData() {
+//   console.log('🔄 User ma\'lumotlari yuklanmoqda...');
+  
+//   const userData = AuthSystem.getCurrentUser();
+  
+//   if (!userData) {
+//     console.error('❌ Foydalanuvchi topilmadi');
+//     AuthSystem.logout();
+//     return;
+//   }
+
+//   // ✅ GLOBAL VARIABLES ga YUKLAYMIZ (script.js da ishlatish uchun)
+//   products = userData.products || [];
+//   categories = userData.categories || ['Electronics'];
+//   sales = userData.sales || [];
+//   debtors = userData.debtors || [];
+//   paidDebtors = userData.paidDebtors || [];
+//   smsHistory = userData.smsHistory || [];
+  
+//   console.log('✅ Ma\'lumotlar yuklandi:', {
+//     products: products.length,
+//     sales: sales.length,
+//     debtors: debtors.length,
+//     categories: categories.length
+//   });
+  
+//   console.log('📧 Foydalanuvchi:', userData.email);
+// }
+
+// ============================================================
+// 📦 USER DATA LOADING
+// ============================================================
 function loadUserData() {
-  console.log('🔄 User ma\'lumotlari yuklanmoqda...');
-  
   const userData = AuthSystem.getCurrentUser();
-  
   if (!userData) {
-    console.error('❌ Foydalanuvchi topilmadi');
     AuthSystem.logout();
     return;
   }
-
-  // ✅ GLOBAL VARIABLES ga YUKLAYMIZ (script.js da ishlatish uchun)
+  
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
   debtors = userData.debtors || [];
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
-  
-  console.log('✅ Ma\'lumotlar yuklandi:', {
-    products: products.length,
-    sales: sales.length,
-    debtors: debtors.length,
-    categories: categories.length
-  });
-  
-  console.log('📧 Foydalanuvchi:', userData.email);
 }
+
+function saveProducts() {
+  AuthSystem.updateCurrentUserData({ products: products });
+}
+
+function saveCategories() {
+  AuthSystem.updateCurrentUserData({ categories: categories });
+}
+
+function saveSales() {
+  AuthSystem.updateCurrentUserData({ sales: sales });
+}
+
+function saveDebtors() {
+  AuthSystem.updateCurrentUserData({ 
+    debtors: debtors,
+    paidDebtors: paidDebtors 
+  });
+}
+
+function saveSmsHistory() {
+  AuthSystem.updateCurrentUserData({ smsHistory: smsHistory });
+}
+
 
 // ============================================================
 // 💾 SAVE FUNCTIONS - AuthSystem ga SAQLASH (PERSISTENT)
@@ -92,14 +134,52 @@ function saveSmsHistory() {
 // ============================================================
 // 🎯 INITIALIZATION - DOMContentLoaded da BIRINCHI BAJARILADI
 // ============================================================
+// document.addEventListener('DOMContentLoaded', function() {
+//   console.log('🎬 Dashboard initializing...');
+  
+//   // 1️⃣ BIRINCHI - Ma'lumotlarni yuklash
+//   loadUserData();
+  
+//   // 2️⃣ IKKINCHI - Boshqa barcha funksiyalar
+//   // (Sizning eski kodingiz shu yerdan davom etadi)
+// });
 document.addEventListener('DOMContentLoaded', function() {
   console.log('🎬 Dashboard initializing...');
   
   // 1️⃣ BIRINCHI - Ma'lumotlarni yuklash
   loadUserData();
   
-  // 2️⃣ IKKINCHI - Boshqa barcha funksiyalar
-  // (Sizning eski kodingiz shu yerdan davom etadi)
+  // 2️⃣ IKKINCHI - UI render
+  renderCategories();
+  renderProducts();
+  renderSaleProducts();
+  renderSales();
+  renderTransactions();
+  updateDailySalesCounter();
+  updateDailySalesPageCounter();
+  updateTotalTransactions();
+  updateMonthlyRevenueUI();
+  updateProfitUI();
+  updateTotalDebtCounter();
+  updateCharts();
+  renderSmsHistory();
+  renderDebtors();
+  updateStatistics();
+  startAutoSmsScheduler();
+  
+  // Kun o'zgarishini tekshirish
+  setInterval(() => {
+    if (checkAndResetDailyIfNeeded()) {
+      updateDailySalesCounter();
+      updateDailySalesPageCounter();
+      renderSales();
+      renderTransactions();
+      updateTotalTransactions();
+      updateMonthlyRevenueUI();
+      updateProfitUI();
+      updateCharts();
+    }
+  }, 60000);
 });
 
 // ============================================================
@@ -3501,10 +3581,20 @@ document.querySelectorAll("table").forEach(table => {
 /* ========== AUTHENTICATION & STORAGE ========== */
 
 // Foydalanuvchi ma'lumotlarini olish
-function getUserData() {
-  const userData = localStorage.getItem('currentUser');
-  console.log('Dashboard - Getting user data:', userData);
-  return userData ? JSON.parse(userData) : null;
+// function getUserData() {
+//   const userData = localStorage.getItem('currentUser');
+//   console.log('Dashboard - Getting user data:', userData);
+//   return userData ? JSON.parse(userData) : null;
+// }
+// Logout button
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (confirm('Haqiqatan ham chiqmoqchimisiz?')) {
+      AuthSystem.logout();
+    }
+  });
 }
 
 // Foydalanuvchi ma'lumotlarini saqlash

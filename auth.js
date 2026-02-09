@@ -230,25 +230,18 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 PROFESSIONAL UNIFIED AUTH SYSTEM (FIXED)
+// 🔐 PROFESSIONAL AUTH SYSTEM - PRODUCTION READY
 // ============================================================
 
 const AuthSystem = (function () {
     'use strict';
 
-    // ============================
-    // 🔹 STORAGE KEYS
-    // ============================
     const USERS_KEY = 'crm_all_users';
     const CURRENT_USER_KEY = 'crm_current_user';
     const SESSION_KEY = 'crm_session_active';
 
-    // ✅ BACKWARD COMPATIBILITY - eski keylar bilan ham ishlash
-    const OLD_USER_KEY = 'currentUser';
-    const OLD_SESSION_KEY = 'isLoggedIn';
-
     // ============================
-    // 🔹 PRIVATE FUNCTIONS
+    // PRIVATE FUNCTIONS
     // ============================
     
     function getAllUsers() {
@@ -261,7 +254,13 @@ const AuthSystem = (function () {
     }
 
     function saveAllUsers(users) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        try {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            return true;
+        } catch (e) {
+            console.error('Storage error:', e);
+            return false;
+        }
     }
 
     function hashPassword(password) {
@@ -278,13 +277,10 @@ const AuthSystem = (function () {
     }
 
     // ============================
-    // 🔹 PUBLIC API
+    // PUBLIC API
     // ============================
     return {
 
-        // ============================================================
-        // 📝 RO'YXATDAN O'TKAZISH
-        // ============================================================
         register: function (data) {
             const allUsers = getAllUsers();
 
@@ -323,13 +319,10 @@ const AuthSystem = (function () {
             allUsers.push(newUser);
             saveAllUsers(allUsers);
 
-            console.log('✅ Yangi foydalanuvchi ro\'yxatdan o\'tdi:', newUser.email);
+            console.log('✅ Ro\'yxatdan o\'tdi:', newUser.email);
             return { success: true, user: newUser };
         },
 
-        // ============================================================
-        // 🔐 LOGIN (FIXED - ikkala keyga ham yozadi)
-        // ============================================================
         login: function (emailOrPhone, password) {
             const users = getAllUsers();
             const hashed = hashPassword(password);
@@ -347,54 +340,32 @@ const AuthSystem = (function () {
                 };
             }
 
-            // ✅ IKKALA FORMAT ham ishlasin
+            // Session o'rnatish
             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
             localStorage.setItem(SESSION_KEY, "true");
-            
-            // Backward compatibility
-            localStorage.setItem(OLD_USER_KEY, JSON.stringify(user));
-            localStorage.setItem(OLD_SESSION_KEY, "true");
 
             console.log('✅ Tizimga kirdi:', user.email);
             return { success: true, user };
         },
 
-        // ============================================================
-        // 👤 HOZIRGI USERNI OLISH (FIXED)
-        // ============================================================
         getCurrentUser: function () {
             try {
-                // Avval yangi keydan tekshirish
-                let data = localStorage.getItem(CURRENT_USER_KEY);
-                
-                // Agar bo'lmasa, eski keydan olish
-                if (!data) {
-                    data = localStorage.getItem(OLD_USER_KEY);
-                    
-                    // Agar eski key topilsa, yangi keyga ham yozish
-                    if (data) {
-                        localStorage.setItem(CURRENT_USER_KEY, data);
-                        localStorage.setItem(SESSION_KEY, "true");
-                    }
-                }
-                
+                const data = localStorage.getItem(CURRENT_USER_KEY);
                 return data ? JSON.parse(data) : null;
             } catch {
                 return null;
             }
         },
 
-        // ============================================================
-        // 💾 MA'LUMOTLARNI YANGILASH
-        // ============================================================
         updateCurrentUserData: function (updates) {
             const currentUser = this.getCurrentUser();
             if (!currentUser) {
-                console.error('❌ Joriy foydalanuvchi topilmadi');
+                console.error('❌ User topilmadi');
                 return false;
             }
 
-            const updatedUser = JSON.parse(JSON.stringify(currentUser));
+            // Deep merge
+            const updatedUser = { ...currentUser };
 
             Object.keys(updates).forEach(key => {
                 if (Array.isArray(updates[key])) {
@@ -411,9 +382,8 @@ const AuthSystem = (function () {
                 }
             });
 
-            // IKKALA formatga ham yozish
+            // Current user yangilash
             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
-            localStorage.setItem(OLD_USER_KEY, JSON.stringify(updatedUser));
 
             // Global bazani yangilash
             const allUsers = getAllUsers();
@@ -422,84 +392,81 @@ const AuthSystem = (function () {
             if (index !== -1) {
                 allUsers[index] = updatedUser;
                 saveAllUsers(allUsers);
-                console.log('✅ Ma\'lumotlar yangilandi:', currentUser.email);
+                console.log('💾 Saqlandi:', currentUser.email);
             }
 
             return true;
         },
 
-        // ============================================================
-        // ✅ SESSIYA TEKSHIRISH (FIXED)
-        // ============================================================
         isSessionValid: function () {
-            // Yangi yoki eski formatda session borligini tekshirish
-            const hasNewSession = localStorage.getItem(SESSION_KEY) === "true";
-            const hasOldSession = localStorage.getItem(OLD_SESSION_KEY) === "true";
-            const hasUser = this.getCurrentUser() !== null;
-
-            return (hasNewSession || hasOldSession) && hasUser;
+            return (
+                localStorage.getItem(SESSION_KEY) === "true" &&
+                this.getCurrentUser() !== null
+            );
         },
 
-        // ============================================================
-        // 🚪 LOGOUT (FIXED - barcha keylarni tozalash)
-        // ============================================================
         logout: function () {
             const user = this.getCurrentUser();
             if (user) {
-                console.log('👋 Tizimdan chiqdi:', user.email);
+                console.log('👋 Chiqdi:', user.email);
             }
             
-            // Barcha session keylarni tozalash
             localStorage.removeItem(CURRENT_USER_KEY);
             localStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem(OLD_USER_KEY);
-            localStorage.removeItem(OLD_SESSION_KEY);
-            
-            window.location.href = "login.html";
+            window.location.replace("login.html");
         },
 
         // ============================================================
-        // 🛡️ SAHIFANI HIMOYA QILISH (PROFESSIONAL)
+        // 🛡️ AUTO-PROTECT (har sahifada avtomatik ishlaydi)
         // ============================================================
-        protectPage: function () {
+        autoProtect: function () {
             const page = window.location.pathname.toLowerCase();
-            const isSessionValid = this.isSessionValid();
+            const isValid = this.isSessionValid();
 
-            // INDEX.HTML - faqat login qilganlar kirishi mumkin
-            if (page.includes('index.html') || page.endsWith('/') || page === '') {
-                if (!isSessionValid) {
-                    console.log('⚠️ Index.html - Session yo\'q, Login sahifasiga yo\'naltirish');
+            // INDEX.HTML - faqat login qilganlar
+            if (page.includes('index.html') || page.endsWith('/') || page === '' || page === '/index') {
+                if (!isValid) {
+                    console.log('🚫 Index.html - Session yo\'q → Login');
                     window.location.replace("login.html");
                     return false;
                 }
-                console.log('✅ Index.html - Session mavjud');
+                console.log('✅ Index.html - Session OK');
                 return true;
             }
 
-            // LOGIN.HTML - agar allaqachon login qilgan bo'lsa, index ga yo'naltirish
+            // LOGIN.HTML - agar login qilgan bo'lsa → index
             if (page.includes('login.html')) {
-                if (isSessionValid) {
-                    console.log('⚠️ Login.html - Allaqachon tizimda, Index ga yo\'naltirish');
+                if (isValid) {
+                    console.log('🔄 Login.html - Tizimda → Index');
                     window.location.replace("index.html");
                     return false;
                 }
                 return true;
             }
 
-            // SIGNUP.HTML - agar allaqachon login qilgan bo'lsa, index ga yo'naltirish
+            // SIGNUP.HTML - agar login qilgan bo'lsa → index
             if (page.includes('signup.html')) {
-                if (isSessionValid) {
-                    console.log('⚠️ Signup.html - Allaqachon tizimda, Index ga yo\'naltirish');
+                if (isValid) {
+                    console.log('🔄 Signup.html - Tizimda → Index');
                     window.location.replace("index.html");
                     return false;
                 }
                 return true;
             }
 
-            // Boshqa sahifalar - landing.html, etc
             return true;
         }
     };
 })();
 
-console.log("🔥 AUTH SYSTEM TAYYOR (PRODUCTION FIXED)");
+// ============================================================
+// 🚀 AUTO-RUN on Every Page Load
+// ============================================================
+(function() {
+    // AuthSystem har doim mavjud
+    if (typeof AuthSystem !== 'undefined') {
+        AuthSystem.autoProtect();
+    }
+})();
+
+console.log("🔥 AUTH SYSTEM LOADED (Production)");

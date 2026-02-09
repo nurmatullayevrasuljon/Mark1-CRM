@@ -934,19 +934,11 @@
 })();
 
 // ============================================================
-// SIGNUP FORM - RO'YXATDAN O'TISH
+// SIGNUP FORM
 // ============================================================
 function initSignupForm() {
-  console.log("🚀 Signup form init boshlandi...");
-
   const form = document.getElementById("signupForm");
-
-  if (!form) {
-    console.log("⚠️ signupForm topilmadi");
-    return;
-  }
-
-  console.log("✅ signupForm topildi!");
+  if (!form) return;
 
   const createBtn = document.getElementById("createBtn");
   const terms = document.getElementById("terms");
@@ -955,88 +947,31 @@ function initSignupForm() {
   const password = document.getElementById("password");
   const telInputs = document.querySelectorAll('input[name="tel"]');
 
-  console.log("📋 Elementlar:", {
-    createBtn: !!createBtn,
-    terms: !!terms,
-    firstName: !!firstName,
-    email: !!email,
-    password: !!password,
-    telInputs: telInputs.length
-  });
-
-  if (!createBtn || !terms || !firstName || !email || !password) {
-    console.error("❌ Muhim elementlar topilmadi!");
-    return;
-  }
-
-  // Validatsiya funksiyasi
   function validateForm() {
-    const firstNameValue = firstName.value.trim();
-    const firstNameValid = firstNameValue.length > 0;
-
-    const emailValue = email.value.trim();
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-
-    const passwordValue = password.value;
-    const passwordValid = passwordValue.length >= 6;
-
-    let allTelFilled = true;
-    telInputs.forEach(input => {
-      if (input.value.trim() === "") {
-        allTelFilled = false;
-      }
-    });
-
-    const termsChecked = terms.checked;
-
-    const isValid = firstNameValid &&
-      emailValid &&
-      passwordValid &&
-      allTelFilled &&
-      termsChecked;
-
-    console.log("🔍 Validatsiya:", {
-      firstName: firstNameValid,
-      email: emailValid,
-      password: passwordValid,
-      tel: allTelFilled,
-      terms: termsChecked,
-      result: isValid ? "✅" : "❌"
-    });
+    const isValid = 
+      firstName.value.trim().length > 0 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) &&
+      password.value.length >= 6 &&
+      Array.from(telInputs).every(input => input.value.trim() !== '') &&
+      terms.checked;
 
     createBtn.disabled = !isValid;
-
-    if (isValid) {
-      createBtn.classList.add("active");
-      console.log("✅ TUGMA AKTIV!");
-    } else {
-      createBtn.classList.remove("active");
-    }
-
+    createBtn.classList.toggle('active', isValid);
     return isValid;
   }
 
-  // Event listeners
   firstName.addEventListener("input", validateForm);
   email.addEventListener("input", validateForm);
   password.addEventListener("input", validateForm);
-
-  telInputs.forEach(input => {
-    input.addEventListener("input", validateForm);
-  });
-
+  telInputs.forEach(input => input.addEventListener("input", validateForm));
   terms.addEventListener("change", validateForm);
 
-  // Boshlang'ich validatsiya
   validateForm();
 
-  // FORM SUBMIT - RO'YXATDAN O'TISH
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    console.log("📤 Form submit - Ro'yxatdan o'tish!");
-
+    
     if (!validateForm()) {
-      console.log("❌ Validatsiya xatosi");
       form.classList.add("was-validated");
       return;
     }
@@ -1047,102 +982,65 @@ function initSignupForm() {
     const userData = {
       fullName: firstName.value.trim(),
       email: email.value.trim(),
-      phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
+      phone: "+998 " + (telInputs[0] ? telInputs[0].value.trim() : ""),
       storeName: telInputs[1] ? telInputs[1].value.trim() : "",
-      password: password.value,
-      role: "Boshqaruv",
-      stats: {
-        customers: 0,
-        deals: 0,
-        today: 0
-      }
+      password: password.value
     };
 
-    console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
-
-    // ✅ AuthSystem.register ishlatish
     const result = AuthSystem.register(userData);
 
     if (result.success) {
-      // Tizimga avtomatik kirish
       AuthSystem.login(userData.email, userData.password);
-
-      console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
-
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.replace("index.html");
       }, 500);
     } else {
-      // Xatolik - alert va login sahifasiga yo'naltirish
-      alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
+      alert(result.message + "\n\nLogin sahifasiga yo'naltirilasiz.");
       setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
+        window.location.replace("login.html");
+      }, 1000);
     }
   });
 
-  // GOOGLE LOGIN
+  // Google Login
   const googleBtn = document.getElementById("googleBtn");
   if (googleBtn) {
     googleBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔵 Google Login boshlandi!");
-
-      // Har safar yangi tasodifiy ma'lumotlar yaratish
+      
       const randomId = Math.random().toString(36).substr(2, 9);
-
+      
       const demoUser = {
         fullName: `Google User ${randomId.substr(0, 5)}`,
         email: `user_${randomId}@gmail.com`,
         phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
         storeName: "Google Store",
-        password: `google_${randomId}`,
-        role: "Boshqaruv",
-        stats: {
-          customers: 0,
-          deals: 0,
-          today: 0
-        }
+        password: `google_${randomId}`
       };
 
-      console.log("📧 Yangi email yaratildi:", demoUser.email);
-
-      // ✅ AuthSystem.register ishlatish
       const result = AuthSystem.register(demoUser);
-
+      
       if (result.success) {
-        console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
         AuthSystem.login(demoUser.email, demoUser.password);
-
         setTimeout(() => {
-          window.location.href = "index.html";
+          window.location.replace("index.html");
         }, 300);
       } else {
-        console.error("❌ Xato:", result.message);
-        alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
+        alert(result.message);
         setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
+          window.location.replace("login.html");
+        }, 1000);
       }
     });
   }
-
-  console.log("✅ Signup form tayyor!");
 }
 
 // ============================================================
-// LOGIN FORM - TIZIMGA KIRISH
+// LOGIN FORM
 // ============================================================
 function initLoginForm() {
-  console.log("🚀 Login form init...");
-
   const form = document.getElementById("loginForm");
-  if (!form) {
-    console.log("⚠️ loginForm topilmadi");
-    return;
-  }
+  if (!form) return;
 
   const loginBtn = document.getElementById("loginBtn");
   const loginInput = document.getElementById("loginInput");
@@ -1174,7 +1072,6 @@ function initLoginForm() {
     };
   }
 
-  // Validation
   function checkLoginForm() {
     const loginOk = loginInput.value.trim().length > 4;
     const passOk = password.value.length >= 6;
@@ -1184,7 +1081,6 @@ function initLoginForm() {
   loginInput.addEventListener("input", checkLoginForm);
   password.addEventListener("input", checkLoginForm);
 
-  // Submit - TIZIMGA KIRISH
   form.addEventListener("submit", e => {
     e.preventDefault();
 
@@ -1196,19 +1092,11 @@ function initLoginForm() {
     loginBtn.innerText = "Kirish...";
     loginBtn.disabled = true;
 
-    const emailOrPhone = loginInput.value.trim();
-    const pass = password.value;
-
-    console.log("🔐 Tizimga kirish urinishi:", emailOrPhone);
-
-    // ✅ AuthSystem.login ishlatish
-    const result = AuthSystem.login(emailOrPhone, pass);
+    const result = AuthSystem.login(loginInput.value.trim(), password.value);
 
     if (result.success) {
-      console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
-
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.replace("index.html");
       }, 500);
     } else {
       alert(result.message);
@@ -1216,40 +1104,26 @@ function initLoginForm() {
       loginBtn.disabled = false;
     }
   });
-
-  console.log("✅ Login form tayyor!");
 }
 
 // ============================================================
 // LANDING PAGE
 // ============================================================
 function initLandingPage() {
-  console.log("🚀 Landing page init...");
-
   const navbar = document.getElementById('navbar');
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
-  if (!navbar || !mobileMenuBtn) {
-    console.log("⚠️ Navbar elementlari topilmadi");
-    return;
-  }
+  if (!navbar || !mobileMenuBtn) return;
 
-  // Navbar scroll effect
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  // Mobile menu toggle
   mobileMenuBtn.addEventListener('click', () => {
     navbar.classList.toggle('mobile-open');
     mobileMenuBtn.textContent = navbar.classList.contains('mobile-open') ? '✕' : '☰';
   });
 
-  // Button handlers
   const startBtn = document.getElementById('startBtn');
   const trialBtn = document.getElementById('trialBtn');
 
@@ -1267,7 +1141,6 @@ function initLandingPage() {
     });
   }
 
-  // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
@@ -1275,10 +1148,7 @@ function initLandingPage() {
         e.preventDefault();
         const target = document.querySelector(href);
         if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           navbar.classList.remove('mobile-open');
           mobileMenuBtn.textContent = '☰';
         }
@@ -1286,7 +1156,7 @@ function initLandingPage() {
     });
   });
 
-  // Parallax effect
+  // Parallax
   let mouseX = 0, mouseY = 0;
   let currentX = 0, currentY = 0;
 
@@ -1310,7 +1180,6 @@ function initLandingPage() {
 
   animate();
 
-  // Scroll animations
   const revealElements = document.querySelectorAll('.block-text, .line-text');
   const revealObserver = new IntersectionObserver(
     (entries) => {
@@ -1321,109 +1190,34 @@ function initLandingPage() {
         }
       });
     },
-    {
-      threshold: 0.15,
-      rootMargin: '0px 0px -60px 0px'
-    }
+    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
   );
 
   revealElements.forEach((el, i) => {
     el.classList.add(`block-text-${(i % 4) + 1}`);
     revealObserver.observe(el);
   });
-
-  // Icon box animations
-  const iconBoxes = document.querySelectorAll('.icon-box');
-  window.addEventListener('scroll', () => {
-    iconBoxes.forEach(box => {
-      if (box.getBoundingClientRect().top < window.innerHeight - 50) {
-        box.classList.add('svg-icon', 'icon-text', 'icon-text2');
-      }
-    });
-  });
-
-  // Nav links active state
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const navHeight = navbar.offsetHeight;
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      const targetId = link.dataset.target;
-      const targetEl = document.getElementById(targetId);
-
-      if (!targetEl) return;
-
-      const y = targetEl.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
-
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-
-      navLinks.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-    });
-  });
-
-  // Update active nav on scroll
-  const sections = document.querySelectorAll('section');
-  window.addEventListener('scroll', () => {
-    let current = '';
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - navHeight - 20;
-      if (window.scrollY >= sectionTop) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.dataset.target === current) {
-        link.classList.add('active');
-      }
-    });
-  });
-
-  console.log("✅ Landing page tayyor!");
 }
 
 // ============================================================
-// MAIN INITIALIZATION
+// INITIALIZATION
 // ============================================================
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("🎬 DOMContentLoaded - Sahifa yuklandi!");
+  const currentPage = window.location.pathname.toLowerCase();
 
-  const currentPage = window.location.pathname;
-  console.log("📄 Joriy sahifa:", currentPage);
-
-  // Signup sahifa
   if (currentPage.includes('signup')) {
-    console.log("➡️ Signup sahifa");
     initSignupForm();
   }
-  // Login sahifa
   else if (currentPage.includes('login')) {
-    console.log("➡️ Login sahifa");
     initLoginForm();
   }
-  // Landing sahifa
   else if (currentPage.includes('landing')) {
-    console.log("➡️ Landing sahifa");
     initLandingPage();
   }
-  // Boshqa sahifalar uchun navbar tekshiruvi
   else {
     const navbar = document.getElementById('navbar');
     if (navbar) {
-      console.log("➡️ Landing page");
       initLandingPage();
-    } else {
-      console.log("➡️ Boshqa sahifa (index.html da script.js ishlaydi)");
     }
   }
-
-  console.log("✅✅✅ Barcha initlar bajarildi!");
 });
-
-console.log("📜 Index.js to'liq yuklandi!");
