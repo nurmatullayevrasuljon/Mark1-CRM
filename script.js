@@ -266,12 +266,6 @@ function isToday(dateStr) {
 /* ===============================================
    STORAGE
 =============================================== */
-// let products = JSON.parse(localStorage.getItem("products")) || [];
-// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
-// let sales = JSON.parse(localStorage.getItem("sales")) || [];
-// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
-// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
-// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
 // ============================================================
 // 🔒 SAFE USER DATA OVERRIDE (FUNCTIONS BREAK BO'LMAYDI)
 // ============================================================
@@ -288,6 +282,13 @@ function isToday(dateStr) {
   window.smsHistory = user.smsHistory || window.smsHistory || [];
 })();
 
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
+let sales = JSON.parse(localStorage.getItem("sales")) || [];
+let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
+let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
+let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
 let editingId = null;
 let currentFilter = 'all';
 let currentSmsDebtorId = null;
@@ -299,27 +300,6 @@ let chartInstances = {
   weekly: null,
   daily: null
 };
-
-// function saveProducts() {
-//   localStorage.setItem("products", JSON.stringify(products));
-// }
-
-// function saveCategories() {
-//   localStorage.setItem("categories", JSON.stringify(categories));
-// }
-
-// function saveSales() {
-//   localStorage.setItem("sales", JSON.stringify(sales));
-// }
-
-// function saveDebtors() {
-//   localStorage.setItem('crmDebtors', JSON.stringify(debtors));
-//   localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
-// }
-
-// function saveSmsHistory() {
-//   localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
-// }
 // ============================================================
 // 💾 SAFE SAVE OVERRIDE (DATA LOST BO'LMAYDI)
 // ============================================================
@@ -334,6 +314,27 @@ function syncUserData() {
   });
 }
 
+
+function saveProducts() {
+  localStorage.setItem("products", JSON.stringify(products));
+}
+
+function saveCategories() {
+  localStorage.setItem("categories", JSON.stringify(categories));
+}
+
+function saveSales() {
+  localStorage.setItem("sales", JSON.stringify(sales));
+}
+
+function saveDebtors() {
+  localStorage.setItem('crmDebtors', JSON.stringify(debtors));
+  localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
+}
+
+function saveSmsHistory() {
+  localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
+}
 
 /* ===============================================
    COUNTER ANIMATION
