@@ -110,6 +110,7 @@
                                 <img src="img/flat-color-icons_google.png" alt="G" />
                                 <span class="small-muted">Continue with Google</span>
                             </button>
+                            <a href="#" onclick="goToLogin()" class="auth-link">    Hisobingiz bormi? Kirish</a>
                         </div>
 
                     </div>
@@ -124,6 +125,9 @@
 <script src="script.js" defer></script>
 <script>
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { AuthSystem.protectPage(); }); } else { AuthSystem.protectPage(); }
+    function goToLogin() { window.location.href = 'login.html';}
+    (function () { if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { setTimeout(function () { AuthSystem.protectPage(); }, 100); }); } else { setTimeout(function () { AuthSystem.protectPage(); }, 100); } })();
+
 </script>
 
 </html>

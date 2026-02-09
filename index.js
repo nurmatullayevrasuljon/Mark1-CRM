@@ -1427,3 +1427,45 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 console.log("📜 Index.js to'liq yuklandi!");
+
+// Submit///
+// Login form submit
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    const result = AuthSystem.login(email, password);
+    
+    if (result.success) {
+        console.log('✅ Login successful, redirecting to dashboard');
+        window.location.href = 'index.html';
+    } else {
+        alert(result.message);
+    }
+});
+
+// Signup form submit
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        storeName: document.getElementById('storeName').value,
+        password: document.getElementById('password').value
+    };
+    
+    const result = AuthSystem.register(formData);
+    
+    if (result.success) {
+        console.log('✅ Registration successful, logging in...');
+        // Auto login after registration
+        AuthSystem.login(formData.email, formData.password);
+        window.location.href = 'index.html';
+    } else {
+        alert(result.message);
+    }
+});

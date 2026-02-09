@@ -230,336 +230,96 @@
 // console.log("🔥 AUTH SYSTEM TAYYOR - HAMMASI TO'LIQ ISHLAYDI");
 
 // ============================================================
-// 🔐 BULLETPROOF AUTH SYSTEM (FIXED)
+// 🛡️ PAGE PROTECTION (FIXED - NO NAVIGATION BLOCKS)
 // ============================================================
-
-const AuthSystem = (function () {
-    'use strict';
-
-    // ============================
-    // 🔹 YAGONA STORAGE KEYS
-    // ============================
-    const USERS_KEY = 'crm_users';
-    const SESSION_KEY = 'crm_session';
-    const CURRENT_USER_KEY = 'crm_user';
-
-    // ============================
-    // 🔹 UTILITY FUNCTIONS
-    // ============================
+protectPage: function () {
+    const path = window.location.pathname.toLowerCase();
+    const page = path.split('/').pop() || 'index.html';
     
-    function getAllUsers() {
+    console.log('🛡️ Protecting page:', page);
+    
+    const publicPages = ['login.html', 'signup.html'];
+    const isPublic = publicPages.includes(page);
+    const hasValidSession = this.isSessionValid();
+    
+    console.log('🔍 Page protection check:', {
+        page,
+        isPublic,
+        hasValidSession
+    });
+    
+    // ✅ PUBLIC SAHIFALAR ORASIDA ERKIN O'TISH
+    if (isPublic) {
+        if (hasValidSession) {
+            // Already logged in, redirect to dashboard
+            console.log('🔄 User already logged in, redirecting to dashboard');
+            window.location.href = 'index.html';
+            return false;
+        }
+        // Public page va login yo'q - ruxsat
+        console.log('✅ Public page access allowed');
+        return true;
+    }
+    
+    // ✅ PRIVATE SAHIFALAR UCHUN LOGIN TALAB
+    if (!isPublic && !hasValidSession) {
+        console.log('🔄 Private page requires login, redirecting...');
+        
+        // ✅ FIRST-TIME USERS UCHUN SIGNUP DEFAULT
+        const hasAnyUsers = this.hasRegisteredUsers();
+        if (!hasAnyUsers) {
+            console.log('🆕 No users found, redirecting to signup');
+            window.location.href = 'signup.html';
+        } else {
+            console.log('👤 Users exist, redirecting to login');
+            window.location.href = 'login.html';
+        }
+        return false;
+    }
+    
+    console.log('✅ Page access allowed');
+    return true;
+},
+
+// ============================================================
+// 🚪 LOGOUT (FIXED - LOGIN GA YO'NALTIRISH)
+// ============================================================
+logout: function () {
+    const user = this.getCurrentUser();
+    if (user) {
+        console.log('👋 Logout:', user.email);
+    }
+    
+    // Clear ALL auth keys
+    const keysToRemove = [
+        SESSION_KEY,
+        CURRENT_USER_KEY,
+        'isLoggedIn',
+        'currentUser',
+        'crm_session_active',
+        'crm_current_user'
+    ];
+    
+    keysToRemove.forEach(key => {
         try {
-            const users = localStorage.getItem(USERS_KEY);
-            return users ? JSON.parse(users) : [];
-        } catch {
-            return [];
+            localStorage.removeItem(key);
+        } catch (e) {
+            console.warn('Could not remove key:', key);
         }
-    }
-
-    function saveAllUsers(users) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
-
-    function hashPassword(password) {
-        let hash = 0;
-        for (let i = 0; i < password.length; i++) {
-            hash = (hash << 5) - hash + password.charCodeAt(i);
-            hash |= 0;
-        }
-        return hash.toString(36);
-    }
-
-    function generateUserId() {
-        return 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
-    }
-
-    // ============================
-    // 🔹 CORE FUNCTIONS
-    // ============================
+    });
     
-    return {
-
-        // ============================================================
-        // 📝 REGISTER
-        // ============================================================
-        register: function (data) {
-            console.log('🔄 Register attempt:', data.email);
-            
-            const allUsers = getAllUsers();
-
-            if (allUsers.find(u => u.email === data.email)) {
-                return { 
-                    success: false, 
-                    message: "Bu email allaqachon ro'yxatdan o'tgan!" 
-                };
-            }
-
-            const newUser = {
-                userId: generateUserId(),
-                fullName: data.fullName,
-                email: data.email,
-                phone: data.phone,
-                storeName: data.storeName,
-                password: hashPassword(data.password),
-                role: data.role || "Boshqaruv",
-                createdAt: new Date().toISOString(),
-
-                // Default data
-                products: [],
-                categories: ['Electronics'],
-                sales: [],
-                debtors: [],
-                paidDebtors: [],
-                smsHistory: [],
-
-                stats: {
-                    customers: 0,
-                    deals: 0,
-                    today: 0
-                }
-            };
-
-            allUsers.push(newUser);
-            saveAllUsers(allUsers);
-
-            console.log('✅ User registered:', newUser.email);
-            return { success: true, user: newUser };
-        },
-
-        // ============================================================
-        // 🔐 LOGIN (FIXED - BITTA MANBAGA YOZISH)
-        // ============================================================
-        login: function (emailOrPhone, password) {
-            console.log('🔄 Login attempt:', emailOrPhone);
-            
-            const users = getAllUsers();
-            const hashed = hashPassword(password);
-
-            const user = users.find(
-                u => (u.email === emailOrPhone || u.phone === emailOrPhone) && u.password === hashed
-            );
-
-            if (!user) {
-                console.log('❌ Login failed: wrong credentials');
-                return { 
-                    success: false, 
-                    message: "Email/Telefon yoki parol noto'g'ri!" 
-                };
-            }
-
-            // ✅ FAQAT UCHTA KEY - BARCHASI HAR DOIM TO'G'RI YOZILADI
-            try {
-                localStorage.setItem(SESSION_KEY, 'active');
-                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-                
-                // Legacy support
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                
-                console.log('✅ Login successful:', user.email);
-                console.log('✅ Session keys saved:', {
-                    session: localStorage.getItem(SESSION_KEY),
-                    hasUser: !!localStorage.getItem(CURRENT_USER_KEY)
-                });
-                
-                return { success: true, user };
-            } catch (error) {
-                console.error('❌ Error saving session:', error);
-                return { success: false, message: 'Tizimda xatolik yuz berdi' };
-            }
-        },
-
-        // ============================================================
-        // 👤 GET CURRENT USER (BULLETPROOF)
-        // ============================================================
-        getCurrentUser: function () {
-            try {
-                // Primary key
-                let userData = localStorage.getItem(CURRENT_USER_KEY);
-                
-                // Fallback to legacy
-                if (!userData) {
-                    userData = localStorage.getItem('currentUser');
-                    if (userData) {
-                        // Migrate to new key
-                        localStorage.setItem(CURRENT_USER_KEY, userData);
-                        localStorage.setItem(SESSION_KEY, 'active');
-                    }
-                }
-                
-                if (!userData) {
-                    console.log('⚠️ No user data found in localStorage');
-                    return null;
-                }
-                
-                const user = JSON.parse(userData);
-                console.log('✅ Current user loaded:', user.email);
-                return user;
-                
-            } catch (error) {
-                console.error('❌ Error loading user:', error);
-                return null;
-            }
-        },
-
-        // ============================================================
-        // ✅ SESSION VALIDATION (BULLETPROOF)
-        // ============================================================
-        isSessionValid: function () {
-            try {
-                // Check session flag
-                const session = localStorage.getItem(SESSION_KEY);
-                const legacySession = localStorage.getItem('isLoggedIn');
-                
-                const hasSession = (session === 'active') || (legacySession === 'true');
-                
-                // Check user data
-                const hasUser = this.getCurrentUser() !== null;
-                
-                const isValid = hasSession && hasUser;
-                
-                console.log('🔍 Session validation:', {
-                    session,
-                    legacySession,
-                    hasSession,
-                    hasUser,
-                    isValid
-                });
-                
-                return isValid;
-                
-            } catch (error) {
-                console.error('❌ Session validation error:', error);
-                return false;
-            }
-        },
-
-        // ============================================================
-        // 💾 UPDATE USER DATA (SYNC TO ALL SOURCES)
-        // ============================================================
-        updateCurrentUserData: function (updates) {
-            const currentUser = this.getCurrentUser();
-            if (!currentUser) {
-                console.error('❌ Cannot update - no current user');
-                return false;
-            }
-
-            try {
-                // Deep merge
-                const updatedUser = JSON.parse(JSON.stringify(currentUser));
-
-                Object.keys(updates).forEach(key => {
-                    if (Array.isArray(updates[key])) {
-                        updatedUser[key] = [...updates[key]];
-                    } else if (typeof updates[key] === "object" && updates[key] !== null) {
-                        updatedUser[key] = { ...updatedUser[key], ...updates[key] };
-                    } else {
-                        updatedUser[key] = updates[key];
-                    }
-                });
-
-                // Save to current session
-                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
-                localStorage.setItem('currentUser', JSON.stringify(updatedUser)); // Legacy
-
-                // Update global users database
-                const allUsers = getAllUsers();
-                const index = allUsers.findIndex(u => u.userId === currentUser.userId);
-
-                if (index !== -1) {
-                    allUsers[index] = updatedUser;
-                    saveAllUsers(allUsers);
-                }
-
-                console.log('✅ User data updated:', currentUser.email);
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Error updating user data:', error);
-                return false;
-            }
-        },
-
-        // ============================================================
-        // 🚪 LOGOUT (COMPLETE CLEANUP)
-        // ============================================================
-        logout: function () {
-            const user = this.getCurrentUser();
-            if (user) {
-                console.log('👋 Logout:', user.email);
-            }
-            
-            // Clear ALL auth keys
-            const keysToRemove = [
-                SESSION_KEY,
-                CURRENT_USER_KEY,
-                'isLoggedIn',
-                'currentUser',
-                'crm_session_active',
-                'crm_current_user'
-            ];
-            
-            keysToRemove.forEach(key => {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    console.warn('Could not remove key:', key);
-                }
-            });
-            
-            console.log('✅ All auth data cleared');
-            
-            // Redirect
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 100);
-        },
-
-        // ============================================================
-        // 🛡️ PAGE PROTECTION (NO LOOPS)
-        // ============================================================
-        protectPage: function () {
-            const path = window.location.pathname.toLowerCase();
-            const page = path.split('/').pop() || 'index.html';
-            
-            console.log('🛡️ Protecting page:', page);
-            
-            const publicPages = ['login.html', 'signup.html'];
-            const isPublic = publicPages.includes(page);
-            const hasValidSession = this.isSessionValid();
-            
-            console.log('🔍 Page protection check:', {
-                page,
-                isPublic,
-                hasValidSession
-            });
-            
-            if (isPublic && hasValidSession) {
-                // Logged in user trying to access login/signup
-                console.log('🔄 Redirecting to dashboard (already logged in)');
-                window.location.href = 'index.html';
-                return false;
-            }
-            
-            if (!isPublic && !hasValidSession) {
-                // Non-logged user trying to access private page
-                console.log('🔄 Redirecting to login (not logged in)');
-                window.location.href = 'login.html';
-                return false;
-            }
-            
-            console.log('✅ Page access allowed');
-            return true;
-        }
-    };
-})();
+    console.log('✅ All auth data cleared');
+    
+    // ✅ LOGOUT DAN KEYIN LOGIN.HTML GA (signup emas!)
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 100);
+},
 
 // ============================================================
-// 🚀 AUTO-INITIALIZE
+// 🆕 HELPER FUNCTION - USERS BORLIGINI TEKSHIRISH
 // ============================================================
-console.log('🔥 AuthSystem loaded and ready');
-
-// Page protection on load
-document.addEventListener('DOMContentLoaded', function() {
-    AuthSystem.protectPage();
-});
+hasRegisteredUsers: function() {
+    const users = getAllUsers();
+    return users.length > 0;
+}
