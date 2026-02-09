@@ -266,12 +266,28 @@ function isToday(dateStr) {
 /* ===============================================
    STORAGE
 =============================================== */
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
-let sales = JSON.parse(localStorage.getItem("sales")) || [];
-let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
-let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
-let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
+// let products = JSON.parse(localStorage.getItem("products")) || [];
+// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
+// let sales = JSON.parse(localStorage.getItem("sales")) || [];
+// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
+// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
+// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
+// ============================================================
+// 🔒 SAFE USER DATA OVERRIDE (FUNCTIONS BREAK BO'LMAYDI)
+// ============================================================
+(function () {
+  const user = AuthSystem.getCurrentUser();
+  if (!user) return;
+
+  // GLOBAL VARIABLE'larni user ichidan yuklash
+  window.products = user.products || window.products || [];
+  window.categories = user.categories || window.categories || ["Electronics"];
+  window.sales = user.sales || window.sales || [];
+  window.debtors = user.debtors || window.debtors || [];
+  window.paidDebtors = user.paidDebtors || window.paidDebtors || [];
+  window.smsHistory = user.smsHistory || window.smsHistory || [];
+})();
+
 let editingId = null;
 let currentFilter = 'all';
 let currentSmsDebtorId = null;
@@ -284,26 +300,40 @@ let chartInstances = {
   daily: null
 };
 
-function saveProducts() {
-  localStorage.setItem("products", JSON.stringify(products));
+// function saveProducts() {
+//   localStorage.setItem("products", JSON.stringify(products));
+// }
+
+// function saveCategories() {
+//   localStorage.setItem("categories", JSON.stringify(categories));
+// }
+
+// function saveSales() {
+//   localStorage.setItem("sales", JSON.stringify(sales));
+// }
+
+// function saveDebtors() {
+//   localStorage.setItem('crmDebtors', JSON.stringify(debtors));
+//   localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
+// }
+
+// function saveSmsHistory() {
+//   localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
+// }
+// ============================================================
+// 💾 SAFE SAVE OVERRIDE (DATA LOST BO'LMAYDI)
+// ============================================================
+function syncUserData() {
+  AuthSystem.updateCurrentUserData({
+    products,
+    categories,
+    sales,
+    debtors,
+    paidDebtors,
+    smsHistory
+  });
 }
 
-function saveCategories() {
-  localStorage.setItem("categories", JSON.stringify(categories));
-}
-
-function saveSales() {
-  localStorage.setItem("sales", JSON.stringify(sales));
-}
-
-function saveDebtors() {
-  localStorage.setItem('crmDebtors', JSON.stringify(debtors));
-  localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
-}
-
-function saveSmsHistory() {
-  localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
-}
 
 /* ===============================================
    COUNTER ANIMATION
