@@ -1,45 +1,148 @@
-// ============================================================
-// 🔐 AUTH CHECK - HAR SAHIFADA
-// ============================================================
-(function() {
-  const currentPage = window.location.pathname.toLowerCase();
-  const publicPages = ['signup.html', 'login.html', 'index.html'];
+// // ============================================================
+// // 🔐 AUTH CHECK - HAR SAHIFADA
+// // ============================================================
+// (function() {
+//   const currentPage = window.location.pathname.toLowerCase();
+//   const publicPages = ['signup.html', 'login.html', 'index.html'];
   
-  const isPublicPage = publicPages.some(page => currentPage.includes(page));
+//   const isPublicPage = publicPages.some(page => currentPage.includes(page));
   
+//   if (!isPublicPage && !AuthSystem.isSessionValid()) {
+//     window.location.href = 'login.html';
+//     return;
+//   }
+// })();
+// // ============================================================
+// // 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
+// // ============================================================
+// (function() {
+//   const currentPath = window.location.pathname.toLowerCase();
+  
+//   // Agar index.html sahifasida bo'lsak
+//   if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
+//     // Session tekshirish
+//     if (!AuthSystem.isSessionValid()) {
+//       console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
+//       window.location.href = 'login.html';
+//       return;
+//     }
+//     console.log('✅ Session valid - user authenticated');
+//   }
+// })();
+// // ============================================================
+// // 📦 USER DATA LOADING
+// // ============================================================
+// function loadUserData() {
+//   const userData = AuthSystem.getCurrentUser();
+//   if (!userData) {
+//     AuthSystem.logout();
+//     return;
+//   }
+
+//   // Ma'lumotlarni yuklash
+//   products = userData.products || [];
+//   categories = userData.categories || ['Electronics'];
+//   sales = userData.sales || [];
+//   debtors = userData.debtors || [];
+//   paidDebtors = userData.paidDebtors || [];
+//   smsHistory = userData.smsHistory || [];
+  
+//   console.log('✅ User data loaded:', userData.email);
+// }
+
+// // ============================================================
+// // 💾 SAVE FUNCTIONS - UPDATED
+// // ============================================================
+// function saveProducts() {
+//   AuthSystem.updateCurrentUserData({ products });
+// }
+
+// function saveCategories() {
+//   AuthSystem.updateCurrentUserData({ categories });
+// }
+
+// function saveSales() {
+//   AuthSystem.updateCurrentUserData({ sales });
+// }
+
+// function saveDebtors() {
+//   AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+// }
+
+// function saveSmsHistory() {
+//   AuthSystem.updateCurrentUserData({ smsHistory });
+// }
+
+// // ============================================================
+// // 🎯 INITIALIZATION
+// // ============================================================
+// document.addEventListener('DOMContentLoaded', function() {
+//   console.log('🎬 Dashboard initializing...');
+  
+//   // 1. Ma'lumotlarni yuklash
+//   loadUserData();
+  
+//   // 2. Boshqa barcha funksiyalar...
+//   // (Sizning eski kodingiz)
+// });
+
+// ============================================================
+// 🔐 AUTH CHECK VA DATA LOADING - TO'LIQ TUZATILGAN
+// ============================================================
+
+// ============================================================
+// 1️⃣ YAGONA AUTH CHECK (IKKI MARTA TEKSHIRMASLIK)
+// ============================================================
+(function authGuard() {
+  console.log('🛡️ Auth Guard ishga tushdi');
+  
+  const currentPath = window.location.pathname.toLowerCase();
+  const publicPages = ['signup.html', 'login.html', 'landing.html'];
+  const isPublicPage = publicPages.some(page => currentPath.includes(page));
+  
+  console.log('📄 Sahifa:', currentPath);
+  console.log('🔍 Public sahifami?', isPublicPage);
+  
+  // ✅ AGAR INDEX.HTML DA BO'LSA VA SESSION YO'Q BO'LSA
   if (!isPublicPage && !AuthSystem.isSessionValid()) {
+    console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
     window.location.href = 'login.html';
     return;
   }
-})();
-// ============================================================
-// 🔐 AUTH CHECK - FAQAT INDEX.HTML UCHUN
-// ============================================================
-(function() {
-  const currentPath = window.location.pathname.toLowerCase();
   
-  // Agar index.html sahifasida bo'lsak
-  if (currentPath.includes('index.html') || currentPath.endsWith('/index')) {
-    // Session tekshirish
-    if (!AuthSystem.isSessionValid()) {
-      console.log('⚠️ Tizimga kirilmagan - login.html ga yo\'naltirish');
-      window.location.href = 'login.html';
+  // ✅ AGAR LOGIN/SIGNUP DA BO'LSA VA SESSION BOR BO'LSA
+  if (isPublicPage && AuthSystem.isSessionValid()) {
+    if (currentPath.includes('login') || currentPath.includes('signup')) {
+      console.log('✅ Foydalanuvchi allaqachon tizimga kirgan - index.html ga yo\'naltirish');
+      window.location.href = 'index.html';
       return;
     }
-    console.log('✅ Session valid - user authenticated');
   }
+  
+  console.log('✅ Auth tekshiruvi o\'tdi');
 })();
+
 // ============================================================
-// 📦 USER DATA LOADING
+// 2️⃣ USER DATA LOADING (FAQAT INDEX.HTML UCHUN)
 // ============================================================
 function loadUserData() {
+  console.log('📦 loadUserData() boshlandi');
+  
   const userData = AuthSystem.getCurrentUser();
+  
   if (!userData) {
+    console.error('❌ Foydalanuvchi ma\'lumotlari topilmadi');
     AuthSystem.logout();
-    return;
+    return false;
   }
 
-  // Ma'lumotlarni yuklash
+  console.log('✅ User data:', {
+    email: userData.email,
+    products: userData.products?.length || 0,
+    sales: userData.sales?.length || 0
+  });
+
+  // ✅ GLOBAL O'ZGARUVCHILARNI TO'LDIRISH
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
@@ -47,44 +150,41 @@ function loadUserData() {
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
   
-  console.log('✅ User data loaded:', userData.email);
+  console.log('✅ Global variables yuklandi');
+  return true;
 }
 
 // ============================================================
-// 💾 SAVE FUNCTIONS - UPDATED
+// 3️⃣ SAVE FUNCTIONS - YANGILANGAN
 // ============================================================
 function saveProducts() {
+  console.log('💾 saveProducts() - AuthSystem ga');
   AuthSystem.updateCurrentUserData({ products });
 }
 
 function saveCategories() {
+  console.log('💾 saveCategories() - AuthSystem ga');
   AuthSystem.updateCurrentUserData({ categories });
 }
 
 function saveSales() {
+  console.log('💾 saveSales() - AuthSystem ga');
   AuthSystem.updateCurrentUserData({ sales });
 }
 
 function saveDebtors() {
+  console.log('💾 saveDebtors() - AuthSystem ga');
   AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
 }
 
 function saveSmsHistory() {
+  console.log('💾 saveSmsHistory() - AuthSystem ga');
   AuthSystem.updateCurrentUserData({ smsHistory });
 }
 
 // ============================================================
-// 🎯 INITIALIZATION
+// KEYIN SIZNING BARCHA ESKI KODINGIZ...
 // ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🎬 Dashboard initializing...');
-  
-  // 1. Ma'lumotlarni yuklash
-  loadUserData();
-  
-  // 2. Boshqa barcha funksiyalar...
-  // (Sizning eski kodingiz)
-});
 
 // KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
@@ -266,12 +366,19 @@ function isToday(dateStr) {
 /* ===============================================
    STORAGE
 =============================================== */
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
-let sales = JSON.parse(localStorage.getItem("sales")) || [];
-let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
-let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
-let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
+// let products = JSON.parse(localStorage.getItem("products")) || [];
+// let categories = JSON.parse(localStorage.getItem("categories")) || ["Electronics"];
+// let sales = JSON.parse(localStorage.getItem("sales")) || [];
+// let debtors = JSON.parse(localStorage.getItem("crmDebtors")) || [];
+// let paidDebtors = JSON.parse(localStorage.getItem("crmPaidDebtors")) || [];
+// let smsHistory = JSON.parse(localStorage.getItem("smsHistory")) || [];
+let products = [];
+let categories = [];
+let sales = [];
+let debtors = [];
+let paidDebtors = [];
+let smsHistory = [];
+
 let editingId = null;
 let currentFilter = 'all';
 let currentSmsDebtorId = null;
@@ -284,26 +391,27 @@ let chartInstances = {
   daily: null
 };
 
-function saveProducts() {
-  localStorage.setItem("products", JSON.stringify(products));
-}
+// function saveProducts() {
+//   localStorage.setItem("products", JSON.stringify(products));
+// }
 
-function saveCategories() {
-  localStorage.setItem("categories", JSON.stringify(categories));
-}
+// function saveCategories() {
+//   localStorage.setItem("categories", JSON.stringify(categories));
+// }
 
-function saveSales() {
-  localStorage.setItem("sales", JSON.stringify(sales));
-}
+// function saveSales() {
+//   localStorage.setItem("sales", JSON.stringify(sales));
+// }
 
-function saveDebtors() {
-  localStorage.setItem('crmDebtors', JSON.stringify(debtors));
-  localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
-}
+// function saveDebtors() {
+//   localStorage.setItem('crmDebtors', JSON.stringify(debtors));
+//   localStorage.setItem('crmPaidDebtors', JSON.stringify(paidDebtors));
+// }
 
-function saveSmsHistory() {
-  localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
-}
+// function saveSmsHistory() {
+//   localStorage.setItem('smsHistory', JSON.stringify(smsHistory));
+// }
+
 
 /* ===============================================
    COUNTER ANIMATION
@@ -2431,114 +2539,114 @@ function showSuccessMessage(message) {
 /* ===============================================
    ✅ SAHIFA YUKLANGANDA (INITIALIZATION)
 =============================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const savedPage = localStorage.getItem("activePage") || "dashboard";
-  const savedTitle = localStorage.getItem("activePageTitle") || "Dashboard";
+// document.addEventListener("DOMContentLoaded", () => {
+//   const savedPage = localStorage.getItem("activePage") || "dashboard";
+//   const savedTitle = localStorage.getItem("activePageTitle") || "Dashboard";
 
-  openPage(savedPage, savedTitle);
+//   openPage(savedPage, savedTitle);
 
-  if (checkAndResetDailyIfNeeded()) {
-    renderTransactions();
-  }
+//   if (checkAndResetDailyIfNeeded()) {
+//     renderTransactions();
+//   }
 
-  renderCategories();
-  renderProducts();
-  renderSaleProducts();
-  renderSales();
-  renderTransactions();
-  updateDailySalesCounter();
-  updateDailySalesPageCounter();
-  updateTotalTransactions();
-  updateMonthlyRevenueUI();
-  updateProfitUI();
-  updateTotalDebtCounter();
-  updateCharts();
+//   renderCategories();
+//   renderProducts();
+//   renderSaleProducts();
+//   renderSales();
+//   renderTransactions();
+//   updateDailySalesCounter();
+//   updateDailySalesPageCounter();
+//   updateTotalTransactions();
+//   updateMonthlyRevenueUI();
+//   updateProfitUI();
+//   updateTotalDebtCounter();
+//   updateCharts();
 
-  // SMS tizimi
-  renderSmsHistory();
-  renderDebtors();
-  updateStatistics();
+//   // SMS tizimi
+//   renderSmsHistory();
+//   renderDebtors();
+//   updateStatistics();
 
-  // ✅ Avtomatik SMS tizimini ishga tushirish (08:00 da)
-  startAutoSmsScheduler();
+//   // ✅ Avtomatik SMS tizimini ishga tushirish (08:00 da)
+//   startAutoSmsScheduler();
 
-  // Har daqiqada kun o'zgarganini tekshirish
-  setInterval(() => {
-    if (checkAndResetDailyIfNeeded()) {
-      updateDailySalesCounter();
-      updateDailySalesPageCounter();
-      renderSales();
-      renderTransactions();
-      updateTotalTransactions();
-      updateMonthlyRevenueUI();
-      updateProfitUI();
-      updateCharts();
-    }
-  }, 60000);
+//   // Har daqiqada kun o'zgarganini tekshirish
+//   setInterval(() => {
+//     if (checkAndResetDailyIfNeeded()) {
+//       updateDailySalesCounter();
+//       updateDailySalesPageCounter();
+//       renderSales();
+//       renderTransactions();
+//       updateTotalTransactions();
+//       updateMonthlyRevenueUI();
+//       updateProfitUI();
+//       updateCharts();
+//     }
+//   }, 60000);
 
-  // Event listeners
-  // const debtorForm = document.getElementById('debtorForm');
-  // if (debtorForm) {
-  //   debtorForm.addEventListener('submit', handleSubmit);
-  // }
+//   // Event listeners
+//   // const debtorForm = document.getElementById('debtorForm');
+//   // if (debtorForm) {
+//   //   debtorForm.addEventListener('submit', handleSubmit);
+//   // }
 
-  const adjustForm = document.getElementById('adjustForm');
-  if (adjustForm) {
-    adjustForm.addEventListener('submit', handleAdjustDebt);
-  }
+//   const adjustForm = document.getElementById('adjustForm');
+//   if (adjustForm) {
+//     adjustForm.addEventListener('submit', handleAdjustDebt);
+//   }
 
-  const smsForm = document.getElementById('smsForm');
-  if (smsForm) {
-    smsForm.addEventListener('submit', sendSms);
-  }
+//   const smsForm = document.getElementById('smsForm');
+//   if (smsForm) {
+//     smsForm.addEventListener('submit', sendSms);
+//   }
 
-  const smsMessage = document.getElementById('smsMessage');
-  if (smsMessage) {
-    smsMessage.addEventListener('input', function () {
-      const preview = document.getElementById('smsPreview');
-      if (preview) {
-        preview.textContent = this.value;
-      }
-    });
-  }
+//   const smsMessage = document.getElementById('smsMessage');
+//   if (smsMessage) {
+//     smsMessage.addEventListener('input', function () {
+//       const preview = document.getElementById('smsPreview');
+//       if (preview) {
+//         preview.textContent = this.value;
+//       }
+//     });
+//   }
 
-  document.querySelectorAll('.filter-tabs button').forEach(button => {
-    button.addEventListener('click', function () {
-      document.querySelectorAll('.filter-tabs button').forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
-      currentFilter = this.dataset.filter;
-      renderDebtors();
-    });
-  });
+//   document.querySelectorAll('.filter-tabs button').forEach(button => {
+//     button.addEventListener('click', function () {
+//       document.querySelectorAll('.filter-tabs button').forEach(btn => btn.classList.remove('active'));
+//       this.classList.add('active');
+//       currentFilter = this.dataset.filter;
+//       renderDebtors();
+//     });
+//   });
 
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', function () {
-      renderDebtors();
-    });
-  }
+//   const searchInput = document.getElementById('searchInput');
+//   if (searchInput) {
+//     searchInput.addEventListener('input', function () {
+//       renderDebtors();
+//     });
+//   }
 
-  const debtorModal = document.getElementById('debtorModal');
-  if (debtorModal) {
-    debtorModal.addEventListener('click', function (e) {
-      if (e.target === this) closeModal();
-    });
-  }
+//   const debtorModal = document.getElementById('debtorModal');
+//   if (debtorModal) {
+//     debtorModal.addEventListener('click', function (e) {
+//       if (e.target === this) closeModal();
+//     });
+//   }
 
-  const smsModal = document.getElementById('smsModal');
-  if (smsModal) {
-    smsModal.addEventListener('click', function (e) {
-      if (e.target === this) closeSmsModal();
-    });
-  }
+//   const smsModal = document.getElementById('smsModal');
+//   if (smsModal) {
+//     smsModal.addEventListener('click', function (e) {
+//       if (e.target === this) closeSmsModal();
+//     });
+//   }
 
-  const adjustDebtModal = document.getElementById('adjustDebtModal');
-  if (adjustDebtModal) {
-    adjustDebtModal.addEventListener('click', function (e) {
-      if (e.target === this) closeAdjustModal();
-    });
-  }
-});
+//   const adjustDebtModal = document.getElementById('adjustDebtModal');
+//   if (adjustDebtModal) {
+//     adjustDebtModal.addEventListener('click', function (e) {
+//       if (e.target === this) closeAdjustModal();
+//     });
+//   }
+// });
 
 // Kam qolgan tavarlar 
 function getStockMeta(product) {
@@ -3731,3 +3839,266 @@ window.incrementStat = incrementStat;
 window.getUserData = getUserData;
 window.saveUserData = saveUserData;
 window.logout = logout;
+
+/* ===============================================
+   ✅ SAHIFA YUKLANGANDA (TO'LIQ TUZATILGAN)
+=============================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  console.log('🎬 DOMContentLoaded - Dashboard boshlandi');
+  
+  // 1️⃣ BIRINCHI: USER DATA NI YUKLASH (eng muhim!)
+  const dataLoaded = loadUserData();
+  
+  if (!dataLoaded) {
+    console.error('❌ Ma\'lumotlar yuklanmadi - sahifa to\'xtatildi');
+    return;
+  }
+  
+  console.log('✅ User data yuklandi, UI render boshlanadi');
+  
+  // 2️⃣ IKKINCHI: UI NI RENDER QILISH
+  const savedPage = localStorage.getItem("activePage") || "dashboard";
+  const savedTitle = localStorage.getItem("activePageTitle") || "Dashboard";
+
+  openPage(savedPage, savedTitle);
+
+  if (checkAndResetDailyIfNeeded()) {
+    renderTransactions();
+  }
+
+  renderCategories();
+  renderProducts();
+  renderSaleProducts();
+  renderSales();
+  renderTransactions();
+  updateDailySalesCounter();
+  updateDailySalesPageCounter();
+  updateTotalTransactions();
+  updateMonthlyRevenueUI();
+  updateProfitUI();
+  updateTotalDebtCounter();
+  updateCharts();
+
+  // SMS tizimi
+  renderSmsHistory();
+  renderDebtors();
+  updateStatistics();
+  renderOverdueCards();
+  renderLowStockAlerts(products);
+
+  // ✅ Avtomatik SMS tizimini ishga tushirish
+  startAutoSmsScheduler();
+
+  // Har daqiqada kun o'zgarganini tekshirish
+  setInterval(() => {
+    if (checkAndResetDailyIfNeeded()) {
+      updateDailySalesCounter();
+      updateDailySalesPageCounter();
+      renderSales();
+      renderTransactions();
+      updateTotalTransactions();
+      updateMonthlyRevenueUI();
+      updateProfitUI();
+      updateCharts();
+    }
+  }, 60000);
+  
+  // Event listeners
+  const adjustForm = document.getElementById('adjustForm');
+  if (adjustForm) {
+    adjustForm.addEventListener('submit', handleAdjustDebt);
+  }
+
+  const smsForm = document.getElementById('smsForm');
+  if (smsForm) {
+    smsForm.addEventListener('submit', sendSms);
+  }
+
+  const smsMessage = document.getElementById('smsMessage');
+  if (smsMessage) {
+    smsMessage.addEventListener('input', function () {
+      const preview = document.getElementById('smsPreview');
+      if (preview) {
+        preview.textContent = this.value;
+      }
+    });
+  }
+
+  document.querySelectorAll('.filter-tabs button').forEach(button => {
+    button.addEventListener('click', function () {
+      document.querySelectorAll('.filter-tabs button').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      renderDebtors();
+    });
+  });
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      renderDebtors();
+    });
+  }
+
+  const debtorModal = document.getElementById('debtorModal');
+  if (debtorModal) {
+    debtorModal.addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  }
+
+  const smsModal = document.getElementById('smsModal');
+  if (smsModal) {
+    smsModal.addEventListener('click', function (e) {
+      if (e.target === this) closeSmsModal();
+    });
+  }
+
+  const adjustDebtModal = document.getElementById('adjustDebtModal');
+  if (adjustDebtModal) {
+    adjustDebtModal.addEventListener('click', function (e) {
+      if (e.target === this) closeAdjustModal();
+    });
+  }
+  
+  console.log('✅✅✅ Dashboard to\'liq tayyor!');
+});
+
+// Kam qolgan tavarlar 
+function getStockMeta(product) {
+  const initial = Number(product.initialStock) || 0;
+  const current = Number(product.stock) || 0;
+
+  const percent = initial > 0
+    ? Math.round((current / initial) * 100)
+    : 0;
+
+  if (current <= 0) {
+    return { percent: 0, status: "danger", label: "TUGAGAN" };
+  }
+
+  if (percent <= 20) {
+    return { percent, status: "warning", label: "KAM QOLGAN" };
+  }
+
+  return null;
+}
+
+// Alert cardlarni render qilish
+function renderLowStockAlerts(products) {
+  const container = document.getElementById("lowStockContainer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  products.forEach(product => {
+    const meta = getStockMeta(product);
+    if (!meta) return;
+
+    container.innerHTML += `
+      <div class="stock-card ${meta.status}">
+        <div class="stock-card-header">
+          <div>
+            <div class="stock-title">${product.name}</div>
+            <div class="stock-category">${product.category}</div>
+          </div>
+        </div>
+
+        <div class="stock-values">
+          <span>Boshlang'ich:</span>
+          <strong>${product.initialStock} ${product.unit}</strong>
+        </div>
+
+        <div class="stock-values">
+          <span>Hozirgi:</span>
+          <strong>${product.stock} ${product.unit}</strong>
+        </div>
+
+        <div class="progress">
+          <div class="progress-bar ${meta.status}"
+               style="width:${meta.percent}%"></div>
+        </div>
+
+        <div class="stock-status ${meta.status}">
+          ${meta.label} — ${meta.percent}% qolgan
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* ===============================================
+   MUDDATI O'TGAN QARZDORLAR CARDLARI
+=============================================== */
+function renderOverdueCards() {
+  const container = document.getElementById("overdueCards");
+  if (!container) return;
+
+  const overdueDebtors = debtors
+    .map(d => {
+      const overdueDays = getDaysOverdue(d.returnDate);
+      return {
+        id: d.id,
+        name: d.name,
+        amount: d.amount,
+        overdueDays: overdueDays
+      };
+    })
+    .filter(d => d.overdueDays > 0)
+    .sort((a, b) => b.overdueDays - a.overdueDays);
+
+  if (overdueDebtors.length === 0) {
+    container.innerHTML = `
+      <div class="overdue-empty">
+        <div class="overdue-empty-icon">✓</div>
+        <div class="overdue-empty-text">Muddati o'tgan qarzdorlar yo'q</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = overdueDebtors.map((d, index) => {
+    const urgencyClass = d.overdueDays >= 7 ? 'critical' :
+      d.overdueDays >= 3 ? 'warning' : 'mild';
+
+    return `
+      <div class="overdue-card-mini ${urgencyClass}" 
+           style="animation-delay: ${index * 0.05}s"
+           onclick="highlightDebtor(${d.id})">
+        <div class="overdue-mini-left">
+          <div class="overdue-mini-name">${d.name}</div>
+          <div class="overdue-mini-amount">${d.amount.toLocaleString()} so'm</div>
+        </div>
+        <div class="overdue-mini-right">
+          <div class="overdue-mini-days ${urgencyClass}">
+            ${d.overdueDays} kun
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function highlightDebtor(debtorId) {
+  openPage('debtors', 'Qarzdorlar');
+
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#debtorTableBody tr');
+    rows.forEach(row => {
+      row.style.background = '';
+    });
+
+    const targetRow = Array.from(rows).find(row => {
+      return row.innerHTML.includes(`onclick="contactDebtor(${debtorId})"`);
+    });
+
+    if (targetRow) {
+      targetRow.style.background = '#fef2f2';
+      targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(() => {
+        targetRow.style.background = '';
+      }, 3000);
+    }
+  }, 300);
+}
