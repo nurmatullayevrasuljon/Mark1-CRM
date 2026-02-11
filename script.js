@@ -87,6 +87,30 @@
 // });
 
 // ============================================================
+// 🔐 AUTH CHECK - HAR SAHIFADA
+// ============================================================
+(function() {
+  const currentPage = window.location.pathname.toLowerCase();
+  const publicPages = ['signup.html', 'login.html', 'index.html'];
+
+  const isPublicPage = publicPages.some(page => currentPage.includes(page));
+
+  if (!isPublicPage && !AuthSystem.isSessionValid()) {
+    const user = AuthSystem.getCurrentUser();
+    if (!user) {
+      // Agar foydalanuvchi ro'yxatdan o'tgan bo'lsa login sahifasiga yo'naltirish
+      window.location.href = 'login.html';
+    } else {
+      // Foydalanuvchi avval ro'yxatdan o'tgan bo'lsa
+      console.log('⚠️ Foydalanuvchi avval ro\'yxatdan o\'tgan - index.html ga yo\'naltirish');
+      window.location.href = 'index.html';
+    }
+    return;
+  }
+})();
+
+
+// ============================================================
 // 📦 USER DATA LOADING (SODDALASHTIRILGAN)
 // ============================================================
 function loadUserData() {
@@ -107,8 +131,6 @@ function loadUserData() {
   
   console.log('✅ User data loaded:', userData.email);
 }
-
-// KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
 
 // KEYIN SIZNING BARCHA ESKI KODINGIZ...

@@ -889,6 +889,36 @@
 // console.log("📜 Authentication System to'liq yuklandi!");
 
 // ============================================================
+// DASHBOARD/INDEX PAGE - FOYDALANUVCHI MA'LUMOTLARINI KO'RSATISH
+// ============================================================
+function initDashboard() {
+  console.log("🚀 Dashboard init...");
+
+  // Himoya - tizimga kirmaganlarni chiqarib yuborish
+  if (!AuthSystem.protectPage()) return;
+
+  const currentUser = AuthSystem.getCurrentUser();
+
+  if (!currentUser) {
+    console.log("❌ Foydalanuvchi topilmadi");
+    window.location.href = 'login.html';
+    return;
+  }
+
+  console.log("✅ Joriy foydalanuvchi:", currentUser);
+
+  // Foydalanuvchi ma'lumotlarini ko'rsatish
+  // Bu qismni o'zingizning HTML strukturangizga moslashtiring
+  updateProfileDisplay();
+  
+  // Ma'lumotlarni yuklash
+  loadUserData();
+  
+  // ... qolgan kodlar
+}
+
+
+// ============================================================
 // GLOBAL PAGE TRANSITION
 // ============================================================
 (function () {
