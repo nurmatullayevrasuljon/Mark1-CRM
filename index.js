@@ -889,36 +889,6 @@
 // console.log("📜 Authentication System to'liq yuklandi!");
 
 // ============================================================
-// DASHBOARD/INDEX PAGE - FOYDALANUVCHI MA'LUMOTLARINI KO'RSATISH
-// ============================================================
-function initDashboard() {
-  console.log("🚀 Dashboard init...");
-
-  // Himoya - tizimga kirmaganlarni chiqarib yuborish
-  if (!AuthSystem.protectPage()) return;
-
-  const currentUser = AuthSystem.getCurrentUser();
-
-  if (!currentUser) {
-    console.log("❌ Foydalanuvchi topilmadi");
-    window.location.href = 'login.html';
-    return;
-  }
-
-  console.log("✅ Joriy foydalanuvchi:", currentUser);
-
-  // Foydalanuvchi ma'lumotlarini ko'rsatish
-  // Bu qismni o'zingizning HTML strukturangizga moslashtiring
-  updateProfileDisplay();
-  
-  // Ma'lumotlarni yuklash
-  loadUserData();
-  
-  // ... qolgan kodlar
-}
-
-
-// ============================================================
 // GLOBAL PAGE TRANSITION
 // ============================================================
 (function () {
@@ -1094,21 +1064,31 @@ function initSignupForm() {
     const result = AuthSystem.register(userData);
 
     if (result.success) {
-      // Tizimga avtomatik kirish
+      // ✅ RO'YXATDAN O'TGANDAN KEYIN AVTOMATIK LOGIN
       AuthSystem.login(userData.email, userData.password);
 
       console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
 
+      // ✅ INDEX.HTML GA YO'NALTIRISH
       setTimeout(() => {
         window.location.href = "index.html";
       }, 500);
     } else {
-      // Xatolik - alert va login sahifasiga yo'naltirish
-      alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
+      // ❌ AGAR EMAIL MAVJUD BO'LSA - LOGIN GA YO'NALTIRISH
+      if (result.redirectToLogin) {
+        alert(result.message);
+        
+        createBtn.innerText = "Login sahifasiga o'tilmoqda...";
+        
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      } else {
+        // Boshqa xatolar
+        alert(result.message);
+        createBtn.innerText = "Yaratish";
+        createBtn.disabled = false;
+      }
     }
   });
 
@@ -1138,7 +1118,6 @@ function initSignupForm() {
 
       console.log("📧 Yangi email yaratildi:", demoUser.email);
 
-      // ✅ AuthSystem.register ishlatish
       const result = AuthSystem.register(demoUser);
 
       if (result.success) {
@@ -1150,11 +1129,13 @@ function initSignupForm() {
         }, 300);
       } else {
         console.error("❌ Xato:", result.message);
-        alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
-
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
+        alert(result.message);
+        
+        if (result.redirectToLogin) {
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500);
+        }
       }
     });
   }
@@ -1237,6 +1218,7 @@ function initLoginForm() {
     if (result.success) {
       console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
 
+      // ✅ INDEX.HTML GA YO'NALTIRISH
       setTimeout(() => {
         window.location.href = "index.html";
       }, 500);

@@ -86,52 +86,147 @@
 //   // (Sizning eski kodingiz)
 // });
 
-// ============================================================
-// 🔐 AUTH CHECK - HAR SAHIFADA
-// ============================================================
-(function() {
-  const currentPage = window.location.pathname.toLowerCase();
-  const publicPages = ['signup.html', 'login.html', 'index.html'];
+// // ============================================================
+// // 📦 USER DATA LOADING (SODDALASHTIRILGAN)
+// // ============================================================
+// function loadUserData() {
+//   const userData = AuthSystem.getCurrentUser();
+//   if (!userData) {
+//     console.error('❌ No user data found');
+//     AuthSystem.logout();
+//     return;
+//   }
 
-  const isPublicPage = publicPages.some(page => currentPage.includes(page));
-
-  if (!isPublicPage && !AuthSystem.isSessionValid()) {
-    const user = AuthSystem.getCurrentUser();
-    if (!user) {
-      // Agar foydalanuvchi ro'yxatdan o'tgan bo'lsa login sahifasiga yo'naltirish
-      window.location.href = 'login.html';
-    } else {
-      // Foydalanuvchi avval ro'yxatdan o'tgan bo'lsa
-      console.log('⚠️ Foydalanuvchi avval ro\'yxatdan o\'tgan - index.html ga yo\'naltirish');
-      window.location.href = 'index.html';
-    }
-    return;
-  }
-})();
-
+//   // Ma'lumotlarni yuklash
+//   products = userData.products || [];
+//   categories = userData.categories || ['Electronics'];
+//   sales = userData.sales || [];
+//   debtors = userData.debtors || [];
+//   paidDebtors = userData.paidDebtors || [];
+//   smsHistory = userData.smsHistory || [];
+  
+//   console.log('✅ User data loaded:', userData.email);
+// }
 
 // ============================================================
-// 📦 USER DATA LOADING (SODDALASHTIRILGAN)
+// 📦 USER DATA LOADING SYSTEM (PROFESSIONAL)
 // ============================================================
+
+// ✅ HAR BIR USER O'Z MA'LUMOTLARINI YUKLAYDI
 function loadUserData() {
+  console.log('📥 Foydalanuvchi ma\'lumotlarini yuklash boshlandi...');
+
   const userData = AuthSystem.getCurrentUser();
+  
   if (!userData) {
-    console.error('❌ No user data found');
+    console.error('❌ Foydalanuvchi topilmadi - login sahifasiga yo\'naltirish');
     AuthSystem.logout();
-    return;
+    return false;
   }
 
-  // Ma'lumotlarni yuklash
+  console.log('✅ Foydalanuvchi topildi:', userData.email);
+
+  // ✅ USER-SPECIFIC DATA NI GLOBAL O'ZGARUVCHILARGA YUKLASH
   products = userData.products || [];
   categories = userData.categories || ['Electronics'];
   sales = userData.sales || [];
   debtors = userData.debtors || [];
   paidDebtors = userData.paidDebtors || [];
   smsHistory = userData.smsHistory || [];
-  
-  console.log('✅ User data loaded:', userData.email);
+
+  console.log('📊 Yuklangan ma\'lumotlar:', {
+    products: products.length,
+    categories: categories.length,
+    sales: sales.length,
+    debtors: debtors.length,
+    paidDebtors: paidDebtors.length,
+    smsHistory: smsHistory.length
+  });
+
+  return true;
 }
 
+// ============================================================
+// 💾 SAVE FUNCTIONS - HAR BIR O'ZGARISHNI SAQLASH
+// ============================================================
+
+function saveProducts() {
+  console.log('💾 Mahsulotlar saqlanmoqda...');
+  const success = AuthSystem.updateCurrentUserData({ products });
+  if (success) {
+    console.log('✅ Mahsulotlar saqlandi');
+  } else {
+    console.error('❌ Mahsulotlarni saqlashda xato');
+  }
+}
+
+function saveCategories() {
+  console.log('💾 Kategoriyalar saqlanmoqda...');
+  const success = AuthSystem.updateCurrentUserData({ categories });
+  if (success) {
+    console.log('✅ Kategoriyalar saqlandi');
+  } else {
+    console.error('❌ Kategoriyalarni saqlashda xato');
+  }
+}
+
+function saveSales() {
+  console.log('💾 Savdolar saqlanmoqda...');
+  const success = AuthSystem.updateCurrentUserData({ sales });
+  if (success) {
+    console.log('✅ Savdolar saqlandi');
+  } else {
+    console.error('❌ Savdolarni saqlashda xato');
+  }
+}
+
+function saveDebtors() {
+  console.log('💾 Qarzdorlar saqlanmoqda...');
+  const success = AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
+  if (success) {
+    console.log('✅ Qarzdorlar saqlandi');
+  } else {
+    console.error('❌ Qarzdorlarni saqlashda xato');
+  }
+}
+
+function saveSmsHistory() {
+  console.log('💾 SMS tarixi saqlanmoqda...');
+  const success = AuthSystem.updateCurrentUserData({ smsHistory });
+  if (success) {
+    console.log('✅ SMS tarixi saqlandi');
+  } else {
+    console.error('❌ SMS tarixini saqlashda xato');
+  }
+}
+
+// ============================================================
+// 🎯 INITIALIZATION - SAHIFA YUKLANGANDA
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎬 Dashboard initializing...');
+
+  // ✅ 1. HIMOYA - Tizimga kirmaganlarni chiqarish
+  if (!AuthSystem.protectPage()) {
+    console.log('⚠️ Sahifa himoyalangan - login talab qilinadi');
+    return;
+  }
+
+  // ✅ 2. FOYDALANUVCHI MA'LUMOTLARINI YUKLASH
+  if (!loadUserData()) {
+    console.error('❌ Ma\'lumotlarni yuklashda xato');
+    return;
+  }
+
+  console.log('✅ Dashboard tayyor - barcha ma\'lumotlar yuklandi');
+
+  // ✅ 3. BARCHA BOSHQA FUNKSIYALAR...
+  // (Sizning eski kodingiz davom etadi - hech narsa o'zgarmaydi)
+});
+
+// ============================================================
+// QOLGAN BARCHA KODLAR SHUNAQA DAVOM ETADI...
+// ============================================================
 
 // KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
