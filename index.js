@@ -936,300 +936,542 @@
 // ============================================================
 // SIGNUP FORM - RO'YXATDAN O'TISH
 // ============================================================
+// function initSignupForm() {
+//   console.log("🚀 Signup form init boshlandi...");
+
+//   const form = document.getElementById("signupForm");
+
+//   if (!form) {
+//     console.log("⚠️ signupForm topilmadi");
+//     return;
+//   }
+
+//   console.log("✅ signupForm topildi!");
+
+//   const createBtn = document.getElementById("createBtn");
+//   const terms = document.getElementById("terms");
+//   const firstName = document.getElementById("firstName");
+//   const email = document.getElementById("email");
+//   const password = document.getElementById("password");
+//   const telInputs = document.querySelectorAll('input[name="tel"]');
+
+//   console.log("📋 Elementlar:", {
+//     createBtn: !!createBtn,
+//     terms: !!terms,
+//     firstName: !!firstName,
+//     email: !!email,
+//     password: !!password,
+//     telInputs: telInputs.length
+//   });
+
+//   if (!createBtn || !terms || !firstName || !email || !password) {
+//     console.error("❌ Muhim elementlar topilmadi!");
+//     return;
+//   }
+
+//   // Validatsiya funksiyasi
+//   function validateForm() {
+//     const firstNameValue = firstName.value.trim();
+//     const firstNameValid = firstNameValue.length > 0;
+
+//     const emailValue = email.value.trim();
+//     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+//     const passwordValue = password.value;
+//     const passwordValid = passwordValue.length >= 6;
+
+//     let allTelFilled = true;
+//     telInputs.forEach(input => {
+//       if (input.value.trim() === "") {
+//         allTelFilled = false;
+//       }
+//     });
+
+//     const termsChecked = terms.checked;
+
+//     const isValid = firstNameValid &&
+//       emailValid &&
+//       passwordValid &&
+//       allTelFilled &&
+//       termsChecked;
+
+//     console.log("🔍 Validatsiya:", {
+//       firstName: firstNameValid,
+//       email: emailValid,
+//       password: passwordValid,
+//       tel: allTelFilled,
+//       terms: termsChecked,
+//       result: isValid ? "✅" : "❌"
+//     });
+
+//     createBtn.disabled = !isValid;
+
+//     if (isValid) {
+//       createBtn.classList.add("active");
+//       console.log("✅ TUGMA AKTIV!");
+//     } else {
+//       createBtn.classList.remove("active");
+//     }
+
+//     return isValid;
+//   }
+
+//   // Event listeners
+//   firstName.addEventListener("input", validateForm);
+//   email.addEventListener("input", validateForm);
+//   password.addEventListener("input", validateForm);
+
+//   telInputs.forEach(input => {
+//     input.addEventListener("input", validateForm);
+//   });
+
+//   terms.addEventListener("change", validateForm);
+
+//   // Boshlang'ich validatsiya
+//   validateForm();
+
+//   // FORM SUBMIT - RO'YXATDAN O'TISH
+//   form.addEventListener("submit", function (e) {
+//     e.preventDefault();
+//     console.log("📤 Form submit - Ro'yxatdan o'tish!");
+
+//     if (!validateForm()) {
+//       console.log("❌ Validatsiya xatosi");
+//       form.classList.add("was-validated");
+//       return;
+//     }
+
+//     createBtn.innerText = "Yaratilmoqda...";
+//     createBtn.disabled = true;
+
+//     const userData = {
+//       fullName: firstName.value.trim(),
+//       email: email.value.trim(),
+//       phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
+//       storeName: telInputs[1] ? telInputs[1].value.trim() : "",
+//       password: password.value,
+//       role: "Boshqaruv",
+//       stats: {
+//         customers: 0,
+//         deals: 0,
+//         today: 0
+//       }
+//     };
+
+//     console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
+
+//     // ✅ AuthSystem.register ishlatish
+//     const result = AuthSystem.register(userData);
+
+//     if (result.success) {
+//       // Tizimga avtomatik kirish
+//       AuthSystem.login(userData.email, userData.password);
+
+//       console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+
+//       setTimeout(() => {
+//         window.location.href = "index.html";
+//       }, 500);
+//     } else {
+//       // Xatolik - alert va login sahifasiga yo'naltirish
+//       alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+
+//       setTimeout(() => {
+//         window.location.href = "login.html";
+//       }, 1500);
+//     }
+//   });
+
+//   // GOOGLE LOGIN
+//   const googleBtn = document.getElementById("googleBtn");
+//   if (googleBtn) {
+//     googleBtn.addEventListener("click", function (e) {
+//       e.preventDefault();
+//       console.log("🔵 Google Login boshlandi!");
+
+//       // Har safar yangi tasodifiy ma'lumotlar yaratish
+//       const randomId = Math.random().toString(36).substr(2, 9);
+
+//       const demoUser = {
+//         fullName: `Google User ${randomId.substr(0, 5)}`,
+//         email: `user_${randomId}@gmail.com`,
+//         phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
+//         storeName: "Google Store",
+//         password: `google_${randomId}`,
+//         role: "Boshqaruv",
+//         stats: {
+//           customers: 0,
+//           deals: 0,
+//           today: 0
+//         }
+//       };
+
+//       console.log("📧 Yangi email yaratildi:", demoUser.email);
+
+//       // ✅ AuthSystem.register ishlatish
+//       const result = AuthSystem.register(demoUser);
+
+//       if (result.success) {
+//         console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
+//         AuthSystem.login(demoUser.email, demoUser.password);
+
+//         setTimeout(() => {
+//           window.location.href = "index.html";
+//         }, 300);
+//       } else {
+//         console.error("❌ Xato:", result.message);
+//         alert(result.message + "\n\nSiz tizimga kirish sahifasiga yo'naltirilasiz.");
+
+//         setTimeout(() => {
+//           window.location.href = "login.html";
+//         }, 1500);
+//       }
+//     });
+//   }
+
+//   console.log("✅ Signup form tayyor!");
+// }
+// ============================================================
+// SIGNUP FORM (NO LOOP - GUARANTEED)
+// ============================================================
+
 function initSignupForm() {
-  console.log("🚀 Signup form init boshlandi...");
+    console.log('🚀 SIGNUP INIT');
 
-  const form = document.getElementById("signupForm");
+    const form = document.getElementById('signupForm');
+    if (!form) return;
 
-  if (!form) {
-    console.log("⚠️ signupForm topilmadi");
-    return;
-  }
+    const createBtn = document.getElementById('createBtn');
+    const terms = document.getElementById('terms');
+    const firstName = document.getElementById('firstName');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const telInputs = document.querySelectorAll('input[name="tel"]');
 
-  console.log("✅ signupForm topildi!");
+    // ============================================================
+    // VALIDATION
+    // ============================================================
+    
+    function validateForm() {
+        const valid = 
+            firstName.value.trim().length > 0 &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) &&
+            password.value.length >= 6 &&
+            Array.from(telInputs).every(inp => inp.value.trim() !== '') &&
+            terms.checked;
 
-  const createBtn = document.getElementById("createBtn");
-  const terms = document.getElementById("terms");
-  const firstName = document.getElementById("firstName");
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
-  const telInputs = document.querySelectorAll('input[name="tel"]');
-
-  console.log("📋 Elementlar:", {
-    createBtn: !!createBtn,
-    terms: !!terms,
-    firstName: !!firstName,
-    email: !!email,
-    password: !!password,
-    telInputs: telInputs.length
-  });
-
-  if (!createBtn || !terms || !firstName || !email || !password) {
-    console.error("❌ Muhim elementlar topilmadi!");
-    return;
-  }
-
-  // Validatsiya funksiyasi
-  function validateForm() {
-    const firstNameValue = firstName.value.trim();
-    const firstNameValid = firstNameValue.length > 0;
-
-    const emailValue = email.value.trim();
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-
-    const passwordValue = password.value;
-    const passwordValid = passwordValue.length >= 6;
-
-    let allTelFilled = true;
-    telInputs.forEach(input => {
-      if (input.value.trim() === "") {
-        allTelFilled = false;
-      }
-    });
-
-    const termsChecked = terms.checked;
-
-    const isValid = firstNameValid &&
-      emailValid &&
-      passwordValid &&
-      allTelFilled &&
-      termsChecked;
-
-    console.log("🔍 Validatsiya:", {
-      firstName: firstNameValid,
-      email: emailValid,
-      password: passwordValid,
-      tel: allTelFilled,
-      terms: termsChecked,
-      result: isValid ? "✅" : "❌"
-    });
-
-    createBtn.disabled = !isValid;
-
-    if (isValid) {
-      createBtn.classList.add("active");
-      console.log("✅ TUGMA AKTIV!");
-    } else {
-      createBtn.classList.remove("active");
-    }
-
-    return isValid;
-  }
-
-  // Event listeners
-  firstName.addEventListener("input", validateForm);
-  email.addEventListener("input", validateForm);
-  password.addEventListener("input", validateForm);
-
-  telInputs.forEach(input => {
-    input.addEventListener("input", validateForm);
-  });
-
-  terms.addEventListener("change", validateForm);
-
-  // Boshlang'ich validatsiya
-  validateForm();
-
-  // FORM SUBMIT - RO'YXATDAN O'TISH
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    console.log("📤 Form submit - Ro'yxatdan o'tish!");
-
-    if (!validateForm()) {
-      console.log("❌ Validatsiya xatosi");
-      form.classList.add("was-validated");
-      return;
-    }
-
-    createBtn.innerText = "Yaratilmoqda...";
-    createBtn.disabled = true;
-
-    const userData = {
-      fullName: firstName.value.trim(),
-      email: email.value.trim(),
-      phone: telInputs[0] ? "+998 " + telInputs[0].value.trim() : "",
-      storeName: telInputs[1] ? telInputs[1].value.trim() : "",
-      password: password.value,
-      role: "Boshqaruv",
-      stats: {
-        customers: 0,
-        deals: 0,
-        today: 0
-      }
-    };
-
-    console.log("💾 Yangi foydalanuvchi ma'lumotlari:", userData);
-
-    // ✅ AuthSystem.register ishlatish
-    const result = AuthSystem.register(userData);
-
-    if (result.success) {
-      // ✅ RO'YXATDAN O'TGANDAN KEYIN AVTOMATIK LOGIN
-      AuthSystem.login(userData.email, userData.password);
-
-      console.log("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!");
-
-      // ✅ INDEX.HTML GA YO'NALTIRISH
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 500);
-    } else {
-      // ❌ AGAR EMAIL MAVJUD BO'LSA - LOGIN GA YO'NALTIRISH
-      if (result.redirectToLogin) {
-        alert(result.message);
+        createBtn.disabled = !valid;
+        if (valid) createBtn.classList.add('active');
+        else createBtn.classList.remove('active');
         
-        createBtn.innerText = "Login sahifasiga o'tilmoqda...";
-        
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
-      } else {
-        // Boshqa xatolar
-        alert(result.message);
-        createBtn.innerText = "Yaratish";
-        createBtn.disabled = false;
-      }
+        return valid;
     }
-  });
 
-  // GOOGLE LOGIN
-  const googleBtn = document.getElementById("googleBtn");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      console.log("🔵 Google Login boshlandi!");
+    firstName.addEventListener('input', validateForm);
+    email.addEventListener('input', validateForm);
+    password.addEventListener('input', validateForm);
+    telInputs.forEach(inp => inp.addEventListener('input', validateForm));
+    terms.addEventListener('change', validateForm);
+    
+    validateForm();
 
-      // Har safar yangi tasodifiy ma'lumotlar yaratish
-      const randomId = Math.random().toString(36).substr(2, 9);
-
-      const demoUser = {
-        fullName: `Google User ${randomId.substr(0, 5)}`,
-        email: `user_${randomId}@gmail.com`,
-        phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
-        storeName: "Google Store",
-        password: `google_${randomId}`,
-        role: "Boshqaruv",
-        stats: {
-          customers: 0,
-          deals: 0,
-          today: 0
+    // ============================================================
+    // FORM SUBMIT (CRITICAL - NO LOOP!)
+    // ============================================================
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            form.classList.add('was-validated');
+            return;
         }
-      };
 
-      console.log("📧 Yangi email yaratildi:", demoUser.email);
+        createBtn.innerText = 'Yaratilmoqda...';
+        createBtn.disabled = true;
 
-      const result = AuthSystem.register(demoUser);
+        const userData = {
+            fullName: firstName.value.trim(),
+            email: email.value.trim(),
+            phone: '+998 ' + telInputs[0].value.trim(),
+            storeName: telInputs[1].value.trim(),
+            password: password.value
+        };
 
-      if (result.success) {
-        console.log("✅ Yangi Google foydalanuvchi ro'yxatdan o'tdi!");
-        AuthSystem.login(demoUser.email, demoUser.password);
+        console.log('📤 REGISTER REQUEST:', userData.email);
 
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 300);
-      } else {
-        console.error("❌ Xato:", result.message);
-        alert(result.message);
-        
-        if (result.redirectToLogin) {
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 1500);
+        // ✅ REGISTER
+        const result = AuthSystem.register(userData);
+
+        if (result.success) {
+            console.log('✅ REGISTER SUCCESS');
+            
+            // ✅ AVTOMATIK LOGIN
+            AuthSystem.login(userData.email, userData.password);
+            
+            // ✅ INDEX.HTML GA YO'NALTIRISH (NO LOOP!)
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+            
+        } else {
+            console.log('❌ REGISTER FAILED');
+            
+            // ✅ AGAR EMAIL MAVJUD BO'LSA
+            if (result.shouldRedirectToLogin) {
+                alert(result.message + '\n\nIltimos tizimga kiring.');
+                
+                createBtn.innerText = 'Login ga o\'tilmoqda...';
+                
+                // ✅ LOGIN.HTML GA YO'NALTIRISH (ONCE ONLY!)
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            } else {
+                alert(result.message);
+                createBtn.innerText = 'Yaratish';
+                createBtn.disabled = false;
+            }
         }
-      }
     });
-  }
 
-  console.log("✅ Signup form tayyor!");
+    // ============================================================
+    // GOOGLE LOGIN
+    // ============================================================
+    
+    const googleBtn = document.getElementById('googleBtn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const randomId = Math.random().toString(36).substr(2, 9);
+            
+            const demoUser = {
+                fullName: `Google User ${randomId.substr(0, 5)}`,
+                email: `user_${randomId}@gmail.com`,
+                phone: `+998 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
+                storeName: 'Google Store',
+                password: `google_${randomId}`
+            };
+
+            const result = AuthSystem.register(demoUser);
+
+            if (result.success) {
+                AuthSystem.login(demoUser.email, demoUser.password);
+                window.location.href = 'index.html';
+            } else {
+                alert(result.message);
+            }
+        });
+    }
+
+    console.log('✅ SIGNUP READY');
 }
 
 // ============================================================
+// SAHIFA YUKLANGANDA
+// ============================================================
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSignupForm);
+} else {
+    initSignupForm();
+}
+// ============================================================
 // LOGIN FORM - TIZIMGA KIRISH
 // ============================================================
+// function initLoginForm() {
+//   console.log("🚀 Login form init...");
+
+//   const form = document.getElementById("loginForm");
+//   if (!form) {
+//     console.log("⚠️ loginForm topilmadi");
+//     return;
+//   }
+
+//   const loginBtn = document.getElementById("loginBtn");
+//   const loginInput = document.getElementById("loginInput");
+//   const password = document.getElementById("password");
+//   const emailTab = document.getElementById("emailTab");
+//   const phoneTab = document.getElementById("phoneTab");
+//   const label = document.getElementById("loginLabel");
+
+//   // Tab switching
+//   if (emailTab && phoneTab && label && loginInput) {
+//     emailTab.onclick = () => {
+//       emailTab.classList.add("active");
+//       phoneTab.classList.remove("active");
+//       label.innerText = "E-pochta manzili";
+//       loginInput.type = "email";
+//       loginInput.placeholder = "you@example.com";
+//       loginInput.value = "";
+//       checkLoginForm();
+//     };
+
+//     phoneTab.onclick = () => {
+//       phoneTab.classList.add("active");
+//       emailTab.classList.remove("active");
+//       label.innerText = "Telefon raqam";
+//       loginInput.type = "tel";
+//       loginInput.placeholder = "+998 90 123 45 67";
+//       loginInput.value = "";
+//       checkLoginForm();
+//     };
+//   }
+
+//   // Validation
+//   function checkLoginForm() {
+//     const loginOk = loginInput.value.trim().length > 4;
+//     const passOk = password.value.length >= 6;
+//     loginBtn.disabled = !(loginOk && passOk);
+//   }
+
+//   loginInput.addEventListener("input", checkLoginForm);
+//   password.addEventListener("input", checkLoginForm);
+
+//   // Submit - TIZIMGA KIRISH
+//   form.addEventListener("submit", e => {
+//     e.preventDefault();
+
+//     if (!form.checkValidity()) {
+//       form.classList.add("was-validated");
+//       return;
+//     }
+
+//     loginBtn.innerText = "Kirish...";
+//     loginBtn.disabled = true;
+
+//     const emailOrPhone = loginInput.value.trim();
+//     const pass = password.value;
+
+//     console.log("🔐 Tizimga kirish urinishi:", emailOrPhone);
+
+//     // ✅ AuthSystem.login ishlatish
+//     const result = AuthSystem.login(emailOrPhone, pass);
+
+//     if (result.success) {
+//       console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
+
+//       setTimeout(() => {
+//         window.location.href = "index.html";
+//       }, 500);
+//     } else {
+//       alert(result.message);
+//       loginBtn.innerText = "Kirish";
+//       loginBtn.disabled = false;
+//     }
+//   });
+
+//   console.log("✅ Login form tayyor!");
+// }
+// ============================================================
+// LOGIN FORM (SIMPLE & WORKING)
+// ============================================================
+
 function initLoginForm() {
-  console.log("🚀 Login form init...");
+    console.log('🚀 LOGIN INIT');
 
-  const form = document.getElementById("loginForm");
-  if (!form) {
-    console.log("⚠️ loginForm topilmadi");
-    return;
-  }
+    const form = document.getElementById('loginForm');
+    if (!form) return;
 
-  const loginBtn = document.getElementById("loginBtn");
-  const loginInput = document.getElementById("loginInput");
-  const password = document.getElementById("password");
-  const emailTab = document.getElementById("emailTab");
-  const phoneTab = document.getElementById("phoneTab");
-  const label = document.getElementById("loginLabel");
+    const loginBtn = document.getElementById('loginBtn');
+    const loginInput = document.getElementById('loginInput');
+    const password = document.getElementById('password');
+    const emailTab = document.getElementById('emailTab');
+    const phoneTab = document.getElementById('phoneTab');
+    const label = document.getElementById('loginLabel');
 
-  // Tab switching
-  if (emailTab && phoneTab && label && loginInput) {
-    emailTab.onclick = () => {
-      emailTab.classList.add("active");
-      phoneTab.classList.remove("active");
-      label.innerText = "E-pochta manzili";
-      loginInput.type = "email";
-      loginInput.placeholder = "you@example.com";
-      loginInput.value = "";
-      checkLoginForm();
-    };
+    // ============================================================
+    // TAB SWITCHING
+    // ============================================================
+    
+    if (emailTab && phoneTab) {
+        emailTab.onclick = () => {
+            emailTab.classList.add('active');
+            phoneTab.classList.remove('active');
+            label.innerText = 'E-pochta manzili';
+            loginInput.type = 'email';
+            loginInput.placeholder = 'you@example.com';
+            loginInput.value = '';
+            checkForm();
+        };
 
-    phoneTab.onclick = () => {
-      phoneTab.classList.add("active");
-      emailTab.classList.remove("active");
-      label.innerText = "Telefon raqam";
-      loginInput.type = "tel";
-      loginInput.placeholder = "+998 90 123 45 67";
-      loginInput.value = "";
-      checkLoginForm();
-    };
-  }
-
-  // Validation
-  function checkLoginForm() {
-    const loginOk = loginInput.value.trim().length > 4;
-    const passOk = password.value.length >= 6;
-    loginBtn.disabled = !(loginOk && passOk);
-  }
-
-  loginInput.addEventListener("input", checkLoginForm);
-  password.addEventListener("input", checkLoginForm);
-
-  // Submit - TIZIMGA KIRISH
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-
-    if (!form.checkValidity()) {
-      form.classList.add("was-validated");
-      return;
+        phoneTab.onclick = () => {
+            phoneTab.classList.add('active');
+            emailTab.classList.remove('active');
+            label.innerText = 'Telefon raqam';
+            loginInput.type = 'tel';
+            loginInput.placeholder = '+998 90 123 45 67';
+            loginInput.value = '';
+            checkForm();
+        };
     }
 
-    loginBtn.innerText = "Kirish...";
-    loginBtn.disabled = true;
-
-    const emailOrPhone = loginInput.value.trim();
-    const pass = password.value;
-
-    console.log("🔐 Tizimga kirish urinishi:", emailOrPhone);
-
-    // ✅ AuthSystem.login ishlatish
-    const result = AuthSystem.login(emailOrPhone, pass);
-
-    if (result.success) {
-      console.log("✅ Muvaffaqiyatli tizimga kirdingiz!");
-
-      // ✅ INDEX.HTML GA YO'NALTIRISH
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 500);
-    } else {
-      alert(result.message);
-      loginBtn.innerText = "Kirish";
-      loginBtn.disabled = false;
+    // ============================================================
+    // VALIDATION
+    // ============================================================
+    
+    function checkForm() {
+        const valid = 
+            loginInput.value.trim().length > 4 &&
+            password.value.length >= 6;
+        
+        loginBtn.disabled = !valid;
     }
-  });
 
-  console.log("✅ Login form tayyor!");
+    loginInput.addEventListener('input', checkForm);
+    password.addEventListener('input', checkForm);
+
+    // ============================================================
+    // FORM SUBMIT
+    // ============================================================
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        loginBtn.innerText = 'Kirish...';
+        loginBtn.disabled = true;
+
+        const emailOrPhone = loginInput.value.trim();
+        const pass = password.value;
+
+        console.log('🔐 LOGIN REQUEST:', emailOrPhone);
+
+        // ✅ LOGIN
+        const result = AuthSystem.login(emailOrPhone, pass);
+
+        if (result.success) {
+            console.log('✅ LOGIN SUCCESS');
+            
+            // ✅ INDEX.HTML GA YO'NALTIRISH
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+            
+        } else {
+            console.log('❌ LOGIN FAILED');
+            alert(result.message);
+            loginBtn.innerText = 'Kirish';
+            loginBtn.disabled = false;
+        }
+    });
+
+    console.log('✅ LOGIN READY');
+}
+
+// ============================================================
+// SAHIFA YUKLANGANDA
+// ============================================================
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoginForm);
+} else {
+    initLoginForm();
 }
 
 // ============================================================
