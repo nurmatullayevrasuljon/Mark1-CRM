@@ -3225,7 +3225,7 @@ body {
   }
 
   #productTable tr {
-    width: 95% !important;
+    width: 100% !important;
     display: block;
     background: #fff;
     margin-bottom: 14px;
