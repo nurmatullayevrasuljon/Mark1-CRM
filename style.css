@@ -19,6 +19,7 @@ body {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
 .btn-edit {
   display: inline-flex;
   align-items: center;
@@ -39,6 +40,7 @@ body {
   border-color: #0062cc;
   transform: translateY(-1px);
 }
+
 .sidebar {
   width: 230px;
   background: #0f172a;
@@ -3223,7 +3225,7 @@ body {
   }
 
   #productTable tr {
-    width: 400px !important;
+    width: 95% !important;
     display: block;
     background: #fff;
     margin-bottom: 14px;
@@ -3268,7 +3270,7 @@ body {
 
 /* ===== TRANSACTIONS TABLE RESPONSIVE ===== */
 @media (max-width: 767px) {
-  
+
   /* Jadval headerini yashirish */
   #transactionsTable thead {
     display: none;
@@ -3318,7 +3320,7 @@ body {
   }
 
   /* Ma'lumotlarni o'ng tomonga joylashtirish */
-  #transactionsTableBody td > * {
+  #transactionsTableBody td>* {
     text-align: right;
   }
 
