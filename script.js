@@ -714,8 +714,8 @@ function renderProducts(list = products) {
         <td data-label="Holat">${getSalesStatus(p)}</td>
 
         <td data-label="Harakatlar">
-          <a href="#" onclick="editProduct(${p.id})">Edit</a>
-          <a href="#" class="text-danger ml-2"
+          <a href="index.html" onclick="editProduct(${p.id})">Edit</a>
+          <a href="index.html" class="text-danger ml-2"
              onclick="deleteProduct(${p.id})">Delete</a>
         </td>
       </tr>
