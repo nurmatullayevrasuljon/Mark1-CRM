@@ -664,15 +664,76 @@ function renderCategories(selected = null) {
   if (selected) productCategory.value = selected;
 }
 
+// /* ===============================================
+//    MAHSULOTLAR - RENDER (data-label bilan)
+// =============================================== */
+// const productTable = document.getElementById("productTable");
+
+// function renderProducts(list = products) {
+//   if (!productTable) return;
+//   productTable.innerHTML = "";
+
+//   if (list.length === 0) {
+//     productTable.innerHTML = `
+//       <tr>
+//         <td colspan="7" class="text-center text-muted py-3">
+//           Mahsulotlar topilmadi
+//         </td>
+//       </tr>
+//     `;
+//     return;
+//   }
+
+//   list.forEach(p => {
+//     const stockUI = getStockUI(p);
+
+//     productTable.innerHTML += `
+//       <tr class="${stockUI.color === "danger" ? "table-danger" : ""}">
+//         <td data-label="Rasm">
+//           <img src="${p.image}" class="product-img">
+//         </td>
+//         <td data-label="Nomi">${p.name}</td>
+//         <td data-label="Kategoriya">${p.category}</td>
+//         <td data-label="Narx">${p.price.toLocaleString()} ${p.currency}</td>
+
+//         <!-- ZAXIRA DIZAYNI -->
+//         <td data-label="Zaxira">
+//           <div class="stock-cell">
+//             <div class="stock-text">
+//               ${p.stock} / ${p.initialStock} ${p.unit}
+//             </div>
+
+//             <div class="progress stock-progress">
+//               <div class="progress-bar bg-${stockUI.color}"
+//                    style="width:${stockUI.percent}%">
+//               </div>
+//             </div>
+//           </div>
+//         </td>
+
+//         <td data-label="Holat">${getSalesStatus(p)}</td>
+
+//         <td data-label="Harakatlar">
+//           <a href="#" onclick="editProduct(${p.id})">Edit</a>
+//           <a href="index.html" class="text-danger ml-2"
+//              onclick="deleteProduct(${p.id})">Delete</a>
+//         </td>
+//       </tr>
+//     `;
+//   });
+// }
 /* ===============================================
    MAHSULOTLAR - RENDER (data-label bilan)
 =============================================== */
+
 const productTable = document.getElementById("productTable");
 
 function renderProducts(list = products) {
   if (!productTable) return;
+
   productTable.innerHTML = "";
 
+  // Agar mahsulot bo‘lmasa
   if (list.length === 0) {
     productTable.innerHTML = `
       <tr>
@@ -684,45 +745,80 @@ function renderProducts(list = products) {
     return;
   }
 
-  list.forEach(p => {
+  // Mahsulotlarni chiqarish
+  list.forEach((p) => {
     const stockUI = getStockUI(p);
 
     productTable.innerHTML += `
       <tr class="${stockUI.color === "danger" ? "table-danger" : ""}">
+        
+        <!-- Rasm -->
         <td data-label="Rasm">
           <img src="${p.image}" class="product-img">
         </td>
-        <td data-label="Nomi">${p.name}</td>
-        <td data-label="Kategoriya">${p.category}</td>
-        <td data-label="Narx">${p.price.toLocaleString()} ${p.currency}</td>
 
-        <!-- ZAXIRA DIZAYNI -->
+        <!-- Nomi -->
+        <td data-label="Nomi">${p.name}</td>
+
+        <!-- Kategoriya -->
+        <td data-label="Kategoriya">${p.category}</td>
+
+        <!-- Narx -->
+        <td data-label="Narx">
+          ${p.price.toLocaleString()} ${p.currency}
+        </td>
+
+        <!-- Zaxira -->
         <td data-label="Zaxira">
           <div class="stock-cell">
+
             <div class="stock-text">
               ${p.stock} / ${p.initialStock} ${p.unit}
             </div>
 
             <div class="progress stock-progress">
-              <div class="progress-bar bg-${stockUI.color}"
-                   style="width:${stockUI.percent}%">
+              <div 
+                class="progress-bar bg-${stockUI.color}"
+                style="width:${stockUI.percent}%">
               </div>
             </div>
+
           </div>
         </td>
 
-        <td data-label="Holat">${getSalesStatus(p)}</td>
+        <!-- Holat -->
+        <td data-label="Holat">
+          ${getSalesStatus(p)}
+        </td>
 
+        <!-- Harakatlar -->
         <td data-label="Harakatlar">
-          <a href="index.html" onclick="editProduct(${p.id})">Edit</a>
-          <a href="index.html" class="text-danger ml-2"
-             onclick="deleteProduct(${p.id})">Delete</a>
+
+          <!-- EDIT -->
+          <button 
+            class="btn btn-sm btn-edit"
+            onclick="editProduct(${p.id})">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+
+          </button>
+
+          <!-- DELETE -->
+          <button 
+            class="btn btn-sm btn-danger ms-2"
+            onclick="deleteProduct(${p.id})">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>
+
+          </button>
+
         </td>
       </tr>
     `;
   });
 }
-
 
 // Zaxirani HIsoblash
 function getStockUI(product) {
