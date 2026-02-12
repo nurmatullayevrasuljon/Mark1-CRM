@@ -87,109 +87,30 @@
 // });
 
 // ============================================================
-// 🔐 SAHIFA HIMOYASI (FIRST PRIORITY!)
+// 📦 USER DATA LOADING (SODDALASHTIRILGAN)
 // ============================================================
-
-(function() {
-    const currentPath = window.location.pathname.toLowerCase();
-    const publicPages = ['signup.html', 'login.html', 'landing.html'];
-    const isPublicPage = publicPages.some(page => currentPath.includes(page));
-
-    if (!isPublicPage) {
-        // ✅ HIMOYA - Tizimga kirmaganlarni login ga yo'naltirish
-        if (!AuthSystem.isSessionValid()) {
-            console.log('🚫 NO SESSION - REDIRECT TO LOGIN');
-            window.location.href = 'login.html';
-        }
-    }
-})();
-
-// ============================================================
-// 📦 USER DATA LOADING (100% IZOLYATSIYA!)
-// ============================================================
-
 function loadUserData() {
-    console.log('📥 LOADING USER DATA...');
+  const userData = AuthSystem.getCurrentUser();
+  if (!userData) {
+    console.error('❌ No user data found');
+    AuthSystem.logout();
+    return;
+  }
 
-    const userData = AuthSystem.getCurrentUser();
-    
-    if (!userData) {
-        console.error('❌ NO USER FOUND');
-        window.location.href = 'login.html';
-        return false;
-    }
-
-    console.log('✅ USER FOUND:', userData.email);
-
-    // ✅ USER-SPECIFIC DATA (HAR BIR USER FAQAT O'ZINIKI!)
-    products = userData.products || [];
-    categories = userData.categories || ['Electronics'];
-    sales = userData.sales || [];
-    debtors = userData.debtors || [];
-    paidDebtors = userData.paidDebtors || [];
-    smsHistory = userData.smsHistory || [];
-
-    console.log('📊 DATA LOADED:', {
-        products: products.length,
-        sales: sales.length,
-        debtors: debtors.length
-    });
-
-    return true;
+  // Ma'lumotlarni yuklash
+  products = userData.products || [];
+  categories = userData.categories || ['Electronics'];
+  sales = userData.sales || [];
+  debtors = userData.debtors || [];
+  paidDebtors = userData.paidDebtors || [];
+  smsHistory = userData.smsHistory || [];
+  
+  console.log('✅ User data loaded:', userData.email);
 }
 
-// ============================================================
-// 💾 SAVE FUNCTIONS (HAR BIR O'ZGARISHNI SAQLASH)
-// ============================================================
 
-function saveProducts() {
-    console.log('💾 SAVING PRODUCTS...');
-    AuthSystem.updateCurrentUserData({ products });
-}
+// KEYIN SIZNING BARCHA ESKI KODINGIZ...
 
-function saveCategories() {
-    console.log('💾 SAVING CATEGORIES...');
-    AuthSystem.updateCurrentUserData({ categories });
-}
-
-function saveSales() {
-    console.log('💾 SAVING SALES...');
-    AuthSystem.updateCurrentUserData({ sales });
-}
-
-function saveDebtors() {
-    console.log('💾 SAVING DEBTORS...');
-    AuthSystem.updateCurrentUserData({ debtors, paidDebtors });
-}
-
-function saveSmsHistory() {
-    console.log('💾 SAVING SMS HISTORY...');
-    AuthSystem.updateCurrentUserData({ smsHistory });
-}
-
-// ============================================================
-// 🎯 INITIALIZATION
-// ============================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎬 DASHBOARD INIT...');
-
-    // ✅ 1. USER DATA YUKLASH
-    if (!loadUserData()) {
-        console.error('❌ FAILED TO LOAD USER DATA');
-        return;
-    }
-
-    console.log('✅ DASHBOARD READY');
-
-    // ✅ 2. BARCHA BOSHQA FUNKSIYALAR (SIZNING ESKI KODINGIZ)
-    // Bu yerdan pastga sizning eski kodingiz davom etadi...
-    // HECH NARSANI O'ZGARTIRMANG!
-});
-
-// ============================================================
-// SIZNING BARCHA ESKI KODINGIZ SHU YERDAN DAVOM ETADI
-// ============================================================
 
 // Welcome text animation
 const items = document.querySelectorAll(".reveal");
@@ -206,8 +127,6 @@ const observer = new IntersectionObserver(
 );
 
 items.forEach(el => observer.observe(el));
-
-// ... VA BOSHQA BARCHA KODLARINGIZ ...
 
 /* ===============================================
    BUGUNGI DAROMAD COUNTER (dailySales ichida)
